@@ -1,20 +1,17 @@
-# Little Games
+# Dwarf Planet Explorer
 
-A deliberately small, child-friendly, offline-capable browser game collection. The first game, **Star Collector**, is fully playable by touch and also supports keyboards and standard browser gamepads.
+A calm, child-friendly, offline-capable Phaser game for Android tablets. The complete first release contains five missions: **Ceres Bright Spot Search**, **Pluto’s Heart Puzzle**, **Haumea’s Speedy Spin**, **Makemake Moon Search**, and **Journey to Eris**.
 
-## Prerequisites
+The app uses only local code and generated Phaser shapes. It has no accounts, ads, analytics, tracking, purchases, or gameplay network requests.
 
-- Node.js 20.19+ (Node 24 LTS is recommended)
-- npm 10+
-- A current Chromium, Firefox, or Safari browser
+## Prerequisites and installation
 
-## Installation
+- Node.js 20.19 or newer (Node 24 recommended)
+- npm 10 or newer
 
 ```sh
 npm install
 ```
-
-No external assets or runtime services are used.
 
 ## Local development
 
@@ -22,19 +19,34 @@ No external assets or runtime services are used.
 npm run dev
 ```
 
-Open the printed local URL. Vite listens on localhost by default; add `-- --host` when testing from a tablet on the same trusted network.
-
-## Testing and validation
+Open the URL printed by Vite. For layout testing from a tablet on the same trusted network:
 
 ```sh
-npm test
-npm run typecheck
-npm run lint
-npm run format:check
-npm run validate:games
+npm run dev -- --host
 ```
 
-`npm run validate` runs formatting, linting, type checking, unit tests, game-registry validation, and a production build.
+## Tests and validation
+
+```sh
+npm run format:check
+npm run lint
+npm run typecheck
+npm test
+npm run validate:games
+npm run build
+```
+
+Run every check with `npm run validate`. Unit tests cover logical input transitions, analog dead-zone behavior, settings persistence, progress migration/reset, all five badges, mission rules, and Free Explore data.
+
+## Five missions
+
+- **Ceres:** guide a rover to three bright crater areas.
+- **Pluto:** assemble five pieces of Pluto’s heart-shaped region.
+- **Haumea:** match five orbiting shapes using forgiving timing.
+- **Makemake:** pan a telescope field to find Makemake and its moon.
+- **Eris:** guide a probe through five deep-space checkpoints.
+
+Completing all five unlocks a calm all-worlds celebration. Free Explore provides illustrations, facts, mission replay, and optional locally provided speech for every dwarf planet.
 
 ## Production build
 
@@ -43,48 +55,69 @@ npm run build
 npm run preview
 ```
 
-Deploy the contents of `dist/` to any static HTTPS host. The manifest uses relative scope/start paths, so a public URL or subdirectory works without a server application.
+Deploy `dist/` to any static HTTPS host. The PWA uses relative start/scope paths, so it can be hosted at a root URL or public subpath.
 
-## PWA testing
+## PWA and offline testing
 
-PWA installation and service workers require HTTPS (localhost is the development exception). Run a production build and preview it, open browser DevTools → Application, confirm the manifest and service worker, install the app, load it once, then switch DevTools Network to **Offline** and reload. The game should remain playable. Service-worker behavior is intentionally disabled during normal Vite development.
+1. Build and preview the production app.
+2. Open DevTools → Application and verify the manifest and active service worker.
+3. Load every screen once, install the app, and then enable **Offline** in DevTools Network.
+4. Reload and open each mission plus Free Explore. All local files should be served from the precache.
+
+Service workers require HTTPS outside localhost.
 
 ## Android tablet testing
 
-1. Serve the production build over HTTPS, or use `npm run dev -- --host` for same-network layout testing.
-2. Open the URL in current Chrome on the tablet and choose **Install app** / **Add to Home screen**.
-3. Test landscape orientation, all four simultaneous-safe touch controls, collection, restart, sound, reduced motion, and offline relaunch.
-4. Check both a small and large tablet and verify Android display/font scaling does not hide controls.
+1. Open the HTTPS deployment in current Chrome on an Android tablet.
+2. Install it with **Install app** or **Add to Home screen**.
+3. Test in landscape at multiple Android display/font sizes.
+4. Verify every screen with touch only: menus, all five missions, pause panels, fact cards, celebration, badges, Free Explore, settings, and parent information.
+5. Confirm reduced motion removes twinkling/pulsing animation and settings survive an app restart.
+6. Complete all five badges and verify the celebration and Free Explore routes.
+7. Hold the parent reset button for two seconds and verify a short tap does not erase progress.
+8. Relaunch in airplane mode after one successful online load.
 
 ## Bluetooth-controller testing
 
-Pair the controller in Android settings, open the game, and press a controller button so the browser grants gamepad access. The left stick or D-pad moves; the south/A button confirms; east/B cancels; Start pauses. Disconnect and reconnect during play to verify touch remains available. Browser/OS mappings vary, so test the target controller model.
+Pair the controller in Android settings, open the game, and press a controller button so the browser exposes it. Verify D-pad/left-stick selection in menus and Free Explore, movement in Ceres/Makemake/Eris, placement in Pluto, timing input in Haumea, south/A confirmation, east/B cancellation, and Start pause. Disconnecting the controller must leave touch fully usable; reconnecting should work without reloading.
 
 ## Controls
 
-- Touch: large on-screen D-pad and **Go!** button
-- Keyboard: arrows or WASD; Enter/Space confirms; Escape cancels; P pauses
-- Gamepad: left stick/D-pad; south button confirms; east button cancels; Start pauses
+- Touch: large on-screen arrows and **Go!**, plus large scene buttons
+- Keyboard: arrows/WASD, Enter/Space, Escape, and P
+- Standard gamepad: D-pad/left stick, south button, east button, and Start
 
-The analog dead zone is configured in `src/config/settings.ts`. Gameplay uses device-independent actions from `ActionState`, including held, newly pressed, and released states.
-
-## Adding another game
-
-1. Add pure rules and tests under `src/games/<game-id>/`.
-2. Add a Phaser scene under `src/scenes/`; only read controls through the shared `actions` service.
-3. Add the scene to the scene list in `src/main.ts`.
-4. Add one metadata entry to `src/games/registry.ts`.
-5. Ensure touch alone can complete it, honor mute/reduced motion, and avoid external runtime assets.
-6. Run `npm run validate`.
+Device adapters feed shared logical actions. Scenes never read keyboard or gamepad APIs directly. The analog dead zone is configured in `src/config/settings.ts`.
 
 ## Architecture
 
-- `src/core`: app-wide preferences and services
-- `src/input`: logical action state plus isolated touch, keyboard, and gamepad adapters
-- `src/games`: game metadata and independently testable rules
-- `src/scenes`: Phaser presentation/gameplay scenes
-- `src/ui`: reusable Phaser UI helpers
-- `src/config`: dimensions and tunable settings
-- `public/assets`: reserved for local, distributable game assets (the initial game uses primitives)
+- `src/core`: app services and scene transitions
+- `src/input`: action state and isolated device adapters
+- `src/data`: dwarf-planet facts and metadata
+- `src/storage`: local badge progress
+- `src/accessibility`: optional local browser speech synthesis
+- `src/games/ceres`, `src/games/pluto`, `src/games/haumea`, `src/games/makemake`, and `src/games/eris`: Phaser-independent mission rules
+- `src/games/puzzle`: reusable placement-puzzle state and validation
+- `src/games/timing`: reusable timing-window, angular-distance, and reduced-motion rules
+- `src/games/search`: reusable ordered visual-search state, hints, and completion callbacks
+- `src/scenes`: missions, navigation, fact cards, celebration, Free Explore, settings, and parent information
+- `src/ui`: reusable buttons and menu focus
+- `src/config`: shared dimensions and input tuning
+- `public/assets`: reserved for optimized local assets; initial art uses Phaser primitives
 
-There is no audio asset in the initial sample, so the mute control persists the shared preference and is ready for future sounds; the first game itself remains silent.
+## Adding another dwarf-planet mission
+
+1. Mark the planet playable in `src/data/planets.ts`.
+2. Put pure mission state/rules and tests in `src/games/<planet-id>/`.
+3. Add its Phaser scene under `src/scenes` and register it in `src/main.ts`.
+4. Read controls only from the shared `actions` service; touch must complete the entire mission.
+5. Add fact text to the local data layer and reuse or extend the fact-card presentation.
+6. Unlock only the matching badge through `ProgressStore`; do not add points, streaks, or currency.
+7. Honor mute and reduced motion, use local/generated assets, and run `npm run validate`.
+
+## Current placeholder limitations
+
+- All planets, the rover, craters, bright spots, and badges are intentionally simple generated shapes.
+- All five missions are playable. Illustrations and sound feedback remain generated placeholders.
+- There are no bundled sounds. The mute preference also disables optional browser text-to-speech.
+- Speech voice and pronunciation depend on voices already installed in the browser/operating system; no external speech service is used.

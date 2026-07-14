@@ -16,10 +16,12 @@ export class GamepadAdapter {
       if (!pad?.connected) continue;
       const x = pad.axes[0] ?? 0;
       const y = pad.axes[1] ?? 0;
-      result.moveLeft ||= x < -this.deadZone || Boolean(pad.buttons[14]?.pressed);
-      result.moveRight ||= x > this.deadZone || Boolean(pad.buttons[15]?.pressed);
-      result.moveUp ||= y < -this.deadZone || Boolean(pad.buttons[12]?.pressed);
-      result.moveDown ||= y > this.deadZone || Boolean(pad.buttons[13]?.pressed);
+      const filteredX = applyDeadZone(x, this.deadZone);
+      const filteredY = applyDeadZone(y, this.deadZone);
+      result.moveLeft ||= filteredX < 0 || Boolean(pad.buttons[14]?.pressed);
+      result.moveRight ||= filteredX > 0 || Boolean(pad.buttons[15]?.pressed);
+      result.moveUp ||= filteredY < 0 || Boolean(pad.buttons[12]?.pressed);
+      result.moveDown ||= filteredY > 0 || Boolean(pad.buttons[13]?.pressed);
       result.confirm ||= Boolean(pad.buttons[0]?.pressed);
       result.primaryAction ||= Boolean(pad.buttons[0]?.pressed);
       result.cancel ||= Boolean(pad.buttons[1]?.pressed);
@@ -32,3 +34,10 @@ export class GamepadAdapter {
     this.connectedCount = Array.from(navigator.getGamepads?.() ?? []).filter(Boolean).length;
   }
 }
+
+export const applyDeadZone = (value: number, deadZone: number): number => {
+  if (deadZone < 0 || deadZone >= 1)
+    throw new Error('Gamepad dead zone must be at least 0 and less than 1.');
+  if (Math.abs(value) <= deadZone) return 0;
+  return Math.sign(value) * ((Math.abs(value) - deadZone) / (1 - deadZone));
+};

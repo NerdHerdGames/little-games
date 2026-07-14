@@ -5,13 +5,20 @@ export interface PreferencesValue {
 
 const KEY = 'little-games-preferences-v1';
 
+export interface KeyValueStorage {
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): void;
+}
+
 export class Preferences {
   private value: PreferencesValue;
 
-  constructor() {
-    const systemReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  constructor(
+    private readonly storage: KeyValueStorage = localStorage,
+    systemReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  ) {
     try {
-      const saved = JSON.parse(localStorage.getItem(KEY) ?? '{}') as Partial<PreferencesValue>;
+      const saved = JSON.parse(this.storage.getItem(KEY) ?? '{}') as Partial<PreferencesValue>;
       this.value = {
         muted: saved.muted ?? false,
         reducedMotion: saved.reducedMotion ?? systemReduced,
@@ -35,7 +42,7 @@ export class Preferences {
 
   private update(next: Partial<PreferencesValue>): void {
     this.value = { ...this.value, ...next };
-    localStorage.setItem(KEY, JSON.stringify(this.value));
-    window.dispatchEvent(new CustomEvent('preferenceschange'));
+    this.storage.setItem(KEY, JSON.stringify(this.value));
+    if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('preferenceschange'));
   }
 }

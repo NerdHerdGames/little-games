@@ -7,9 +7,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon.svg'],
       manifest: {
-        name: 'Little Games',
-        short_name: 'Little Games',
-        description: 'A friendly collection of small games for children.',
+        name: 'Dwarf Planet Explorer',
+        short_name: 'Planet Explorer',
+        description: 'Calm dwarf-planet missions for young explorers.',
         theme_color: '#17324d',
         background_color: '#fff8e7',
         display: 'standalone',
