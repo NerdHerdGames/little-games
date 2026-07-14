@@ -11,6 +11,7 @@ for (const [index, game] of GAMES.entries()) {
   if (!game.title.trim()) errors.push(`${location}: title is required.`);
   if (!game.description.trim()) errors.push(`${location}: description is required.`);
   if (!game.sceneKey.trim()) errors.push(`${location}: sceneKey is required.`);
+  if (!game.symbol.trim()) errors.push(`${location}: symbol is required.`);
   ids.add(game.id);
 }
 if (GAMES.length === 0) errors.push('At least one game must be registered.');

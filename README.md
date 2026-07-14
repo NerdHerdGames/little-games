@@ -1,6 +1,8 @@
-# Dwarf Planet Explorer
+# Little Games
 
-A calm, child-friendly, offline-capable Phaser game for Android tablets. The complete first release contains five missions: **Ceres Bright Spot Search**, **Pluto’s Heart Puzzle**, **Haumea’s Speedy Spin**, **Makemake Moon Search**, and **Journey to Eris**.
+A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **Star Collector** and **Dwarf Planet Explorer**.
+
+Star Collector is a small movement-and-collection game. Dwarf Planet Explorer contains five missions: **Ceres Bright Spot Search**, **Pluto’s Heart Puzzle**, **Haumea’s Speedy Spin**, **Makemake Moon Search**, and **Journey to Eris**.
 
 The app uses only local code and generated Phaser shapes. It has no accounts, ads, analytics, tracking, purchases, or gameplay network requests.
 
@@ -100,6 +102,7 @@ Device adapters feed shared logical actions. Scenes never read keyboard or gamep
 - `src/games/puzzle`: reusable placement-puzzle state and validation
 - `src/games/timing`: reusable timing-window, angular-distance, and reduced-motion rules
 - `src/games/search`: reusable ordered visual-search state, hints, and completion callbacks
+- `src/games/registry.ts`: top-level games displayed by the library grid
 - `src/scenes`: missions, navigation, fact cards, celebration, Free Explore, settings, and parent information
 - `src/ui`: reusable buttons and menu focus
 - `src/config`: shared dimensions and input tuning
@@ -115,9 +118,17 @@ Device adapters feed shared logical actions. Scenes never read keyboard or gamep
 6. Unlock only the matching badge through `ProgressStore`; do not add points, streaks, or currency.
 7. Honor mute and reduced motion, use local/generated assets, and run `npm run validate`.
 
+## Adding another top-level game
+
+1. Add the game’s first Phaser scene under `src/scenes` and register it in `src/main.ts`.
+2. Add one entry to `src/games/registry.ts` with its title, description, scene key, symbol, and accent color.
+3. Use shared input and preferences; touch must be sufficient to complete the game.
+4. Add device-independent rules and tests under `src/games/<game-id>`.
+5. Run `npm run validate`. The game library grid renders catalog entries automatically.
+
 ## Current placeholder limitations
 
 - All planets, the rover, craters, bright spots, and badges are intentionally simple generated shapes.
-- All five missions are playable. Illustrations and sound feedback remain generated placeholders.
+- Star Collector and all five dwarf-planet missions are playable. Illustrations and sound feedback remain generated placeholders.
 - There are no bundled sounds. The mute preference also disables optional browser text-to-speech.
 - Speech voice and pronunciation depend on voices already installed in the browser/operating system; no external speech service is used.

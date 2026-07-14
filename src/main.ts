@@ -10,6 +10,7 @@ import { CeresMissionScene } from './scenes/CeresMissionScene';
 import { FactCardScene } from './scenes/FactCardScene';
 import { ErisMissionScene } from './scenes/ErisMissionScene';
 import { FreeExploreScene } from './scenes/FreeExploreScene';
+import { GameHubScene } from './scenes/GameHubScene';
 import { HaumeaMissionScene } from './scenes/HaumeaMissionScene';
 import { MainMenuScene } from './scenes/MainMenuScene';
 import { MakemakeMissionScene } from './scenes/MakemakeMissionScene';
@@ -17,6 +18,7 @@ import { PlanetSelectScene } from './scenes/PlanetSelectScene';
 import { ParentInfoScene } from './scenes/ParentInfoScene';
 import { PlutoMissionScene } from './scenes/PlutoMissionScene';
 import { SettingsScene } from './scenes/SettingsScene';
+import { StarCollectorScene } from './scenes/StarCollectorScene';
 import './styles.css';
 
 registerSW({
@@ -33,6 +35,8 @@ const game = new Phaser.Game({
   backgroundColor: '#fff8e7',
   scene: [
     BootScene,
+    GameHubScene,
+    StarCollectorScene,
     MainMenuScene,
     PlanetSelectScene,
     CeresMissionScene,

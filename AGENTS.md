@@ -1,10 +1,10 @@
-# Dwarf Planet Explorer Development Rules
+# Little Games Development Rules
 
 ## Project purpose
 
 This repository contains small, child-friendly browser games designed primarily for Android tablets.
 
-The current application is **Dwarf Planet Explorer**. New missions must use the established planet data, progress, settings, transition, focus, and input systems.
+The current application is the **Little Games** collection. **Dwarf Planet Explorer** is one top-level game. New games must be added to `src/games/registry.ts`; new dwarf-planet missions must use the established planet data, progress, settings, transition, focus, and input systems.
 
 Games must be easy to play, safe for children, accessible, installable as a PWA, and shareable through a public URL.
 

@@ -46,6 +46,7 @@ export class MainMenuScene extends Phaser.Scene {
         color: '#d7e8ff',
       })
       .setOrigin(0.5);
+    addButton(this, 145, 65, 'Game Library', () => goToScene(this, 'GameHub'), 240);
     addButton(this, 640, 285, 'Play', () => goToScene(this, 'PlanetSelect'), 390);
     addButton(this, 640, 380, 'Free Explore', () => goToScene(this, 'FreeExplore'), 390);
     addButton(this, 640, 475, 'Badge Collection', () => goToScene(this, 'BadgeCollection'), 390);
@@ -67,6 +68,7 @@ export class MainMenuScene extends Phaser.Scene {
     }
     if (actions.wasPressed('confirm') || actions.wasPressed('primaryAction'))
       goToScene(this, DESTINATIONS[this.focus.current] ?? 'PlanetSelect');
+    if (actions.wasPressed('cancel')) goToScene(this, 'GameHub');
   }
 
   private refreshFocus(): void {

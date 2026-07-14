@@ -8,7 +8,7 @@ export class BootScene extends Phaser.Scene {
   create(): void {
     this.cameras.main.setBackgroundColor('#0d1b2a');
     this.add
-      .text(640, 320, 'Dwarf Planet Explorer', {
+      .text(640, 320, 'Little Games', {
         fontFamily: 'Arial, sans-serif',
         fontSize: '52px',
         color: '#fff4c2',
@@ -16,12 +16,12 @@ export class BootScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
     this.add
-      .text(640, 390, 'Preparing the rover…', {
+      .text(640, 390, 'Loading your games…', {
         fontFamily: 'Arial, sans-serif',
         fontSize: '26px',
         color: '#d7e8ff',
       })
       .setOrigin(0.5);
-    this.time.delayedCall(100, () => goToScene(this, 'MainMenu'));
+    this.time.delayedCall(100, () => goToScene(this, 'GameHub'));
   }
 }
