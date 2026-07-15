@@ -73,7 +73,8 @@ export class SolarSystemExplorerScene extends Phaser.Scene {
       .setOrigin(0.5);
     addButton(this, 137, 485, 'Game Library', () => goToScene(this, 'GameHub'), 235);
 
-    this.world = this.add.container(VIEW.x - this.panX, VIEW.y - this.panY);
+    // Keep the pannable map behind the fixed information panel and controls.
+    this.world = this.add.container(VIEW.x - this.panX, VIEW.y - this.panY).setDepth(-10);
     this.world.add(
       this.add.rectangle(WORLD.width / 2, WORLD.height / 2, WORLD.width, WORLD.height, 0x050e1b),
     );

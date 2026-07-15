@@ -73,7 +73,8 @@ export class MakemakeMissionScene extends Phaser.Scene {
     });
     addButton(this, 165, 490, 'Pause', () => this.togglePause(), 240);
 
-    this.world = this.add.container(VIEW.x - this.panX, VIEW.y - this.panY);
+    // Keep the pannable map behind the fixed objective panel and controls.
+    this.world = this.add.container(VIEW.x - this.panX, VIEW.y - this.panY).setDepth(-10);
     const background = this.add.rectangle(
       WORLD.width / 2,
       WORLD.height / 2,
