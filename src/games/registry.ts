@@ -27,7 +27,7 @@ export const GAMES: readonly GameDefinition[] = [
   {
     id: 'solar-system-telescope',
     title: 'Solar System Telescope',
-    description: 'Drag through space and discover the Sun and eight planets.',
+    description: 'Discover the Sun, eight planets, and five little worlds.',
     sceneKey: 'SolarSystemExplorer',
     accentColor: 0x557bdc,
     symbol: '☀',

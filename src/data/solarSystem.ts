@@ -12,6 +12,7 @@ export const SOLAR_SYSTEM_OBJECTS = [
   { id: 'venus', name: 'Venus', x: 720, y: 610, radius: 42, selectionRadius: 62, color: 0xe7b866 },
   { id: 'earth', name: 'Earth', x: 950, y: 430, radius: 45, selectionRadius: 65, color: 0x4f9dde },
   { id: 'mars', name: 'Mars', x: 1170, y: 650, radius: 34, selectionRadius: 58, color: 0xc5684e },
+  { id: 'ceres', name: 'Ceres', x: 1320, y: 350, radius: 24, selectionRadius: 54, color: 0xb9a58d },
   {
     id: 'jupiter',
     name: 'Jupiter',
@@ -48,6 +49,26 @@ export const SOLAR_SYSTEM_OBJECTS = [
     selectionRadius: 74,
     color: 0x557bdc,
   },
+  { id: 'pluto', name: 'Pluto', x: 2700, y: 390, radius: 29, selectionRadius: 58, color: 0xd6b38a },
+  {
+    id: 'haumea',
+    name: 'Haumea',
+    x: 2940,
+    y: 650,
+    radius: 30,
+    selectionRadius: 62,
+    color: 0xcfe9ef,
+  },
+  {
+    id: 'makemake',
+    name: 'Makemake',
+    x: 3180,
+    y: 420,
+    radius: 29,
+    selectionRadius: 58,
+    color: 0xc67c5a,
+  },
+  { id: 'eris', name: 'Eris', x: 3440, y: 590, radius: 28, selectionRadius: 58, color: 0xe8edf1 },
 ] as const;
 
 export type SolarSystemObject = (typeof SOLAR_SYSTEM_OBJECTS)[number];

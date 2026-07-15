@@ -7,7 +7,7 @@ import { addButton } from '../ui/button';
 import { enablePannableSearchView } from '../ui/PannableSearchView';
 
 const VIEW = { x: 285, y: 110, width: 950, height: 535 } as const;
-const WORLD = { width: 2700, height: 1100 } as const;
+const WORLD = { width: 3920, height: 1100 } as const;
 // Allow the first and last objects to travel all the way to the crosshair.
 const MIN_PAN_X = SOLAR_SYSTEM_OBJECTS[0].x - VIEW.width / 2;
 const MAX_PAN_X = (SOLAR_SYSTEM_OBJECTS.at(-1)?.x ?? SOLAR_SYSTEM_OBJECTS[0].x) - VIEW.width / 2;
@@ -81,8 +81,8 @@ export class SolarSystemExplorerScene extends Phaser.Scene {
     this.world.add(
       this.add.rectangle(WORLD.width / 2, WORLD.height / 2, WORLD.width, WORLD.height, 0x050e1b),
     );
-    for (let index = 0; index < 90; index += 1) {
-      const x = 25 + ((index * 347) % 2630);
+    for (let index = 0; index < 130; index += 1) {
+      const x = 25 + ((index * 347) % 3850);
       const y = 25 + ((index * 193) % 1030);
       this.world.add(
         this.add.star(x, y, 4, 1.5, 3 + (index % 4), index % 4 === 0 ? 0xfff4c2 : 0xc7dcf0),
@@ -153,7 +153,11 @@ export class SolarSystemExplorerScene extends Phaser.Scene {
   }
 
   private addSolarObject(object: SolarSystemObject): void {
-    const body = this.add.circle(0, 0, object.radius, object.color).setStrokeStyle(5, 0xffffff);
+    const body =
+      object.id === 'haumea'
+        ? this.add.ellipse(0, 0, object.radius * 2.7, object.radius * 1.35, object.color)
+        : this.add.circle(0, 0, object.radius, object.color);
+    body.setStrokeStyle(5, 0xffffff);
     const container = this.add.container(object.x, object.y, [body]);
     if (object.id === 'sun')
       container.add(
@@ -168,6 +172,10 @@ export class SolarSystemExplorerScene extends Phaser.Scene {
       container.add(
         this.add.ellipse(0, 0, 210, 58).setStrokeStyle(12, 0xeedda7).setFillStyle(0, 0),
       );
+    if (object.id === 'ceres') container.add(this.add.circle(8, -5, 7, 0xf2eadf));
+    if (object.id === 'pluto') container.add(this.add.ellipse(5, 2, 24, 23, 0xf2ddd0));
+    if (object.id === 'makemake') container.add(this.add.ellipse(-4, -5, 37, 11, 0xe2a083));
+    if (object.id === 'eris') container.add(this.add.circle(-7, -7, 8, 0xc8d0d8));
     this.world.add(container);
   }
 
