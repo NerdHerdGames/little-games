@@ -21,7 +21,7 @@ export class GameHubScene extends Phaser.Scene {
     this.cards = [];
     this.cameras.main.setBackgroundColor('#f6f1df');
     this.add
-      .text(640, 72, 'Little Games', {
+      .text(640, 52, 'Little Games', {
         fontFamily: 'Arial',
         fontSize: '58px',
         color: '#17324d',
@@ -29,7 +29,7 @@ export class GameHubScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
     this.add
-      .text(640, 125, 'Choose a game to play', {
+      .text(640, 94, 'Choose a game to play', {
         fontFamily: 'Arial',
         fontSize: '27px',
         color: '#46627a',
@@ -66,7 +66,7 @@ export class GameHubScene extends Phaser.Scene {
       const description = this.add
         .text(-65, 0, game.description, {
           fontFamily: 'Arial',
-          fontSize: '23px',
+          fontSize: '21px',
           color: '#46627a',
           wordWrap: { width: 300 },
           lineSpacing: 6,
@@ -94,7 +94,7 @@ export class GameHubScene extends Phaser.Scene {
       this.cards.push(card);
     });
     this.status = this.add
-      .text(640, 155, '', {
+      .text(640, 125, '', {
         fontFamily: 'Arial',
         fontSize: '20px',
         color: '#17324d',
@@ -102,11 +102,11 @@ export class GameHubScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
     this.pageText = this.add
-      .text(640, 680, '', { fontFamily: 'Arial', fontSize: '20px', color: '#46627a' })
+      .text(640, 150, '', { fontFamily: 'Arial', fontSize: '20px', color: '#46627a' })
       .setOrigin(0.5);
     if (GAMES.length > PAGE_SIZE) {
-      addButton(this, 380, 675, 'Previous Page', () => this.changePage(-1), 240);
-      addButton(this, 900, 675, 'Next Page', () => this.changePage(1), 240);
+      addButton(this, 155, 110, 'Previous Page', () => this.changePage(-1), 250);
+      addButton(this, 1125, 110, 'Next Page', () => this.changePage(1), 250);
     }
     this.refresh();
   }

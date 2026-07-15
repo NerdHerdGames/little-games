@@ -16,6 +16,7 @@ import { HaumeaMissionScene } from './scenes/HaumeaMissionScene';
 import { MainMenuScene } from './scenes/MainMenuScene';
 import { MakemakeMissionScene } from './scenes/MakemakeMissionScene';
 import { PlanetSelectScene } from './scenes/PlanetSelectScene';
+import { PlanetFactMatchScene } from './scenes/PlanetFactMatchScene';
 import { ParentInfoScene } from './scenes/ParentInfoScene';
 import { PlutoMissionScene } from './scenes/PlutoMissionScene';
 import { SettingsScene } from './scenes/SettingsScene';
@@ -41,6 +42,7 @@ const game = new Phaser.Game({
     StarCollectorScene,
     SolarSystemExplorerScene,
     FishTankQuizScene,
+    PlanetFactMatchScene,
     MainMenuScene,
     PlanetSelectScene,
     CeresMissionScene,

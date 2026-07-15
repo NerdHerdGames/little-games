@@ -40,4 +40,12 @@ export const GAMES: readonly GameDefinition[] = [
     accentColor: 0x65c8d0,
     symbol: '🐟',
   },
+  {
+    id: 'planet-fact-match',
+    title: 'Planet Fact Match',
+    description: 'Drag each planet to the fact it matches and earn eight stars.',
+    sceneKey: 'PlanetFactMatch',
+    accentColor: 0x7d8fe8,
+    symbol: '🪐',
+  },
 ];
