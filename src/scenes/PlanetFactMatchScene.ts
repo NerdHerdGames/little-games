@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { playPlacementTone } from '../accessibility/FeedbackTone';
+import { speak, stopSpeaking } from '../accessibility/Speech';
 import { actions, preferences } from '../core/services';
 import {
   createPlanetFactMatch,
@@ -10,6 +11,7 @@ import {
 } from '../games/planet-fact-match/rules';
 import { addButton } from '../ui/button';
 import { enableDragPlacement } from '../ui/DragPlacement';
+import { enableTapSelection } from '../ui/TapSelection';
 
 const SLOT = { x: 640, y: 365, radius: 82 } as const;
 const PLANET_NAMES: Readonly<Record<PlanetId, string>> = {
@@ -39,6 +41,7 @@ export class PlanetFactMatchScene extends Phaser.Scene {
   private factText!: Phaser.GameObjects.Text;
   private feedbackText!: Phaser.GameObjects.Text;
   private starText!: Phaser.GameObjects.Text;
+  private cleanupFactTap: (() => void) | undefined;
   private locked = false;
 
   constructor() {
@@ -56,7 +59,7 @@ export class PlanetFactMatchScene extends Phaser.Scene {
       color: '#fff4c2',
       fontStyle: 'bold',
     });
-    this.add.text(25, 63, 'Drag the matching planet into the round slot.', {
+    this.add.text(25, 63, 'Drag the matching planet into the slot. Tap the fact to hear it.', {
       fontFamily: 'Arial',
       fontSize: '20px',
       color: '#d7e8ff',
@@ -91,6 +94,8 @@ export class PlanetFactMatchScene extends Phaser.Scene {
     });
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       for (const planet of this.planets) planet.cleanupDrag();
+      this.cleanupFactTap?.();
+      stopSpeaking();
     });
 
     this.add.rectangle(640, 470, 1040, 410, 0xfffbec).setStrokeStyle(8, 0x7fa5c7);
@@ -105,7 +110,7 @@ export class PlanetFactMatchScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
     this.factText = this.add
-      .text(640, 510, '', {
+      .text(640, 510, this.match.current?.text ?? '', {
         fontFamily: 'Arial',
         fontSize: '32px',
         color: '#17324d',
@@ -113,7 +118,12 @@ export class PlanetFactMatchScene extends Phaser.Scene {
         align: 'center',
         wordWrap: { width: 850 },
       })
+      .setFixedSize(850, 100)
       .setOrigin(0.5);
+    this.cleanupFactTap = enableTapSelection(this, this.factText, () => {
+      const fact = this.match.current?.text;
+      if (fact) speak(fact, preferences.current.muted);
+    });
     this.feedbackText = this.add
       .text(640, 610, 'Which planet matches this fact?', {
         fontFamily: 'Arial',

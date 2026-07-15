@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { playPlacementTone } from '../accessibility/FeedbackTone';
+import { speak, stopSpeaking } from '../accessibility/Speech';
 import { actions, preferences } from '../core/services';
 import { PLANETS } from '../data/planets';
 import {
@@ -11,6 +12,7 @@ import {
 } from '../games/dwarf-fact-match/rules';
 import { addButton } from '../ui/button';
 import { enableDragPlacement } from '../ui/DragPlacement';
+import { enableTapSelection } from '../ui/TapSelection';
 
 const SLOT = { x: 640, y: 365, radius: 82 } as const;
 const NAMES = Object.fromEntries(PLANETS.map(({ id, name }) => [id, name])) as Record<
@@ -38,6 +40,7 @@ export class DwarfFactMatchScene extends Phaser.Scene {
   private factText!: Phaser.GameObjects.Text;
   private feedbackText!: Phaser.GameObjects.Text;
   private starText!: Phaser.GameObjects.Text;
+  private cleanupFactTap: (() => void) | undefined;
   private locked = false;
 
   constructor() {
@@ -55,11 +58,16 @@ export class DwarfFactMatchScene extends Phaser.Scene {
       color: '#fff4c2',
       fontStyle: 'bold',
     });
-    this.add.text(25, 63, 'Drag the matching little world into the round slot.', {
-      fontFamily: 'Arial',
-      fontSize: '20px',
-      color: '#d7e8ff',
-    });
+    this.add.text(
+      25,
+      63,
+      'Drag the matching little world into the slot. Tap the fact to hear it.',
+      {
+        fontFamily: 'Arial',
+        fontSize: '20px',
+        color: '#d7e8ff',
+      },
+    );
     this.starText = this.add
       .text(760, 46, '', {
         fontFamily: 'Arial',
@@ -90,6 +98,8 @@ export class DwarfFactMatchScene extends Phaser.Scene {
     });
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       for (const choice of this.choices) choice.cleanupDrag();
+      this.cleanupFactTap?.();
+      stopSpeaking();
     });
 
     this.add.rectangle(640, 470, 1040, 410, 0xfffbec).setStrokeStyle(8, 0x7fa5c7);
@@ -104,7 +114,7 @@ export class DwarfFactMatchScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
     this.factText = this.add
-      .text(640, 510, '', {
+      .text(640, 510, this.match.current?.text ?? '', {
         fontFamily: 'Arial',
         fontSize: '32px',
         color: '#17324d',
@@ -112,7 +122,12 @@ export class DwarfFactMatchScene extends Phaser.Scene {
         align: 'center',
         wordWrap: { width: 850 },
       })
+      .setFixedSize(850, 100)
       .setOrigin(0.5);
+    this.cleanupFactTap = enableTapSelection(this, this.factText, () => {
+      const fact = this.match.current?.text;
+      if (fact) speak(fact, preferences.current.muted);
+    });
     this.feedbackText = this.add
       .text(640, 610, '', {
         fontFamily: 'Arial',

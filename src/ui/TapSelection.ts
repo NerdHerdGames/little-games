@@ -2,7 +2,7 @@ import type Phaser from 'phaser';
 
 export const enableTapSelection = (
   scene: Phaser.Scene,
-  target: Phaser.GameObjects.Container,
+  target: Phaser.GameObjects.Container | Phaser.GameObjects.Text,
   onTap: () => void,
 ): (() => void) => {
   target.setInteractive({ useHandCursor: true });
