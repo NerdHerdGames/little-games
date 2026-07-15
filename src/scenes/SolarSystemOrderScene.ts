@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { playPlacementTone } from '../accessibility/FeedbackTone';
+import { speak, stopSpeaking } from '../accessibility/Speech';
 import { actions, preferences } from '../core/services';
 import {
   createSolarOrderGame,
@@ -11,6 +12,7 @@ import {
 } from '../games/solar-system-order/rules';
 import { addButton } from '../ui/button';
 import { enableDragPlacement } from '../ui/DragPlacement';
+import { enableTapSelection } from '../ui/TapSelection';
 
 const TRAY_X = [100, 280, 460, 640, 820, 1000, 1180] as const;
 const SLOT_X = TRAY_X;
@@ -23,6 +25,7 @@ interface OrderPiece {
   trayX: number;
   trayY: number;
   cleanupDrag: () => void;
+  cleanupTap: (() => void) | undefined;
   placed: boolean;
 }
 
@@ -76,11 +79,24 @@ export class SolarSystemOrderScene extends Phaser.Scene {
       const cleanupDrag = enableDragPlacement(this, display, {
         onSelect: () => display.setDepth(30),
         onDrop: (x, y) => this.dropObject(id, x, y),
+        onTap: () => speak(SOLAR_ORDER_NAMES[id], preferences.current.muted),
       });
-      this.pieces.push({ id, display, trayX: 0, trayY: 125, cleanupDrag, placed: false });
+      this.pieces.push({
+        id,
+        display,
+        trayX: 0,
+        trayY: 125,
+        cleanupDrag,
+        cleanupTap: undefined,
+        placed: false,
+      });
     }
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-      for (const piece of this.pieces) piece.cleanupDrag();
+      for (const piece of this.pieces) {
+        piece.cleanupDrag();
+        piece.cleanupTap?.();
+      }
+      stopSpeaking();
     });
 
     this.add.rectangle(640, 420, 1220, 300, 0xfffbec).setStrokeStyle(8, 0x7fa5c7);
@@ -167,6 +183,9 @@ export class SolarSystemOrderScene extends Phaser.Scene {
     this.order = result.state;
     piece.placed = true;
     piece.cleanupDrag();
+    piece.cleanupTap = enableTapSelection(this, piece.display, () =>
+      speak(SOLAR_ORDER_NAMES[id], preferences.current.muted),
+    );
     const correctSlot = SOLAR_SYSTEM_ORDER.indexOf(id);
     const target = this.slotPosition(correctSlot);
     piece.display.setPosition(target.x, target.y + 8).setDepth(20);
