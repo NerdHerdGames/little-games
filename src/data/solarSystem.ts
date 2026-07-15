@@ -1,0 +1,53 @@
+export const SOLAR_SYSTEM_OBJECTS = [
+  { id: 'sun', name: 'Sun', x: 190, y: 540, radius: 95, selectionRadius: 115, color: 0xffd65a },
+  {
+    id: 'mercury',
+    name: 'Mercury',
+    x: 480,
+    y: 420,
+    radius: 24,
+    selectionRadius: 55,
+    color: 0xa9a39b,
+  },
+  { id: 'venus', name: 'Venus', x: 720, y: 610, radius: 42, selectionRadius: 62, color: 0xe7b866 },
+  { id: 'earth', name: 'Earth', x: 950, y: 430, radius: 45, selectionRadius: 65, color: 0x4f9dde },
+  { id: 'mars', name: 'Mars', x: 1170, y: 650, radius: 34, selectionRadius: 58, color: 0xc5684e },
+  {
+    id: 'jupiter',
+    name: 'Jupiter',
+    x: 1480,
+    y: 470,
+    radius: 82,
+    selectionRadius: 102,
+    color: 0xd2a679,
+  },
+  {
+    id: 'saturn',
+    name: 'Saturn',
+    x: 1770,
+    y: 620,
+    radius: 68,
+    selectionRadius: 108,
+    color: 0xe3c983,
+  },
+  {
+    id: 'uranus',
+    name: 'Uranus',
+    x: 2100,
+    y: 400,
+    radius: 54,
+    selectionRadius: 75,
+    color: 0x91d7dc,
+  },
+  {
+    id: 'neptune',
+    name: 'Neptune',
+    x: 2410,
+    y: 570,
+    radius: 52,
+    selectionRadius: 74,
+    color: 0x557bdc,
+  },
+] as const;
+
+export type SolarSystemObject = (typeof SOLAR_SYSTEM_OBJECTS)[number];

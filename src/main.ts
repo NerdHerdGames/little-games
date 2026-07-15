@@ -18,6 +18,7 @@ import { PlanetSelectScene } from './scenes/PlanetSelectScene';
 import { ParentInfoScene } from './scenes/ParentInfoScene';
 import { PlutoMissionScene } from './scenes/PlutoMissionScene';
 import { SettingsScene } from './scenes/SettingsScene';
+import { SolarSystemExplorerScene } from './scenes/SolarSystemExplorerScene';
 import { StarCollectorScene } from './scenes/StarCollectorScene';
 import './styles.css';
 
@@ -37,6 +38,7 @@ const game = new Phaser.Game({
     BootScene,
     GameHubScene,
     StarCollectorScene,
+    SolarSystemExplorerScene,
     MainMenuScene,
     PlanetSelectScene,
     CeresMissionScene,

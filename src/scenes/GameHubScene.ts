@@ -37,9 +37,12 @@ export class GameHubScene extends Phaser.Scene {
       .setOrigin(0.5);
     GAMES.forEach((game, index) => {
       const pageIndex = index % PAGE_SIZE;
+      const page = Math.floor(index / PAGE_SIZE);
+      const itemsOnPage = Math.min(PAGE_SIZE, GAMES.length - page * PAGE_SIZE);
       const column = pageIndex % COLUMNS;
       const row = Math.floor(pageIndex / COLUMNS);
-      const x = 350 + column * 580;
+      const x =
+        itemsOnPage % COLUMNS === 1 && pageIndex === itemsOnPage - 1 ? 640 : 350 + column * 580;
       const y = 285 + row * 275;
       const panel = this.add.rectangle(0, 0, 500, 235, 0xffffff).setStrokeStyle(6, 0x46627a);
       const icon = this.add.circle(-165, -10, 70, game.accentColor).setStrokeStyle(5, 0x17324d);

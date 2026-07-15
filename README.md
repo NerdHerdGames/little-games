@@ -1,8 +1,8 @@
 # Little Games
 
-A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **Star Collector** and **Dwarf Planet Explorer**.
+A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **Star Collector**, **Dwarf Planet Explorer**, and **Solar System Telescope**.
 
-Star Collector is a small movement-and-collection game. Dwarf Planet Explorer contains five missions: **Ceres Bright Spot Search**, **Pluto’s Heart Puzzle**, **Haumea’s Speedy Spin**, **Makemake Moon Search**, and **Journey to Eris**.
+Star Collector is a small movement-and-collection game. Dwarf Planet Explorer contains five dwarf-planet missions. Solar System Telescope lets children drag through a generated star field, tap the Sun or any of the eight planets, see its name, and optionally hear it spoken by the device.
 
 The app uses only local code and generated Phaser shapes. It has no accounts, ads, analytics, tracking, purchases, or gameplay network requests.
 
@@ -129,6 +129,6 @@ Device adapters feed shared logical actions. Scenes never read keyboard or gamep
 ## Current placeholder limitations
 
 - All planets, the rover, craters, bright spots, and badges are intentionally simple generated shapes.
-- Star Collector and all five dwarf-planet missions are playable. Illustrations and sound feedback remain generated placeholders.
+- Star Collector, Solar System Telescope, and all five dwarf-planet missions are playable. Illustrations and sound feedback remain generated placeholders.
 - There are no bundled sounds. The mute preference also disables optional browser text-to-speech.
 - Speech voice and pronunciation depend on voices already installed in the browser/operating system; no external speech service is used.
