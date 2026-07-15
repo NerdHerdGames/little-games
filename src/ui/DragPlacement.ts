@@ -11,6 +11,7 @@ export const enableDragPlacement = (
   callbacks: DragPlacementCallbacks,
 ): (() => void) => {
   piece.setInteractive({ draggable: true, useHandCursor: true });
+  let active = true;
   const select = (): void => callbacks.onSelect();
   const drag = (_pointer: Phaser.Input.Pointer, dragX: number, dragY: number): void => {
     piece.setPosition(dragX, dragY);
@@ -20,9 +21,11 @@ export const enableDragPlacement = (
   piece.on('drag', drag);
   piece.on('dragend', drop);
   return () => {
+    if (!active) return;
+    active = false;
     piece.off('pointerdown', select);
     piece.off('drag', drag);
     piece.off('dragend', drop);
-    scene.input.setDraggable(piece, false);
+    if (piece.input) scene.input.setDraggable(piece, false);
   };
 };

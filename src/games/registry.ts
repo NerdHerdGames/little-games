@@ -32,4 +32,12 @@ export const GAMES: readonly GameDefinition[] = [
     accentColor: 0x557bdc,
     symbol: '☀',
   },
+  {
+    id: 'fish-tank-quiz',
+    title: 'Fish Tank Quiz',
+    description: 'Answer friendly questions and fill a swimming fish tank.',
+    sceneKey: 'FishTankQuiz',
+    accentColor: 0x65c8d0,
+    symbol: '🐟',
+  },
 ];

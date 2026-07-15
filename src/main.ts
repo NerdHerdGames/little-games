@@ -8,6 +8,7 @@ import { AllWorldsCelebrationScene } from './scenes/AllWorldsCelebrationScene';
 import { BootScene } from './scenes/BootScene';
 import { CeresMissionScene } from './scenes/CeresMissionScene';
 import { FactCardScene } from './scenes/FactCardScene';
+import { FishTankQuizScene } from './scenes/FishTankQuizScene';
 import { ErisMissionScene } from './scenes/ErisMissionScene';
 import { FreeExploreScene } from './scenes/FreeExploreScene';
 import { GameHubScene } from './scenes/GameHubScene';
@@ -39,6 +40,7 @@ const game = new Phaser.Game({
     GameHubScene,
     StarCollectorScene,
     SolarSystemExplorerScene,
+    FishTankQuizScene,
     MainMenuScene,
     PlanetSelectScene,
     CeresMissionScene,
