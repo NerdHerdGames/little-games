@@ -44,7 +44,7 @@ Run every check with `npm run validate`. Unit tests cover logical input transiti
 
 - **Ceres:** guide a rover to three bright crater areas.
 - **Pluto:** assemble five pieces of Pluto’s heart-shaped region.
-- **Haumea:** match five orbiting shapes using forgiving timing.
+- **Haumea:** swipe or hold a movement control to spin a round world into Haumea's stretched shape.
 - **Makemake:** pan a telescope field to find Makemake and its moon.
 - **Eris:** guide a probe through five deep-space checkpoints.
 
@@ -81,7 +81,7 @@ Service workers require HTTPS outside localhost.
 
 ## Bluetooth-controller testing
 
-Pair the controller in Android settings, open the game, and press a controller button so the browser exposes it. Verify D-pad/left-stick selection in menus and Free Explore, movement in Ceres/Makemake/Eris, placement in Pluto, timing input in Haumea, south/A confirmation, east/B cancellation, and Start pause. Disconnecting the controller must leave touch fully usable; reconnecting should work without reloading.
+Pair the controller in Android settings, open the game, and press a controller button so the browser exposes it. Verify D-pad/left-stick selection in menus and Free Explore, movement in Ceres/Makemake/Eris, placement in Pluto, held movement spinning in Haumea, south/A confirmation, east/B cancellation, and Start pause. Disconnecting the controller must leave touch fully usable; reconnecting should work without reloading.
 
 ## Controls
 

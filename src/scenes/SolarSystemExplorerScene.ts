@@ -8,6 +8,9 @@ import { enablePannableSearchView } from '../ui/PannableSearchView';
 
 const VIEW = { x: 285, y: 110, width: 950, height: 535 } as const;
 const WORLD = { width: 2700, height: 1100 } as const;
+// Allow the first and last objects to travel all the way to the crosshair.
+const MIN_PAN_X = SOLAR_SYSTEM_OBJECTS[0].x - VIEW.width / 2;
+const MAX_PAN_X = (SOLAR_SYSTEM_OBJECTS.at(-1)?.x ?? SOLAR_SYSTEM_OBJECTS[0].x) - VIEW.width / 2;
 
 export class SolarSystemExplorerScene extends Phaser.Scene {
   private world!: Phaser.GameObjects.Container;
@@ -169,7 +172,7 @@ export class SolarSystemExplorerScene extends Phaser.Scene {
   }
 
   private panBy(deltaX: number, deltaY: number): void {
-    this.panX = Phaser.Math.Clamp(this.panX + deltaX, 0, WORLD.width - VIEW.width);
+    this.panX = Phaser.Math.Clamp(this.panX + deltaX, MIN_PAN_X, MAX_PAN_X);
     this.panY = Phaser.Math.Clamp(this.panY + deltaY, 0, WORLD.height - VIEW.height);
     this.updateWorldPosition();
   }
