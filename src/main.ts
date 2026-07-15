@@ -22,6 +22,7 @@ import { ParentInfoScene } from './scenes/ParentInfoScene';
 import { PlutoMissionScene } from './scenes/PlutoMissionScene';
 import { SettingsScene } from './scenes/SettingsScene';
 import { SolarSystemExplorerScene } from './scenes/SolarSystemExplorerScene';
+import { SolarSystemOrderScene } from './scenes/SolarSystemOrderScene';
 import { StarCollectorScene } from './scenes/StarCollectorScene';
 import './styles.css';
 
@@ -45,6 +46,7 @@ const game = new Phaser.Game({
     FishTankQuizScene,
     PlanetFactMatchScene,
     DwarfFactMatchScene,
+    SolarSystemOrderScene,
     MainMenuScene,
     PlanetSelectScene,
     CeresMissionScene,

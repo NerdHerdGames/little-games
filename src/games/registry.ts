@@ -56,4 +56,12 @@ export const GAMES: readonly GameDefinition[] = [
     accentColor: 0xb9a58d,
     symbol: '●',
   },
+  {
+    id: 'solar-system-order',
+    title: 'Solar System Order',
+    description: 'Place the Sun, planets, and little worlds in distance order.',
+    sceneKey: 'SolarSystemOrder',
+    accentColor: 0xffb84d,
+    symbol: '↗',
+  },
 ];
