@@ -1,8 +1,8 @@
 # Little Games
 
-A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **Star Collector**, **Dwarf Planet Explorer**, **Solar System Telescope**, **Fish Tank Quiz**, and **Planet Fact Match**.
+A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **Star Collector**, **Dwarf Planet Explorer**, **Solar System Telescope**, **Fish Tank Quiz**, **Planet Fact Match**, and **Dwarf Planet Fact Match**.
 
-Star Collector is a small movement-and-collection game. Dwarf Planet Explorer contains five dwarf-planet missions. Solar System Telescope lets children explore the Sun and eight planets. Fish Tank Quiz asks simple sea-animal questions before releasing six generated animals into a swimming tank. Planet Fact Match asks children to drag each of the eight planets to a matching fact and earn stars.
+Star Collector is a small movement-and-collection game. Dwarf Planet Explorer contains five dwarf-planet missions. Solar System Telescope lets children explore the Sun and eight planets. Fish Tank Quiz asks simple sea-animal questions before releasing six generated animals into a swimming tank. Planet Fact Match asks children to drag each of the eight planets to a matching fact and earn stars. Dwarf Planet Fact Match provides the same calm matching activity for Ceres, Pluto, Haumea, Makemake, and Eris.
 
 The app uses only local code and generated Phaser shapes. It has no accounts, ads, analytics, tracking, purchases, or gameplay network requests.
 

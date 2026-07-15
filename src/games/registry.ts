@@ -48,4 +48,12 @@ export const GAMES: readonly GameDefinition[] = [
     accentColor: 0x7d8fe8,
     symbol: '🪐',
   },
+  {
+    id: 'dwarf-planet-fact-match',
+    title: 'Dwarf Planet Fact Match',
+    description: 'Match five little worlds with their space facts.',
+    sceneKey: 'DwarfFactMatch',
+    accentColor: 0xb9a58d,
+    symbol: '●',
+  },
 ];

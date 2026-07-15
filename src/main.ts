@@ -7,6 +7,7 @@ import { BadgeCollectionScene } from './scenes/BadgeCollectionScene';
 import { AllWorldsCelebrationScene } from './scenes/AllWorldsCelebrationScene';
 import { BootScene } from './scenes/BootScene';
 import { CeresMissionScene } from './scenes/CeresMissionScene';
+import { DwarfFactMatchScene } from './scenes/DwarfFactMatchScene';
 import { FactCardScene } from './scenes/FactCardScene';
 import { FishTankQuizScene } from './scenes/FishTankQuizScene';
 import { ErisMissionScene } from './scenes/ErisMissionScene';
@@ -43,6 +44,7 @@ const game = new Phaser.Game({
     SolarSystemExplorerScene,
     FishTankQuizScene,
     PlanetFactMatchScene,
+    DwarfFactMatchScene,
     MainMenuScene,
     PlanetSelectScene,
     CeresMissionScene,
