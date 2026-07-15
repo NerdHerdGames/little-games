@@ -59,6 +59,14 @@ npm run preview
 
 Deploy `dist/` to any static HTTPS host. The PWA uses relative start/scope paths, so it can be hosted at a root URL or public subpath.
 
+## Publish with GitHub Pages
+
+The workflow at `.github/workflows/deploy-pages.yml` validates, builds, and publishes the game whenever a commit is pushed to `main`. It can also be started manually from the repository's **Actions** tab.
+
+Before the first deployment, open the GitHub repository and choose **Settings → Pages → Build and deployment → Source → GitHub Actions**. Push the project to the `main` branch, then follow the deployment URL shown by the completed workflow.
+
+The workflow sets Vite's base path from the repository name so application assets and the offline service worker work at `https://USERNAME.github.io/REPOSITORY/`. For a user site repository named `USERNAME.github.io` or a custom domain, change `VITE_BASE_PATH` in the workflow to `/`.
+
 ## PWA and offline testing
 
 1. Build and preview the production app.
