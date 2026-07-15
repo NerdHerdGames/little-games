@@ -8,7 +8,9 @@ import { addButton } from '../ui/button';
 import { enablePannableSearchView } from '../ui/PannableSearchView';
 
 const VIEW = { x: 320, y: 125, width: 900, height: 500 } as const;
-const WORLD = { width: 1800, height: 1000 } as const;
+// Extra room on the right lets Makemake's moon reach the telescope crosshair.
+// This keeps center-and-confirm selection equivalent to direct touch selection.
+const WORLD = { width: 1950, height: 1000 } as const;
 const TARGETS = [
   { id: 'makemake', x: 1370, y: 505, radius: 78 },
   { id: 'moon', x: 1490, y: 420, radius: 48 },
@@ -84,7 +86,7 @@ export class MakemakeMissionScene extends Phaser.Scene {
     );
     this.world.add(background);
     for (let index = 0; index < 55; index += 1) {
-      const x = 35 + ((index * 277) % 1720);
+      const x = 35 + ((index * 277) % 1870);
       const y = 30 + ((index * 163) % 930);
       const star = this.add.star(
         x,
