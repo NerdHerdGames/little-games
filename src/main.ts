@@ -10,6 +10,7 @@ import { CeresMissionScene } from './scenes/CeresMissionScene';
 import { DwarfFactMatchScene } from './scenes/DwarfFactMatchScene';
 import { FactCardScene } from './scenes/FactCardScene';
 import { FishTankQuizScene } from './scenes/FishTankQuizScene';
+import { FishShapeMatchScene } from './scenes/FishShapeMatchScene';
 import { ErisMissionScene } from './scenes/ErisMissionScene';
 import { FreeExploreScene } from './scenes/FreeExploreScene';
 import { GameHubScene } from './scenes/GameHubScene';
@@ -44,6 +45,7 @@ const game = new Phaser.Game({
     StarCollectorScene,
     SolarSystemExplorerScene,
     FishTankQuizScene,
+    FishShapeMatchScene,
     PlanetFactMatchScene,
     DwarfFactMatchScene,
     SolarSystemOrderScene,

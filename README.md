@@ -1,8 +1,8 @@
 # Little Games
 
-A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **Star Collector**, **Dwarf Planet Explorer**, **Solar System Telescope**, **Fish Tank Quiz**, **Planet Fact Match**, **Dwarf Planet Fact Match**, and **Solar System Order**.
+A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **Star Collector**, **Dwarf Planet Explorer**, **Solar System Telescope**, **Fish Tank Quiz**, **Planet Fact Match**, **Dwarf Planet Fact Match**, **Solar System Order**, and **Fish Shape Match**.
 
-Star Collector is a small movement-and-collection game. Dwarf Planet Explorer contains five dwarf-planet missions. Solar System Telescope lets children explore the Sun, eight planets, and five dwarf planets. Fish Tank Quiz asks simple sea-animal questions before releasing six generated animals into a swimming tank. Planet Fact Match asks children to drag each of the eight planets to a matching fact and earn stars. Dwarf Planet Fact Match provides the same calm matching activity for Ceres, Pluto, Haumea, Makemake, and Eris. Solar System Order places the Sun, eight planets, and five dwarf planets into a near-to-far sequence.
+Star Collector is a small movement-and-collection game. Dwarf Planet Explorer contains five dwarf-planet missions. Solar System Telescope lets children explore the Sun, eight planets, and five dwarf planets. Fish Tank Quiz asks simple sea-animal questions before releasing six generated animals into a swimming tank. Planet Fact Match asks children to drag each of the eight planets to a matching fact and earn stars. Dwarf Planet Fact Match provides the same calm matching activity for Ceres, Pluto, Haumea, Makemake, and Eris. Solar System Order places the Sun, eight planets, and five dwarf planets into a near-to-far sequence. Fish Shape Match asks children to find circle, square, and triangle fish in red, green, and blue.
 
 The app uses only local code and generated Phaser shapes. It has no accounts, ads, analytics, tracking, purchases, or gameplay network requests.
 

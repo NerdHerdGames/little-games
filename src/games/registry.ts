@@ -64,4 +64,12 @@ export const GAMES: readonly GameDefinition[] = [
     accentColor: 0xffb84d,
     symbol: '↗',
   },
+  {
+    id: 'fish-shape-match',
+    title: 'Fish Shape Match',
+    description: 'Find circle, square, and triangle fish in three bright colors.',
+    sceneKey: 'FishShapeMatch',
+    accentColor: 0x55ace8,
+    symbol: '△',
+  },
 ];
