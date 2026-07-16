@@ -72,4 +72,12 @@ export const GAMES: readonly GameDefinition[] = [
     accentColor: 0x55ace8,
     symbol: '△',
   },
+  {
+    id: 'shape-flip-match',
+    title: 'Shape Flip Match',
+    description: 'Flip cards and match colorful circles, squares, and triangles.',
+    sceneKey: 'ShapeFlipMatch',
+    accentColor: 0x5b73a8,
+    symbol: '?',
+  },
 ];
