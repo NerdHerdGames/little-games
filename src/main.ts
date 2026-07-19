@@ -26,6 +26,7 @@ import { ShapeFlipMatchScene } from './scenes/ShapeFlipMatchScene';
 import { SolarSystemExplorerScene } from './scenes/SolarSystemExplorerScene';
 import { SolarSystemOrderScene } from './scenes/SolarSystemOrderScene';
 import { StarCollectorScene } from './scenes/StarCollectorScene';
+import { TractorTrailerScene } from './scenes/TractorTrailerScene';
 import './styles.css';
 
 registerSW({
@@ -48,6 +49,7 @@ const game = new Phaser.Game({
     FishTankQuizScene,
     FishShapeMatchScene,
     ShapeFlipMatchScene,
+    TractorTrailerScene,
     PlanetFactMatchScene,
     DwarfFactMatchScene,
     SolarSystemOrderScene,

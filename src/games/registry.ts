@@ -80,4 +80,12 @@ export const GAMES: readonly GameDefinition[] = [
     accentColor: 0x5b73a8,
     symbol: '?',
   },
+  {
+    id: 'tractor-trailer-trip',
+    title: 'Tractor Trailer Trip',
+    description: 'Drive a tractor and help three farm animals climb aboard.',
+    sceneKey: 'TractorTrailer',
+    accentColor: 0x74b85a,
+    symbol: 'T',
+  },
 ];
