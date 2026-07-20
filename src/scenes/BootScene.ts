@@ -1,9 +1,15 @@
 import Phaser from 'phaser';
 import { goToScene } from '../core/SceneTransitions';
+import { GAMES } from '../games/registry';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
     super('Boot');
+  }
+  preload(): void {
+    for (const game of GAMES) {
+      if (game.icon) this.load.image(game.icon.key, game.icon.path);
+    }
   }
   create(): void {
     this.cameras.main.setBackgroundColor('#0d1b2a');

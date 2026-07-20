@@ -46,14 +46,16 @@ export class GameHubScene extends Phaser.Scene {
       const y = 285 + row * 275;
       const panel = this.add.rectangle(0, 0, 500, 235, 0xffffff).setStrokeStyle(6, 0x46627a);
       const icon = this.add.circle(-165, -10, 70, game.accentColor).setStrokeStyle(5, 0x17324d);
-      const symbol = this.add
-        .text(-165, -12, game.symbol, {
-          fontFamily: 'Arial',
-          fontSize: '78px',
-          color: '#17324d',
-          fontStyle: 'bold',
-        })
-        .setOrigin(0.5);
+      const symbol = game.icon
+        ? this.add.image(-165, -10, game.icon.key).setDisplaySize(130, 97)
+        : this.add
+            .text(-165, -12, game.symbol, {
+              fontFamily: 'Arial',
+              fontSize: '78px',
+              color: '#17324d',
+              fontStyle: 'bold',
+            })
+            .setOrigin(0.5);
       const title = this.add
         .text(-65, -70, game.title, {
           fontFamily: 'Arial',

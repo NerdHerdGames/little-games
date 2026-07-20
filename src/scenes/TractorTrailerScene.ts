@@ -15,6 +15,29 @@ import { enableDragPlacement } from '../ui/DragPlacement';
 
 const TRAILER_X = [390, 245, 100] as const;
 const TRAILER_Y = 500;
+const TRACTOR_BODY_KEY = 'tractor-body';
+const REAR_WHEELS_KEY = 'tractor-rear-wheels';
+const FRONT_WHEELS_KEY = 'tractor-front-wheels';
+const REAR_WHEEL_FRAMES = [
+  [22, 240, 240, 250],
+  [292, 240, 240, 250],
+  [562, 240, 240, 250],
+  [831, 240, 241, 250],
+  [1102, 240, 240, 250],
+  [1373, 240, 239, 250],
+  [1642, 240, 240, 250],
+  [1912, 240, 240, 250],
+] as const;
+const FRONT_WHEEL_FRAMES = [
+  [65, 261, 207, 212],
+  [328, 261, 209, 212],
+  [593, 261, 207, 212],
+  [855, 261, 206, 212],
+  [1114, 261, 206, 212],
+  [1372, 261, 206, 212],
+  [1632, 261, 206, 212],
+  [1893, 261, 206, 212],
+] as const;
 
 export class TractorTrailerScene extends Phaser.Scene {
   private journey: TractorGameState = createTractorGame();
@@ -23,9 +46,19 @@ export class TractorTrailerScene extends Phaser.Scene {
   private scenery: Phaser.GameObjects.Rectangle[] = [];
   private animalDisplay: Phaser.GameObjects.Container | undefined;
   private cleanupAnimalDrag: (() => void) | undefined;
+  private rearWheel!: Phaser.GameObjects.Sprite;
+  private frontWheel!: Phaser.GameObjects.Sprite;
+  private wheelsMoving = false;
 
   constructor() {
     super('TractorTrailer');
+  }
+
+  preload(): void {
+    const path = 'assets/games/tractor-trailer/';
+    this.load.image(TRACTOR_BODY_KEY, `${path}TractorBodySprite.png`);
+    this.load.image(REAR_WHEELS_KEY, `${path}TractoRear WheelAnimation.png`);
+    this.load.image(FRONT_WHEELS_KEY, `${path}TractorFrontWheelsAnimation.png`);
   }
 
   create(): void {
@@ -33,6 +66,7 @@ export class TractorTrailerScene extends Phaser.Scene {
     this.scenery = [];
     this.animalDisplay = undefined;
     this.cleanupAnimalDrag = undefined;
+    this.wheelsMoving = false;
     this.cameras.main.setBackgroundColor('#a9ddf5');
 
     this.add.rectangle(640, 600, 1280, 240, 0x74b85a);
@@ -83,17 +117,21 @@ export class TractorTrailerScene extends Phaser.Scene {
 
   update(_time: number, delta: number): void {
     if (actions.wasPressed('cancel')) this.scene.start('GameHub');
-    if (this.journey.complete || this.journey.waitingForAnimal) return;
     const rightHeld = actions.isHeld('moveRight');
     const goHeld = actions.isHeld('primaryAction');
-    const driving = rightHeld || goHeld;
+    const driving =
+      !this.journey.complete && !this.journey.waitingForAnimal && (rightHeld || goHeld);
+    this.setWheelsMoving(driving);
     if (!driving) return;
 
     const traveled = (Math.min(delta, 40) * 115) / 1000;
     const previous = this.journey;
     this.journey = driveTractor(previous, traveled, rightHeld, goHeld);
     this.scrollScenery(traveled);
-    if (!previous.waitingForAnimal && this.journey.waitingForAnimal) this.showNextAnimal();
+    if (!previous.waitingForAnimal && this.journey.waitingForAnimal) {
+      this.setWheelsMoving(false);
+      this.showNextAnimal();
+    }
   }
 
   private createVehicle(): void {
@@ -111,19 +149,63 @@ export class TractorTrailerScene extends Phaser.Scene {
         })
         .setOrigin(0.5);
     }
-    this.add.rectangle(550, 490, 155, 105, 0x57a84d).setStrokeStyle(6, 0x285e35);
-    this.add.rectangle(590, 425, 74, 65, 0x73c4e8).setStrokeStyle(6, 0x285e35);
-    this.add.rectangle(640, 520, 70, 55, 0x57a84d).setStrokeStyle(6, 0x285e35);
-    this.add.circle(515, 555, 30, 0x263849).setStrokeStyle(5, 0xffffff);
-    this.add.circle(620, 555, 42, 0x263849).setStrokeStyle(6, 0xffffff);
-    this.add
-      .text(550, 487, 'TRACTOR', {
-        fontFamily: 'Arial',
-        fontSize: '18px',
-        color: '#ffffff',
-        fontStyle: 'bold',
-      })
-      .setOrigin(0.5);
+    this.registerWheelFrames(REAR_WHEELS_KEY, REAR_WHEEL_FRAMES);
+    this.registerWheelFrames(FRONT_WHEELS_KEY, FRONT_WHEEL_FRAMES);
+    const frameRate = preferences.current.reducedMotion ? 4 : 10;
+    if (this.anims.exists('tractor-rear-wheel-turn')) this.anims.remove('tractor-rear-wheel-turn');
+    this.anims.create({
+      key: 'tractor-rear-wheel-turn',
+      frames: REAR_WHEEL_FRAMES.map((_frame, index) => ({
+        key: REAR_WHEELS_KEY,
+        frame: `wheel-${index}`,
+      })),
+      frameRate,
+      repeat: -1,
+    });
+    if (this.anims.exists('tractor-front-wheel-turn'))
+      this.anims.remove('tractor-front-wheel-turn');
+    this.anims.create({
+      key: 'tractor-front-wheel-turn',
+      frames: FRONT_WHEEL_FRAMES.map((_frame, index) => ({
+        key: FRONT_WHEELS_KEY,
+        frame: `wheel-${index}`,
+      })),
+      frameRate,
+      repeat: -1,
+    });
+
+    this.add.image(670, 470, TRACTOR_BODY_KEY).setDisplaySize(520, 390).setDepth(3);
+    this.rearWheel = this.add
+      .sprite(510, 525, REAR_WHEELS_KEY, 'wheel-0')
+      .setDisplaySize(165, 165)
+      .setDepth(4);
+    this.frontWheel = this.add
+      .sprite(831, 556, FRONT_WHEELS_KEY, 'wheel-0')
+      .setDisplaySize(103, 103)
+      .setDepth(4);
+  }
+
+  private registerWheelFrames(
+    textureKey: string,
+    frames: readonly (readonly [number, number, number, number])[],
+  ): void {
+    const texture = this.textures.get(textureKey);
+    frames.forEach(([x, y, width, height], index) => {
+      const name = `wheel-${index}`;
+      if (!texture.has(name)) texture.add(name, 0, x, y, width, height);
+    });
+  }
+
+  private setWheelsMoving(moving: boolean): void {
+    if (moving === this.wheelsMoving) return;
+    this.wheelsMoving = moving;
+    if (moving) {
+      this.rearWheel.play('tractor-rear-wheel-turn');
+      this.frontWheel.play('tractor-front-wheel-turn');
+    } else {
+      this.rearWheel.stop();
+      this.frontWheel.stop();
+    }
   }
 
   private showNextAnimal(): void {

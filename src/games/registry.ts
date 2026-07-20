@@ -5,6 +5,7 @@ export interface GameDefinition {
   sceneKey: string;
   accentColor: number;
   symbol: string;
+  icon?: { key: string; path: string };
 }
 
 export const GAMES: readonly GameDefinition[] = [
@@ -87,5 +88,9 @@ export const GAMES: readonly GameDefinition[] = [
     sceneKey: 'TractorTrailer',
     accentColor: 0x74b85a,
     symbol: 'T',
+    icon: {
+      key: 'tractor-trailer-icon',
+      path: 'assets/games/tractor-trailer/tractor-icon.png',
+    },
   },
 ];
