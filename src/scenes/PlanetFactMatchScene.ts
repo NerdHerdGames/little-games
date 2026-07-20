@@ -11,6 +11,7 @@ import {
 } from '../games/planet-fact-match/rules';
 import { addButton } from '../ui/button';
 import { enableDragPlacement } from '../ui/DragPlacement';
+import { createPlanetArt } from '../ui/PlanetArt';
 import { enableTapSelection } from '../ui/TapSelection';
 
 const SLOT = { x: 640, y: 365, radius: 82 } as const;
@@ -228,16 +229,6 @@ export class PlanetFactMatchScene extends Phaser.Scene {
   }
 
   private createPlanet(id: PlanetId, x: number, y: number): Phaser.GameObjects.Container {
-    const colors: Readonly<Record<PlanetId, number>> = {
-      mercury: 0xa9a49d,
-      venus: 0xe2ad65,
-      earth: 0x4e91d8,
-      mars: 0xc96848,
-      jupiter: 0xd6ae82,
-      saturn: 0xe4cf8c,
-      uranus: 0x8bd4d5,
-      neptune: 0x4168c7,
-    };
     const radii: Readonly<Record<PlanetId, number>> = {
       mercury: 25,
       venus: 31,
@@ -248,18 +239,6 @@ export class PlanetFactMatchScene extends Phaser.Scene {
       uranus: 34,
       neptune: 34,
     };
-    const parts: Phaser.GameObjects.GameObject[] = [];
-    if (id === 'saturn')
-      parts.push(this.add.ellipse(0, 0, 104, 30).setStrokeStyle(9, 0xf2e1a9).setFillStyle(0, 0));
-    const body = this.add.circle(0, 0, radii[id], colors[id]).setStrokeStyle(4, 0xffffff);
-    parts.push(body);
-    if (id === 'earth') parts.push(this.add.ellipse(-8, -3, 25, 14, 0x65b96f));
-    if (id === 'jupiter') {
-      parts.push(this.add.rectangle(0, -12, 70, 8, 0xf2d1aa));
-      parts.push(this.add.rectangle(0, 14, 74, 7, 0xad745d));
-    }
-    if (id === 'mars') parts.push(this.add.circle(-9, -7, 7, 0x9d493c));
-    if (id === 'venus') parts.push(this.add.ellipse(4, -5, 45, 10, 0xf4d38f, 0.75));
-    return this.add.container(x, y, parts).setSize(120, 110);
+    return createPlanetArt(this, id, x, y, { radius: radii[id] }).setSize(120, 110);
   }
 }

@@ -12,6 +12,7 @@ import {
 } from '../games/solar-system-order/rules';
 import { addButton } from '../ui/button';
 import { enableDragPlacement } from '../ui/DragPlacement';
+import { createPlanetArt, isPlanetArtId } from '../ui/PlanetArt';
 import { enableTapSelection } from '../ui/TapSelection';
 
 const TRAY_X = [100, 280, 460, 640, 820, 1000, 1180] as const;
@@ -263,33 +264,24 @@ export class SolarSystemOrderScene extends Phaser.Scene {
   }
 
   private createObject(id: SolarOrderId, x: number, y: number): Phaser.GameObjects.Container {
-    const colors: Readonly<Record<SolarOrderId, number>> = {
+    const dwarfColors = {
       sun: 0xffd65a,
-      mercury: 0xa9a49d,
-      venus: 0xe2ad65,
-      earth: 0x4e91d8,
-      mars: 0xc96848,
       ceres: 0xb9a58d,
-      jupiter: 0xd6ae82,
-      saturn: 0xe4cf8c,
-      uranus: 0x8bd4d5,
-      neptune: 0x4168c7,
       pluto: 0xd6b38a,
       haumea: 0xcfe9ef,
       makemake: 0xc67c5a,
       eris: 0xe8edf1,
-    };
+    } as const;
     const parts: Phaser.GameObjects.GameObject[] = [];
-    if (id === 'saturn')
-      parts.push(this.add.ellipse(0, -8, 80, 24).setStrokeStyle(7, 0xf2e1a9).setFillStyle(0, 0));
-    if (id === 'haumea')
-      parts.push(this.add.ellipse(0, -8, 58, 34, colors[id]).setStrokeStyle(3, 0xffffff));
-    else {
-      const radius = id === 'sun' ? 31 : id === 'jupiter' ? 28 : 23;
-      parts.push(this.add.circle(0, -8, radius, colors[id]).setStrokeStyle(3, 0xffffff));
+    if (isPlanetArtId(id)) {
+      const radius = id === 'jupiter' ? 28 : id === 'saturn' ? 25 : 23;
+      parts.push(createPlanetArt(this, id, 0, -8, { radius, strokeWidth: 3 }));
+    } else if (id === 'haumea') {
+      parts.push(this.add.ellipse(0, -8, 58, 34, dwarfColors[id]).setStrokeStyle(3, 0xffffff));
+    } else {
+      const radius = id === 'sun' ? 31 : 23;
+      parts.push(this.add.circle(0, -8, radius, dwarfColors[id]).setStrokeStyle(3, 0xffffff));
     }
-    if (id === 'earth') parts.push(this.add.ellipse(-6, -10, 18, 10, 0x65b96f));
-    if (id === 'jupiter') parts.push(this.add.rectangle(0, -8, 47, 6, 0xad745d));
     if (id === 'pluto') parts.push(this.add.ellipse(4, -7, 17, 16, 0xf2ddd0));
     const label = this.add
       .text(0, 32, SOLAR_ORDER_NAMES[id], {

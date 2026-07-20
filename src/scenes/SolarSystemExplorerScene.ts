@@ -5,6 +5,7 @@ import { actions, preferences } from '../core/services';
 import { SOLAR_SYSTEM_OBJECTS, type SolarSystemObject } from '../data/solarSystem';
 import { addButton } from '../ui/button';
 import { enablePannableSearchView } from '../ui/PannableSearchView';
+import { createPlanetArt, isPlanetArtId } from '../ui/PlanetArt';
 
 const VIEW = { x: 285, y: 110, width: 950, height: 535 } as const;
 const WORLD = { width: 3920, height: 1100 } as const;
@@ -153,24 +154,21 @@ export class SolarSystemExplorerScene extends Phaser.Scene {
   }
 
   private addSolarObject(object: SolarSystemObject): void {
-    const body =
-      object.id === 'haumea'
-        ? this.add.ellipse(0, 0, object.radius * 2.7, object.radius * 1.35, object.color)
-        : this.add.circle(0, 0, object.radius, object.color);
-    body.setStrokeStyle(5, 0xffffff);
-    const container = this.add.container(object.x, object.y, [body]);
+    const container = isPlanetArtId(object.id)
+      ? createPlanetArt(this, object.id, object.x, object.y, {
+          radius: object.radius,
+          strokeWidth: 5,
+        })
+      : this.add.container(object.x, object.y, [
+          object.id === 'haumea'
+            ? this.add
+                .ellipse(0, 0, object.radius * 2.7, object.radius * 1.35, object.color)
+                .setStrokeStyle(5, 0xffffff)
+            : this.add.circle(0, 0, object.radius, object.color).setStrokeStyle(5, 0xffffff),
+        ]);
     if (object.id === 'sun')
       container.add(
         this.add.star(0, 0, 18, object.radius - 12, object.radius + 18, 0xffd65a).setAlpha(0.35),
-      );
-    if (object.id === 'earth') container.add(this.add.ellipse(-10, -5, 28, 17, 0x6cc27a));
-    if (object.id === 'jupiter') {
-      container.add(this.add.rectangle(0, -22, 135, 12, 0xf0d1a5));
-      container.add(this.add.rectangle(0, 20, 145, 10, 0xb87d61));
-    }
-    if (object.id === 'saturn')
-      container.add(
-        this.add.ellipse(0, 0, 210, 58).setStrokeStyle(12, 0xeedda7).setFillStyle(0, 0),
       );
     if (object.id === 'ceres') container.add(this.add.circle(8, -5, 7, 0xf2eadf));
     if (object.id === 'pluto') container.add(this.add.ellipse(5, 2, 24, 23, 0xf2ddd0));
