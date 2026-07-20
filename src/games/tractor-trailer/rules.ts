@@ -4,6 +4,7 @@ export const FARM_ANIMALS = [
   { id: 'pig', name: 'Pig', color: 0xf29ab2 },
   { id: 'sheep', name: 'Sheep', color: 0xd9e1e8 },
   { id: 'dog', name: 'Dog', color: 0xb97a45 },
+  { id: 'cat', name: 'Cat', color: 0xc58a45 },
   { id: 'horse', name: 'Horse', color: 0x8b5635 },
 ] as const;
 
@@ -18,6 +19,7 @@ export interface TractorGameState {
 }
 
 const ENCOUNTER_DISTANCE = 260;
+const BARN_DISTANCE = 360;
 
 export const selectFarmAnimals = (random: () => number = Math.random): FarmAnimalId[] => {
   const animals = FARM_ANIMALS.map(({ id }) => id);
@@ -51,18 +53,24 @@ export const driveTractor = (
   if (state.waitingForAnimal || state.complete || (!rightHeld && !goHeld) || distance <= 0)
     return state;
   const distanceToNext = Math.max(0, state.distanceToNext - distance);
-  return { ...state, distanceToNext, waitingForAnimal: distanceToNext === 0 };
+  const allAnimalsLoaded = state.loaded.length === state.animals.length;
+  return {
+    ...state,
+    distanceToNext,
+    waitingForAnimal: !allAnimalsLoaded && distanceToNext === 0,
+    complete: allAnimalsLoaded && distanceToNext === 0,
+  };
 };
 
 export const loadFarmAnimal = (state: TractorGameState, animal: FarmAnimalId): TractorGameState => {
   if (!state.waitingForAnimal || state.animals[state.loaded.length] !== animal) return state;
   const loaded = [...state.loaded, animal];
-  const complete = loaded.length === state.animals.length;
+  const allAnimalsLoaded = loaded.length === state.animals.length;
   return {
     ...state,
     loaded,
     waitingForAnimal: false,
-    distanceToNext: complete ? 0 : ENCOUNTER_DISTANCE,
-    complete,
+    distanceToNext: allAnimalsLoaded ? BARN_DISTANCE : ENCOUNTER_DISTANCE,
+    complete: false,
   };
 };
