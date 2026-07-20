@@ -59,11 +59,16 @@ export class PlanetFactMatchScene extends Phaser.Scene {
       color: '#fff4c2',
       fontStyle: 'bold',
     });
-    this.add.text(25, 63, 'Drag the matching planet into the slot. Tap the fact to hear it.', {
-      fontFamily: 'Arial',
-      fontSize: '20px',
-      color: '#d7e8ff',
-    });
+    this.add.text(
+      25,
+      63,
+      'Drag the matching planet into the slot. Tap the fact to hear it again.',
+      {
+        fontFamily: 'Arial',
+        fontSize: '20px',
+        color: '#d7e8ff',
+      },
+    );
     this.starText = this.add
       .text(720, 46, '', {
         fontFamily: 'Arial',
@@ -170,11 +175,12 @@ export class PlanetFactMatchScene extends Phaser.Scene {
     planet.label.setText(`★ ${PLANET_NAMES[id]}`).setColor('#fff4c2');
     this.feedbackText.setText('That matches! You earned a star.');
     playPlacementTone(preferences.current.muted);
+    speak(PLANET_NAMES[id], preferences.current.muted);
     this.refreshStars();
     if (!preferences.current.reducedMotion)
       this.tweens.add({ targets: planet.display, scale: 1.18, duration: 180, yoyo: true });
 
-    this.time.delayedCall(preferences.current.reducedMotion ? 150 : 600, () => {
+    this.time.delayedCall(1500, () => {
       planet.display.setPosition(planet.startX, planet.startY).setDepth(10);
       this.locked = false;
       if (this.match.complete) this.completeGame();
@@ -183,9 +189,11 @@ export class PlanetFactMatchScene extends Phaser.Scene {
   }
 
   private refreshRound(): void {
-    this.factText.setText(this.match.current?.text ?? 'All planets matched!');
+    const fact = this.match.current?.text;
+    this.factText.setText(fact ?? 'All planets matched!');
     this.feedbackText.setText('Which planet matches this fact?');
     this.refreshStars();
+    if (fact) speak(fact, preferences.current.muted);
   }
 
   private refreshStars(): void {

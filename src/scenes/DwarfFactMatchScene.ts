@@ -61,7 +61,7 @@ export class DwarfFactMatchScene extends Phaser.Scene {
     this.add.text(
       25,
       63,
-      'Drag the matching little world into the slot. Tap the fact to hear it.',
+      'Drag the matching little world into the slot. Tap the fact to hear it again.',
       {
         fontFamily: 'Arial',
         fontSize: '20px',
@@ -171,10 +171,11 @@ export class DwarfFactMatchScene extends Phaser.Scene {
     choice.label.setText(`★ ${NAMES[id]}`).setColor('#fff4c2');
     this.feedbackText.setText('That matches! You earned a star.');
     playPlacementTone(preferences.current.muted);
+    speak(NAMES[id], preferences.current.muted);
     this.refreshStars();
     if (!preferences.current.reducedMotion)
       this.tweens.add({ targets: choice.display, scale: 1.18, duration: 180, yoyo: true });
-    this.time.delayedCall(preferences.current.reducedMotion ? 150 : 600, () => {
+    this.time.delayedCall(1500, () => {
       this.resetChoice(choice);
       this.locked = false;
       if (this.match.complete) this.completeGame();
@@ -186,9 +187,11 @@ export class DwarfFactMatchScene extends Phaser.Scene {
     choice.display.setPosition(choice.startX, choice.startY).setDepth(10);
   }
   private refreshRound(): void {
-    this.factText.setText(this.match.current?.text ?? 'All dwarf planets matched!');
+    const fact = this.match.current?.text;
+    this.factText.setText(fact ?? 'All dwarf planets matched!');
     this.feedbackText.setText('Which little world matches this fact?');
     this.refreshStars();
+    if (fact) speak(fact, preferences.current.muted);
   }
   private refreshStars(): void {
     this.starText.setText(
