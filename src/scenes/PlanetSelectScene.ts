@@ -4,6 +4,7 @@ import { actions, progress } from '../core/services';
 import { goToScene } from '../core/SceneTransitions';
 import { MenuFocus } from '../ui/MenuFocus';
 import { addButton } from '../ui/button';
+import { createPlanetArt, preloadPlanetArt } from '../ui/PlanetArt';
 
 export class PlanetSelectScene extends Phaser.Scene {
   private focus = new MenuFocus(PLANETS.length);
@@ -11,6 +12,13 @@ export class PlanetSelectScene extends Phaser.Scene {
   private status!: Phaser.GameObjects.Text;
   constructor() {
     super('PlanetSelect');
+  }
+
+  preload(): void {
+    preloadPlanetArt(
+      this,
+      PLANETS.map(({ id }) => id),
+    );
   }
 
   create(): void {
@@ -43,10 +51,10 @@ export class PlanetSelectScene extends Phaser.Scene {
     PLANETS.forEach((planet, index) => {
       const x = 160 + index * 240;
       const panel = this.add.rectangle(0, 0, 210, 330, 0x203c5a).setStrokeStyle(5, 0x7193b5);
-      const world = this.add
-        .circle(0, -65, planet.id === 'haumea' ? 42 : 58, planet.color)
-        .setStrokeStyle(4, 0xffffff);
-      if (planet.id === 'haumea') world.setScale(1.45, 0.82);
+      const world = createPlanetArt(this, planet.id, 0, -65, {
+        maxWidth: 130,
+        maxHeight: 115,
+      });
       const name = this.add
         .text(0, 20, planet.name, {
           fontFamily: 'Arial, sans-serif',

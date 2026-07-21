@@ -11,7 +11,7 @@ import {
 } from '../games/planet-fact-match/rules';
 import { addButton } from '../ui/button';
 import { enableDragPlacement } from '../ui/DragPlacement';
-import { createPlanetArt } from '../ui/PlanetArt';
+import { createPlanetArt, preloadPlanetArt } from '../ui/PlanetArt';
 import { enableTapSelection } from '../ui/TapSelection';
 
 const SLOT = { x: 640, y: 365, radius: 82 } as const;
@@ -47,6 +47,10 @@ export class PlanetFactMatchScene extends Phaser.Scene {
 
   constructor() {
     super('PlanetFactMatch');
+  }
+
+  preload(): void {
+    preloadPlanetArt(this, PLANET_IDS);
   }
 
   create(): void {

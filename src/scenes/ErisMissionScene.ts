@@ -9,6 +9,7 @@ import {
   type ErisJourneyState,
 } from '../games/eris/rules';
 import { addButton } from '../ui/button';
+import { createPlanetArt, preloadPlanetArt } from '../ui/PlanetArt';
 
 const CHECKPOINTS = [
   [250, 285],
@@ -26,7 +27,7 @@ const BOUNDS = { left: 75, right: 1205, top: 135, bottom: 620 } as const;
 export class ErisMissionScene extends Phaser.Scene {
   private journey: ErisJourneyState = createErisJourney();
   private probe!: Phaser.GameObjects.Container;
-  private sun!: Phaser.GameObjects.Arc;
+  private sun!: Phaser.GameObjects.Container;
   private rings: Phaser.GameObjects.Arc[] = [];
   private progressText!: Phaser.GameObjects.Text;
   private message!: Phaser.GameObjects.Text;
@@ -37,6 +38,10 @@ export class ErisMissionScene extends Phaser.Scene {
 
   constructor() {
     super('ErisMission');
+  }
+
+  preload(): void {
+    preloadPlanetArt(this, ['sun', 'eris']);
   }
 
   create(): void {
@@ -72,7 +77,7 @@ export class ErisMissionScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
     addButton(this, 1120, 55, 'Pause', () => this.togglePause(), 210);
-    this.sun = this.add.circle(95, 360, 62, 0xffd65a).setStrokeStyle(7, 0xfff4c2);
+    this.sun = createPlanetArt(this, 'sun', 95, 360, { maxWidth: 140, maxHeight: 140 });
     this.add
       .text(95, 445, 'Sun', { fontFamily: 'Arial', fontSize: '20px', color: '#fff4c2' })
       .setOrigin(0.5);
@@ -207,8 +212,7 @@ export class ErisMissionScene extends Phaser.Scene {
   private completeJourney(): void {
     this.finishing = true;
     progress.unlock('eris');
-    this.add.circle(1090, 345, 105, 0xe8edf1).setStrokeStyle(8, 0xffffff).setDepth(20);
-    this.add.circle(1055, 320, 25, 0xbfc8d2).setDepth(21);
+    createPlanetArt(this, 'eris', 1090, 345, { maxWidth: 210, maxHeight: 210 }).setDepth(20);
     this.add
       .text(800, 345, 'You arrived at Eris!', {
         fontFamily: 'Arial',

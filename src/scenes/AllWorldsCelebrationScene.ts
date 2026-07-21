@@ -3,10 +3,17 @@ import { actions, preferences } from '../core/services';
 import { goToScene } from '../core/SceneTransitions';
 import { PLANETS } from '../data/planets';
 import { addButton } from '../ui/button';
+import { createPlanetArt, preloadPlanetArt } from '../ui/PlanetArt';
 
 export class AllWorldsCelebrationScene extends Phaser.Scene {
   constructor() {
     super('AllWorldsCelebration');
+  }
+  preload(): void {
+    preloadPlanetArt(
+      this,
+      PLANETS.map(({ id }) => id),
+    );
   }
   create(): void {
     this.cameras.main.setBackgroundColor('#10243d');
@@ -27,10 +34,10 @@ export class AllWorldsCelebrationScene extends Phaser.Scene {
       .setOrigin(0.5);
     PLANETS.forEach((planet, index) => {
       const x = 170 + index * 235;
-      const world = this.add
-        .circle(x, 315, planet.id === 'haumea' ? 48 : 62, planet.color)
-        .setStrokeStyle(6, 0xffffff);
-      if (planet.id === 'haumea') world.setScale(1.4, 0.78);
+      const world = createPlanetArt(this, planet.id, x, 315, {
+        maxWidth: 145,
+        maxHeight: 130,
+      });
       this.add
         .text(x, 410, planet.name, {
           fontFamily: 'Arial',

@@ -7,6 +7,7 @@ import { placePuzzlePiece, type PlacementPuzzleState } from '../games/puzzle/rul
 import { addButton } from '../ui/button';
 import { enableDragPlacement } from '../ui/DragPlacement';
 import { MenuFocus } from '../ui/MenuFocus';
+import { createPlanetArt, preloadPlanetArt } from '../ui/PlanetArt';
 
 const STARTS = [
   [150, 205],
@@ -41,6 +42,10 @@ export class PlutoMissionScene extends Phaser.Scene {
     super('PlutoMission');
   }
 
+  preload(): void {
+    preloadPlanetArt(this, ['pluto']);
+  }
+
   create(): void {
     this.puzzle = createPlutoPuzzle();
     this.pieces = [];
@@ -63,9 +68,7 @@ export class PlutoMissionScene extends Phaser.Scene {
     });
     addButton(this, 1120, 55, 'Pause', () => this.togglePause(), 210);
 
-    this.add.circle(820, 365, 255, 0xd6b38a).setStrokeStyle(8, 0xf5eee5);
-    this.add.circle(735, 250, 38, 0xb88769);
-    this.add.circle(930, 410, 55, 0xb88769);
+    createPlanetArt(this, 'pluto', 820, 365, { maxWidth: 510, maxHeight: 510 });
     this.add
       .text(820, 355, '♥', { fontFamily: 'Arial', fontSize: '330px', color: '#f2e6dc' })
       .setOrigin(0.5)

@@ -5,17 +5,25 @@ import { goToScene } from '../core/SceneTransitions';
 import { FACTS_BY_PLANET, PLANETS } from '../data/planets';
 import { MenuFocus } from '../ui/MenuFocus';
 import { addButton } from '../ui/button';
+import { createPlanetArt, preloadPlanetArt } from '../ui/PlanetArt';
 
 export class FreeExploreScene extends Phaser.Scene {
   private focus = new MenuFocus(PLANETS.length);
   private factIndex = 0;
-  private illustration!: Phaser.GameObjects.Arc;
+  private illustration!: Phaser.GameObjects.Container;
   private title!: Phaser.GameObjects.Text;
   private fact!: Phaser.GameObjects.Text;
   private counter!: Phaser.GameObjects.Text;
   private cards: Phaser.GameObjects.Container[] = [];
   constructor() {
     super('FreeExplore');
+  }
+
+  preload(): void {
+    preloadPlanetArt(
+      this,
+      PLANETS.map(({ id }) => id),
+    );
   }
 
   create(): void {
@@ -52,7 +60,10 @@ export class FreeExploreScene extends Phaser.Scene {
       });
       this.cards.push(card);
     });
-    this.illustration = this.add.circle(260, 355, 120, 0xffffff).setStrokeStyle(7, 0x17324d);
+    this.illustration = createPlanetArt(this, this.planet().id, 260, 355, {
+      maxWidth: 255,
+      maxHeight: 240,
+    });
     this.title = this.add
       .text(260, 520, '', {
         fontFamily: 'Arial',
@@ -118,9 +129,11 @@ export class FreeExploreScene extends Phaser.Scene {
     const planet = this.planet();
     const facts = this.facts();
     this.cards.forEach((card, index) => card.setScale(index === this.focus.current ? 1.07 : 1));
-    this.illustration
-      .setFillStyle(planet.color)
-      .setScale(planet.id === 'haumea' ? 1.35 : 1, planet.id === 'haumea' ? 0.72 : 1);
+    this.illustration.destroy(true);
+    this.illustration = createPlanetArt(this, planet.id, 260, 355, {
+      maxWidth: 255,
+      maxHeight: 240,
+    });
     this.title.setText(planet.name);
     this.fact.setText(facts[this.factIndex] ?? '');
     this.counter.setText(`Fact ${this.factIndex + 1} of ${facts.length}`);

@@ -12,16 +12,13 @@ import {
 } from '../games/dwarf-fact-match/rules';
 import { addButton } from '../ui/button';
 import { enableDragPlacement } from '../ui/DragPlacement';
+import { createPlanetArt, preloadPlanetArt } from '../ui/PlanetArt';
 import { enableTapSelection } from '../ui/TapSelection';
 
 const SLOT = { x: 640, y: 365, radius: 82 } as const;
 const NAMES = Object.fromEntries(PLANETS.map(({ id, name }) => [id, name])) as Record<
   DwarfId,
   string
->;
-const COLORS = Object.fromEntries(PLANETS.map(({ id, color }) => [id, color])) as Record<
-  DwarfId,
-  number
 >;
 
 interface DwarfChoice {
@@ -45,6 +42,10 @@ export class DwarfFactMatchScene extends Phaser.Scene {
 
   constructor() {
     super('DwarfFactMatch');
+  }
+
+  preload(): void {
+    preloadPlanetArt(this, DWARF_IDS);
   }
 
   create(): void {
@@ -225,17 +226,6 @@ export class DwarfFactMatchScene extends Phaser.Scene {
   }
 
   private createDwarf(id: DwarfId, x: number, y: number): Phaser.GameObjects.Container {
-    const parts: Phaser.GameObjects.GameObject[] = [];
-    if (id === 'haumea')
-      parts.push(this.add.ellipse(0, 0, 86, 48, COLORS[id]).setStrokeStyle(4, 0xffffff));
-    else
-      parts.push(
-        this.add.circle(0, 0, id === 'pluto' ? 36 : 33, COLORS[id]).setStrokeStyle(4, 0xffffff),
-      );
-    if (id === 'ceres') parts.push(this.add.circle(9, -5, 7, 0xf2eadf));
-    if (id === 'pluto') parts.push(this.add.ellipse(4, 2, 25, 24, 0xf2ddd0));
-    if (id === 'makemake') parts.push(this.add.ellipse(-5, -5, 36, 10, 0xe2a083));
-    if (id === 'eris') parts.push(this.add.circle(-8, -7, 9, 0xc8d0d8));
-    return this.add.container(x, y, parts).setSize(130, 110);
+    return createPlanetArt(this, id, x, y, { maxWidth: 100, maxHeight: 84 }).setSize(130, 110);
   }
 }

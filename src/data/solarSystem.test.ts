@@ -20,5 +20,7 @@ describe('Solar System Explorer data', () => {
       'Eris',
     ]);
     expect(new Set(SOLAR_SYSTEM_OBJECTS.map((object) => object.id)).size).toBe(14);
+    for (const object of SOLAR_SYSTEM_OBJECTS)
+      expect(object.spritePath).toBe(`assets/pixel-planets/individual/${object.id}.png`);
   });
 });

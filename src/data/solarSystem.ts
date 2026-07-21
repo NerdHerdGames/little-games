@@ -1,4 +1,6 @@
-export const SOLAR_SYSTEM_OBJECTS = [
+import { PLANET_SPRITES } from './planetSprites';
+
+const SOLAR_SYSTEM_LAYOUT = [
   { id: 'sun', name: 'Sun', x: 190, y: 540, radius: 95, selectionRadius: 115, color: 0xffd65a },
   {
     id: 'mercury',
@@ -70,5 +72,10 @@ export const SOLAR_SYSTEM_OBJECTS = [
   },
   { id: 'eris', name: 'Eris', x: 3440, y: 590, radius: 28, selectionRadius: 58, color: 0xe8edf1 },
 ] as const;
+
+export const SOLAR_SYSTEM_OBJECTS = SOLAR_SYSTEM_LAYOUT.map((object) => ({
+  ...object,
+  spritePath: PLANET_SPRITES[object.id].path,
+}));
 
 export type SolarSystemObject = (typeof SOLAR_SYSTEM_OBJECTS)[number];

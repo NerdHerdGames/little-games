@@ -6,6 +6,7 @@ import { MAKEMAKE_HINT_DELAY_MS, MAKEMAKE_OBJECTIVES } from '../games/makemake/r
 import { isSearchHintEligible, VisualSearchSession } from '../games/search/rules';
 import { addButton } from '../ui/button';
 import { enablePannableSearchView } from '../ui/PannableSearchView';
+import { createPlanetArt, preloadPlanetArt } from '../ui/PlanetArt';
 
 const VIEW = { x: 320, y: 125, width: 900, height: 500 } as const;
 // Extra room on the right lets Makemake's moon reach the telescope crosshair.
@@ -35,6 +36,10 @@ export class MakemakeMissionScene extends Phaser.Scene {
 
   constructor() {
     super('MakemakeMission');
+  }
+
+  preload(): void {
+    preloadPlanetArt(this, ['makemake']);
   }
 
   create(): void {
@@ -101,8 +106,20 @@ export class MakemakeMissionScene extends Phaser.Scene {
     this.addWorldObject(780, 290, 48, 0xbcd9e8, 'Icy world');
     this.addWorldObject(1090, 760, 54, 0x9bb4c8, 'Distant object');
     this.addWorldObject(420, 700, 35, 0xd5c7a9, 'Small world');
-    const makemake = this.addWorldObject(1370, 505, 72, 0xc67c5a, 'Makemake');
-    makemake.add(this.add.ellipse(0, 0, 105, 34, 0xe2a083));
+    const makemakeArt = createPlanetArt(this, 'makemake', 0, 0, {
+      maxWidth: 145,
+      maxHeight: 145,
+    });
+    const makemakeLabel = this.add
+      .text(0, 90, 'Makemake', {
+        fontFamily: 'Arial',
+        fontSize: '20px',
+        color: '#ffffff',
+        backgroundColor: '#10243d',
+        padding: { x: 7, y: 4 },
+      })
+      .setOrigin(0.5);
+    this.world.add(this.add.container(1370, 505, [makemakeArt, makemakeLabel]));
     const moon = this.addWorldObject(1490, 420, 28, 0xd9dde4, 'Small moon');
     moon.add(this.add.circle(-8, -5, 8, 0xaab2bf));
     this.hintRing = this.add

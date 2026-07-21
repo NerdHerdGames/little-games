@@ -3,11 +3,18 @@ import { PLANETS } from '../data/planets';
 import { actions, progress } from '../core/services';
 import { goToScene } from '../core/SceneTransitions';
 import { addButton } from '../ui/button';
+import { createPlanetArt, preloadPlanetArt } from '../ui/PlanetArt';
 
 export class BadgeCollectionScene extends Phaser.Scene {
   private destination = 'MainMenu';
   constructor() {
     super('BadgeCollection');
+  }
+  preload(): void {
+    preloadPlanetArt(
+      this,
+      PLANETS.map(({ id }) => id),
+    );
   }
   create(data: { fromMission?: boolean }): void {
     this.destination = data.fromMission ? 'PlanetSelect' : 'MainMenu';
@@ -37,9 +44,8 @@ export class BadgeCollectionScene extends Phaser.Scene {
     PLANETS.forEach((planet, index) => {
       const unlocked = progress.isUnlocked(planet.id);
       const x = 160 + index * 240;
-      this.add
-        .circle(x, 330, 82, unlocked ? planet.color : 0x445566)
-        .setStrokeStyle(7, unlocked ? 0xfff4c2 : 0x9da8b3);
+      if (unlocked) createPlanetArt(this, planet.id, x, 330, { maxWidth: 155, maxHeight: 155 });
+      else this.add.circle(x, 330, 82, 0x445566).setStrokeStyle(7, 0x9da8b3);
       this.add
         .text(x, 325, unlocked ? '★' : '🔒', {
           fontFamily: 'Arial',

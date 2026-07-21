@@ -5,13 +5,14 @@ import { actions, preferences } from '../core/services';
 import { SOLAR_SYSTEM_OBJECTS, type SolarSystemObject } from '../data/solarSystem';
 import { addButton } from '../ui/button';
 import { enablePannableSearchView } from '../ui/PannableSearchView';
-import { createPlanetArt, isPlanetArtId } from '../ui/PlanetArt';
+import { createPlanetArt, preloadPlanetArt } from '../ui/PlanetArt';
 
 const VIEW = { x: 285, y: 110, width: 950, height: 535 } as const;
 const WORLD = { width: 3920, height: 1100 } as const;
 // Allow the first and last objects to travel all the way to the crosshair.
-const MIN_PAN_X = SOLAR_SYSTEM_OBJECTS[0].x - VIEW.width / 2;
-const MAX_PAN_X = (SOLAR_SYSTEM_OBJECTS.at(-1)?.x ?? SOLAR_SYSTEM_OBJECTS[0].x) - VIEW.width / 2;
+const FIRST_OBJECT = SOLAR_SYSTEM_OBJECTS[0]!;
+const MIN_PAN_X = FIRST_OBJECT.x - VIEW.width / 2;
+const MAX_PAN_X = (SOLAR_SYSTEM_OBJECTS.at(-1)?.x ?? FIRST_OBJECT.x) - VIEW.width / 2;
 
 export class SolarSystemExplorerScene extends Phaser.Scene {
   private world!: Phaser.GameObjects.Container;
@@ -24,6 +25,13 @@ export class SolarSystemExplorerScene extends Phaser.Scene {
 
   constructor() {
     super('SolarSystemExplorer');
+  }
+
+  preload(): void {
+    preloadPlanetArt(
+      this,
+      SOLAR_SYSTEM_OBJECTS.map(({ id }) => id),
+    );
   }
 
   create(): void {
@@ -154,26 +162,9 @@ export class SolarSystemExplorerScene extends Phaser.Scene {
   }
 
   private addSolarObject(object: SolarSystemObject): void {
-    const container = isPlanetArtId(object.id)
-      ? createPlanetArt(this, object.id, object.x, object.y, {
-          radius: object.radius,
-          strokeWidth: 5,
-        })
-      : this.add.container(object.x, object.y, [
-          object.id === 'haumea'
-            ? this.add
-                .ellipse(0, 0, object.radius * 2.7, object.radius * 1.35, object.color)
-                .setStrokeStyle(5, 0xffffff)
-            : this.add.circle(0, 0, object.radius, object.color).setStrokeStyle(5, 0xffffff),
-        ]);
-    if (object.id === 'sun')
-      container.add(
-        this.add.star(0, 0, 18, object.radius - 12, object.radius + 18, 0xffd65a).setAlpha(0.35),
-      );
-    if (object.id === 'ceres') container.add(this.add.circle(8, -5, 7, 0xf2eadf));
-    if (object.id === 'pluto') container.add(this.add.ellipse(5, 2, 24, 23, 0xf2ddd0));
-    if (object.id === 'makemake') container.add(this.add.ellipse(-4, -5, 37, 11, 0xe2a083));
-    if (object.id === 'eris') container.add(this.add.circle(-7, -7, 8, 0xc8d0d8));
+    const container = createPlanetArt(this, object.id, object.x, object.y, {
+      radius: object.radius,
+    });
     this.world.add(container);
   }
 

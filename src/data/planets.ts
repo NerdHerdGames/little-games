@@ -1,10 +1,12 @@
 import type { PlanetId } from '../storage/ProgressStore';
+import { PLANET_SPRITES } from './planetSprites';
 
 export interface PlanetData {
   id: PlanetId;
   name: string;
   subtitle: string;
   color: number;
+  spritePath: string;
   playable: boolean;
   missionScene?: string;
 }
@@ -15,6 +17,7 @@ export const PLANETS: readonly PlanetData[] = [
     name: 'Ceres',
     subtitle: 'Asteroid Belt',
     color: 0xb9a58d,
+    spritePath: PLANET_SPRITES.ceres.path,
     playable: true,
     missionScene: 'CeresMission',
   },
@@ -23,6 +26,7 @@ export const PLANETS: readonly PlanetData[] = [
     name: 'Pluto',
     subtitle: 'Kuiper Belt',
     color: 0xd6b38a,
+    spritePath: PLANET_SPRITES.pluto.path,
     playable: true,
     missionScene: 'PlutoMission',
   },
@@ -31,6 +35,7 @@ export const PLANETS: readonly PlanetData[] = [
     name: 'Haumea',
     subtitle: 'Fast and oval',
     color: 0xcfe9ef,
+    spritePath: PLANET_SPRITES.haumea.path,
     playable: true,
     missionScene: 'HaumeaMission',
   },
@@ -39,6 +44,7 @@ export const PLANETS: readonly PlanetData[] = [
     name: 'Makemake',
     subtitle: 'Reddish world',
     color: 0xc67c5a,
+    spritePath: PLANET_SPRITES.makemake.path,
     playable: true,
     missionScene: 'MakemakeMission',
   },
@@ -47,6 +53,7 @@ export const PLANETS: readonly PlanetData[] = [
     name: 'Eris',
     subtitle: 'Faraway world',
     color: 0xe8edf1,
+    spritePath: PLANET_SPRITES.eris.path,
     playable: true,
     missionScene: 'ErisMission',
   },
