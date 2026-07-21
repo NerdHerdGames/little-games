@@ -1,4 +1,5 @@
 import type { Action } from './actions';
+import { getTouchControlVisibility, type TouchControlProfile } from './TouchControlProfile';
 
 const BUTTONS: ReadonlyArray<{ action: Action; label: string; className: string }> = [
   { action: 'moveUp', label: 'Up', className: 'up' },
@@ -9,16 +10,20 @@ const BUTTONS: ReadonlyArray<{ action: Action; label: string; className: string 
 
 export class TouchControls {
   private held: Partial<Record<Action, boolean>> = {};
-  private root = document.querySelector<HTMLDivElement>('#touch-controls');
+  private readonly root: HTMLDivElement;
+  private readonly pad: HTMLDivElement;
+  private readonly actionButton: HTMLButtonElement;
 
   constructor() {
-    if (!this.root) throw new Error('Touch controls container #touch-controls was not found.');
-    const pad = document.createElement('div');
-    pad.className = 'dpad';
+    const root = document.querySelector<HTMLDivElement>('#touch-controls');
+    if (!root) throw new Error('Touch controls container #touch-controls was not found.');
+    this.root = root;
+    this.pad = document.createElement('div');
+    this.pad.className = 'dpad';
     for (const item of BUTTONS)
-      pad.append(this.makeButton(item.action, item.label, item.className));
-    this.root.append(pad);
-    this.root.append(this.makeButton('primaryAction', 'Go!', 'action-button'));
+      this.pad.append(this.makeButton(item.action, item.label, item.className));
+    this.actionButton = this.makeButton('primaryAction', 'Go!', 'action-button');
+    this.root.append(this.pad, this.actionButton);
   }
 
   read(): Partial<Record<Action, boolean>> {
@@ -26,7 +31,21 @@ export class TouchControls {
   }
 
   setVisible(visible: boolean): void {
-    this.root?.classList.toggle('hidden', !visible);
+    this.root.classList.toggle('hidden', !visible);
+  }
+
+  setProfile(profile: TouchControlProfile): void {
+    const visibility = getTouchControlVisibility(profile);
+    this.releaseAll();
+    this.pad.hidden = !visibility.directions;
+    this.actionButton.hidden = !visibility.action;
+    this.setVisible(visibility.directions || visibility.action);
+  }
+
+  private releaseAll(): void {
+    this.held = {};
+    for (const button of this.root.querySelectorAll('.touch-button.active'))
+      button.classList.remove('active');
   }
 
   private makeButton(action: Action, label: string, className: string): HTMLButtonElement {

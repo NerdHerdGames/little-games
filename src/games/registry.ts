@@ -1,3 +1,5 @@
+import type { TouchControlProfile } from '../input/TouchControlProfile';
+
 export interface GameDefinition {
   id: string;
   title: string;
@@ -5,6 +7,7 @@ export interface GameDefinition {
   sceneKey: string;
   accentColor: number;
   symbol: string;
+  touchControls: TouchControlProfile;
   icon?: { key: string; path: string };
 }
 
@@ -14,6 +17,7 @@ export const GAMES: readonly GameDefinition[] = [
     title: 'Star Collector',
     description: 'Move around and collect five friendly stars.',
     sceneKey: 'StarCollector',
+    touchControls: 'directions',
     accentColor: 0xffd65a,
     symbol: '★',
   },
@@ -22,6 +26,7 @@ export const GAMES: readonly GameDefinition[] = [
     title: 'Dwarf Planet Explorer',
     description: 'Explore five little worlds and earn planet badges.',
     sceneKey: 'MainMenu',
+    touchControls: 'full',
     accentColor: 0x8cc8e8,
     symbol: '●',
   },
@@ -30,6 +35,7 @@ export const GAMES: readonly GameDefinition[] = [
     title: 'Solar System Telescope',
     description: 'Discover the Sun, eight planets, and five little worlds.',
     sceneKey: 'SolarSystemExplorer',
+    touchControls: 'full',
     accentColor: 0x557bdc,
     symbol: '☀',
   },
@@ -38,6 +44,7 @@ export const GAMES: readonly GameDefinition[] = [
     title: 'Fish Tank Quiz',
     description: 'Answer friendly questions and fill a swimming fish tank.',
     sceneKey: 'FishTankQuiz',
+    touchControls: 'none',
     accentColor: 0x65c8d0,
     symbol: '🐟',
   },
@@ -46,6 +53,7 @@ export const GAMES: readonly GameDefinition[] = [
     title: 'Planet Fact Match',
     description: 'Drag each planet to the fact it matches and earn eight stars.',
     sceneKey: 'PlanetFactMatch',
+    touchControls: 'none',
     accentColor: 0x7d8fe8,
     symbol: '🪐',
   },
@@ -54,6 +62,7 @@ export const GAMES: readonly GameDefinition[] = [
     title: 'Dwarf Planet Fact Match',
     description: 'Match five little worlds with their space facts.',
     sceneKey: 'DwarfFactMatch',
+    touchControls: 'none',
     accentColor: 0xb9a58d,
     symbol: '●',
   },
@@ -62,6 +71,7 @@ export const GAMES: readonly GameDefinition[] = [
     title: 'Solar System Order',
     description: 'Place the Sun, planets, and little worlds in distance order.',
     sceneKey: 'SolarSystemOrder',
+    touchControls: 'none',
     accentColor: 0xffb84d,
     symbol: '↗',
   },
@@ -70,6 +80,7 @@ export const GAMES: readonly GameDefinition[] = [
     title: 'Fish Shape Match',
     description: 'Find circle, square, and triangle fish in three bright colors.',
     sceneKey: 'FishShapeMatch',
+    touchControls: 'none',
     accentColor: 0x55ace8,
     symbol: '△',
   },
@@ -78,6 +89,7 @@ export const GAMES: readonly GameDefinition[] = [
     title: 'Shape Flip Match',
     description: 'Flip cards and match colorful circles, squares, and triangles.',
     sceneKey: 'ShapeFlipMatch',
+    touchControls: 'none',
     accentColor: 0x5b73a8,
     symbol: '?',
   },
@@ -86,6 +98,7 @@ export const GAMES: readonly GameDefinition[] = [
     title: 'Tractor Trailer Trip',
     description: 'Drive a tractor and help three farm animals climb aboard.',
     sceneKey: 'TractorTrailer',
+    touchControls: 'action',
     accentColor: 0x74b85a,
     symbol: 'T',
     icon: {

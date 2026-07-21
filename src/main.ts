@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { registerSW } from 'virtual:pwa-register';
 import { GAME_HEIGHT, GAME_WIDTH } from './config/settings';
+import { getTouchControlProfile } from './config/touchControls';
 import { actions, preferences } from './core/services';
 import { InputCoordinator } from './input/InputCoordinator';
 import { BadgeCollectionScene } from './scenes/BadgeCollectionScene';
@@ -73,7 +74,16 @@ const game = new Phaser.Game({
   render: { antialias: true, roundPixels: true },
 });
 
-game.events.on(Phaser.Core.Events.PRE_STEP, () => coordinator.update());
+let activeTouchScene = '';
+game.events.on(Phaser.Core.Events.PRE_STEP, () => {
+  const activeScenes = game.scene.getScenes(true);
+  const sceneKey = activeScenes.at(-1)?.sys.settings.key ?? '';
+  if (sceneKey !== activeTouchScene) {
+    activeTouchScene = sceneKey;
+    coordinator.setTouchProfile(getTouchControlProfile(sceneKey));
+  }
+  coordinator.update();
+});
 window.addEventListener('preferenceschange', () => game.sound.setMute(preferences.current.muted));
 game.sound.setMute(preferences.current.muted);
 

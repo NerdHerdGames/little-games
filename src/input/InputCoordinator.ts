@@ -3,6 +3,7 @@ import type { ActionState } from './ActionState';
 import { GamepadAdapter } from './GamepadAdapter';
 import { KeyboardAdapter } from './KeyboardAdapter';
 import { TouchControls } from './TouchControls';
+import type { TouchControlProfile } from './TouchControlProfile';
 
 export class InputCoordinator {
   readonly touch = new TouchControls();
@@ -10,6 +11,10 @@ export class InputCoordinator {
   readonly gamepad = new GamepadAdapter(INPUT_DEAD_ZONE);
 
   constructor(private readonly state: ActionState) {}
+
+  setTouchProfile(profile: TouchControlProfile): void {
+    this.touch.setProfile(profile);
+  }
 
   update(): void {
     this.state.setSource('touch', this.touch.read());

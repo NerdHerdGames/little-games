@@ -11,5 +11,10 @@
     "strict": true,
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "scripts", "src/games/registry.ts"]
+  "include": [
+    "vite.config.ts",
+    "scripts",
+    "src/games/registry.ts",
+    "src/input/TouchControlProfile.ts"
+  ]
 }
