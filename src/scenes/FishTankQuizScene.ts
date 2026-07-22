@@ -15,6 +15,80 @@ import { MenuFocus } from '../ui/MenuFocus';
 import { enableTapSelection } from '../ui/TapSelection';
 
 const TANK = { left: 340, right: 1240, top: 120, bottom: 650 } as const;
+const OCEAN_ANIMALS_TEXTURE = 'ocean-animals';
+const FISH_TANK_BACKGROUND_TEXTURE = 'fish-tank-quiz-background';
+const SWIM_FRAME_COUNT = 6;
+const SWIM_FRAME_WIDTH = 362;
+interface AnimalAnimationDefinition {
+  texture: string;
+  path: string;
+  cropY: number;
+  cropHeight: number;
+  frameRate: number;
+  sizeMultiplier: number;
+}
+const ANIMAL_ANIMATIONS: Record<SeaAnimalId, AnimalAnimationDefinition> = {
+  clownfish: {
+    texture: 'clownfish-animation-sheet',
+    path: 'assets/ocean/ClownFishAnimation.png',
+    cropY: 210,
+    cropHeight: 250,
+    frameRate: 7,
+    sizeMultiplier: 1,
+  },
+  'regal-blue-tang': {
+    texture: 'regal-blue-tang-animation-sheet',
+    path: 'assets/ocean/RegalBlueTangAnimation.png',
+    cropY: 210,
+    cropHeight: 250,
+    frameRate: 7,
+    sizeMultiplier: 1,
+  },
+  pufferfish: {
+    texture: 'pufferfish-animation-sheet',
+    path: 'assets/ocean/PufferFishAnimation.png',
+    cropY: 205,
+    cropHeight: 280,
+    frameRate: 6,
+    sizeMultiplier: 1,
+  },
+  shark: {
+    texture: 'shark-animation-sheet',
+    path: 'assets/ocean/SharkAnimation.png',
+    cropY: 235,
+    cropHeight: 210,
+    frameRate: 7,
+    sizeMultiplier: 2,
+  },
+  'sea-turtle': {
+    texture: 'sea-turtle-animation-sheet',
+    path: 'assets/ocean/SeaTurtleAnimation.png',
+    cropY: 220,
+    cropHeight: 260,
+    frameRate: 6,
+    sizeMultiplier: 1,
+  },
+  jellyfish: {
+    texture: 'jellyfish-animation-sheet',
+    path: 'assets/ocean/JellyFishAnimation.png',
+    cropY: 140,
+    cropHeight: 390,
+    frameRate: 5,
+    sizeMultiplier: 1,
+  },
+};
+const OCEAN_ANIMAL_FRAMES: Record<
+  SeaAnimalId,
+  { x: number; y: number; width: number; height: number }
+> = {
+  clownfish: { x: 45, y: 125, width: 445, height: 325 },
+  'regal-blue-tang': { x: 535, y: 125, width: 430, height: 325 },
+  jellyfish: { x: 1025, y: 90, width: 345, height: 430 },
+  shark: { x: 20, y: 570, width: 525, height: 365 },
+  'sea-turtle': { x: 550, y: 630, width: 430, height: 315 },
+  pufferfish: { x: 1005, y: 575, width: 430, height: 380 },
+};
+
 interface SwimmingAnimal {
   id: SeaAnimalId;
   display: Phaser.GameObjects.Container;
@@ -45,12 +119,21 @@ export class FishTankQuizScene extends Phaser.Scene {
     super('FishTankQuiz');
   }
 
+  preload(): void {
+    this.load.image(OCEAN_ANIMALS_TEXTURE, 'assets/ocean/OceanAnimals.png');
+    this.load.image(FISH_TANK_BACKGROUND_TEXTURE, 'assets/ocean/FishTankQuizBackground.png');
+    for (const definition of Object.values(ANIMAL_ANIMATIONS))
+      this.load.image(definition.texture, definition.path);
+  }
+
   create(): void {
     this.state = createFishTankState();
     this.animals = [];
     this.pending = undefined;
     this.quizPanel = undefined;
     this.completionObjects = [];
+    this.registerAnimalFrames();
+    this.registerAnimalAnimations();
     this.cameras.main.setBackgroundColor('#dff5f2');
     this.add.text(25, 20, 'Fish Tank Quiz', {
       fontFamily: 'Arial',
@@ -66,14 +149,11 @@ export class FishTankQuizScene extends Phaser.Scene {
     });
     addButton(this, 1120, 65, 'Game Library', () => this.returnToLibrary(), 250);
     addButton(this, 430, 65, 'Watch Tank', () => this.watchFullTank(), 200);
-    this.add.rectangle(790, 385, 900, 530, 0x69c9df, 0.72).setStrokeStyle(12, 0x2f7188);
-    this.add.rectangle(790, 605, 880, 70, 0xe6c98a, 0.8);
-    for (let index = 0; index < 16; index += 1)
-      this.add.circle(370 + ((index * 179) % 830), 145 + ((index * 97) % 410), 4, 0xffffff, 0.7);
-    for (let index = 0; index < 9; index += 1) {
-      const x = 380 + index * 100;
-      this.add.triangle(x, 595, -15, 30, 0, -20, 15, 30, 0x3a9874, 0.8);
-    }
+    this.add
+      .image(790, 385, FISH_TANK_BACKGROUND_TEXTURE)
+      .setDisplaySize(TANK.right - TANK.left, TANK.bottom - TANK.top)
+      .setDepth(-20);
+    this.add.rectangle(790, 385, 900, 530).setStrokeStyle(12, 0x175d7a).setFillStyle(0, 0);
     this.progressText = this.add
       .text(680, 92, '', {
         fontFamily: 'Arial',
@@ -234,6 +314,7 @@ export class FishTankQuizScene extends Phaser.Scene {
     released.released = true;
     released.cleanupDrag();
     released.display.setDepth(5);
+    this.startTankAnimation(released);
     this.enableAnimalTap(released);
     this.pending = undefined;
     this.quizPanel?.destroy();
@@ -261,11 +342,22 @@ export class FishTankQuizScene extends Phaser.Scene {
       if (!animal.released) continue;
       animal.display.x += (animal.velocityX * delta * motionScale) / 1000;
       animal.display.y += (animal.velocityY * delta * motionScale) / 1000;
-      if (animal.display.x < TANK.left + 65 || animal.display.x > TANK.right - 65) {
+      const sprite = animal.display.getAt(0);
+      const horizontalPadding =
+        sprite instanceof Phaser.GameObjects.Sprite ? sprite.displayWidth / 2 + 10 : 65;
+      const verticalPadding =
+        sprite instanceof Phaser.GameObjects.Sprite ? sprite.displayHeight / 2 + 10 : 55;
+      if (
+        animal.display.x < TANK.left + horizontalPadding ||
+        animal.display.x > TANK.right - horizontalPadding
+      ) {
         animal.velocityX *= -1;
         animal.display.setScale(Math.sign(animal.velocityX), 1);
       }
-      if (animal.display.y < TANK.top + 55 || animal.display.y > TANK.bottom - 85)
+      if (
+        animal.display.y < TANK.top + verticalPadding ||
+        animal.display.y > TANK.bottom - Math.max(85, verticalPadding)
+      )
         animal.velocityY *= -1;
     }
   }
@@ -286,6 +378,7 @@ export class FishTankQuizScene extends Phaser.Scene {
       animal.display
         .setPosition(470 + (index % 3) * 280, 230 + Math.floor(index / 3) * 230)
         .setDepth(5);
+      this.startTankAnimation(animal);
       this.enableAnimalTap(animal);
       this.state = answerFishQuestion(this.state, data.id, data.correctChoice).state;
     });
@@ -360,40 +453,67 @@ export class FishTankQuizScene extends Phaser.Scene {
   }
 
   private createAnimal(id: SeaAnimalId, x: number, y: number): Phaser.GameObjects.Container {
-    const parts: Phaser.GameObjects.GameObject[] = [];
-    if (id === 'sea-turtle') {
-      parts.push(
-        this.add.ellipse(0, 0, 86, 58, 0x4aa66d).setStrokeStyle(4, 0xffffff),
-        this.add.circle(52, 0, 18, 0x78bd79).setStrokeStyle(3, 0xffffff),
-        this.add.ellipse(-22, -34, 32, 16, 0x78bd79),
-        this.add.ellipse(-22, 34, 32, 16, 0x78bd79),
-      );
-    } else if (id === 'jellyfish') {
-      parts.push(this.add.ellipse(0, -10, 78, 64, 0xc795df, 0.9).setStrokeStyle(4, 0xffffff));
-      for (const offset of [-25, 0, 25])
-        parts.push(this.add.line(0, 0, offset, 15, offset - 8, 55, 0xffffff, 0.9).setLineWidth(5));
-    } else if (id === 'shark') {
-      parts.push(
-        this.add.ellipse(0, 0, 112, 48, 0x668ca3).setStrokeStyle(4, 0xffffff),
-        this.add.polygon(-28, 20, [0, 0, -48, -30, -48, 30], 0x668ca3),
-        this.add.triangle(0, -35, 0, 30, 24, 30, 12, 0, 0x668ca3),
-      );
-    } else {
-      const color = id === 'clownfish' ? 0xf28a3b : id === 'regal-blue-tang' ? 0x347ac1 : 0xd9c56f;
-      parts.push(
-        this.add
-          .ellipse(0, 0, id === 'pufferfish' ? 78 : 100, 58, color)
-          .setStrokeStyle(4, 0xffffff),
-        this.add.polygon(-23, 20, [0, 0, -46, -30, -46, 30], color),
-      );
-      if (id === 'clownfish')
-        parts.push(
-          this.add.rectangle(-18, 0, 11, 56, 0xffffff),
-          this.add.rectangle(20, 0, 11, 50, 0xffffff),
-        );
-      if (id === 'regal-blue-tang') parts.push(this.add.ellipse(8, 5, 58, 19, 0xf2d34f));
+    const sprite = this.add.sprite(0, 0, OCEAN_ANIMALS_TEXTURE, id);
+    const scale = Math.min(122 / sprite.width, 92 / sprite.height);
+    sprite.setScale(scale);
+    return this.add.container(x, y, [sprite]).setSize(140, 108);
+  }
+
+  private registerAnimalFrames(): void {
+    const texture = this.textures.get(OCEAN_ANIMALS_TEXTURE);
+    for (const [id, frame] of Object.entries(OCEAN_ANIMAL_FRAMES)) {
+      if (!texture.has(id)) texture.add(id, 0, frame.x, frame.y, frame.width, frame.height);
     }
-    parts.push(this.add.circle(30, -8, 5, 0x172b3a));
-    return this.add.container(x, y, parts).setSize(130, 100);
+  }
+
+  private registerAnimalAnimations(): void {
+    for (const [id, definition] of Object.entries(ANIMAL_ANIMATIONS)) {
+      const texture = this.textures.get(definition.texture);
+      const frames: Phaser.Types.Animations.AnimationFrame[] = [];
+      for (let index = 0; index < SWIM_FRAME_COUNT; index += 1) {
+        const frameName = `swim-${index}`;
+        if (!texture.has(frameName))
+          texture.add(
+            frameName,
+            0,
+            index * SWIM_FRAME_WIDTH,
+            definition.cropY,
+            SWIM_FRAME_WIDTH,
+            definition.cropHeight,
+          );
+        frames.push({ key: definition.texture, frame: frameName });
+      }
+      const animationKey = `${id}-swim`;
+      if (!this.anims.exists(animationKey))
+        this.anims.create({
+          key: animationKey,
+          frames,
+          frameRate: definition.frameRate,
+          repeat: -1,
+          yoyo: true,
+        });
+    }
+  }
+
+  private startTankAnimation(animal: SwimmingAnimal): void {
+    if (preferences.current.reducedMotion) return;
+    const sprite = animal.display.getAt(0);
+    if (!(sprite instanceof Phaser.GameObjects.Sprite)) return;
+    const definition = ANIMAL_ANIMATIONS[animal.id];
+    const scale =
+      Math.min(122 / SWIM_FRAME_WIDTH, 92 / definition.cropHeight) * definition.sizeMultiplier;
+    sprite.setScale(scale).play(`${animal.id}-swim`);
+    animal.display.setPosition(
+      Phaser.Math.Clamp(
+        animal.display.x,
+        TANK.left + sprite.displayWidth / 2 + 10,
+        TANK.right - sprite.displayWidth / 2 - 10,
+      ),
+      Phaser.Math.Clamp(
+        animal.display.y,
+        TANK.top + sprite.displayHeight / 2 + 10,
+        TANK.bottom - Math.max(85, sprite.displayHeight / 2 + 10),
+      ),
+    );
   }
 }
