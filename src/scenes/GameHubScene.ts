@@ -4,6 +4,7 @@ import { actions } from '../core/services';
 import { GAMES } from '../games/registry';
 import { MenuFocus } from '../ui/MenuFocus';
 import { addButton } from '../ui/button';
+import { addCircularThumbnail } from '../ui/CircularThumbnail';
 
 const COLUMNS = 2;
 const PAGE_SIZE = 4;
@@ -47,7 +48,7 @@ export class GameHubScene extends Phaser.Scene {
       const panel = this.add.rectangle(0, 0, 500, 235, 0xffffff).setStrokeStyle(6, 0x46627a);
       const icon = this.add.circle(-165, -10, 70, game.accentColor).setStrokeStyle(5, 0x17324d);
       const symbol = game.icon
-        ? this.add.image(-165, -10, game.icon.key).setDisplaySize(130, 97)
+        ? addCircularThumbnail(this, game.icon.key, -165, -10)
         : this.add
             .text(-165, -12, game.symbol, {
               fontFamily: 'Arial',

@@ -20,6 +20,10 @@ export const GAMES: readonly GameDefinition[] = [
     touchControls: 'none',
     accentColor: 0x79ded2,
     symbol: '↗',
+    icon: {
+      key: 'rocket-workshop-thumbnail',
+      path: 'assets/games/rocket-workshop/rocket-thumbnail.svg',
+    },
   },
   {
     id: 'star-collector',
