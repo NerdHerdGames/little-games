@@ -13,6 +13,15 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'rocket-workshop',
+    title: 'Rocket Workshop',
+    description: 'Build your own rocket, pick a planet, and watch it fly!',
+    sceneKey: 'RocketWorkshop',
+    touchControls: 'none',
+    accentColor: 0x79ded2,
+    symbol: '↗',
+  },
+  {
     id: 'star-collector',
     title: 'Star Collector',
     description: 'Move around and collect five friendly stars.',
@@ -105,5 +114,14 @@ export const GAMES: readonly GameDefinition[] = [
       key: 'tractor-trailer-icon',
       path: 'assets/games/tractor-trailer/tractor-icon.png',
     },
+  },
+  {
+    id: 'asteroid-patrol',
+    title: 'Asteroid Patrol',
+    description: 'Guide a spaceship and gently clear five waves of space rocks.',
+    sceneKey: 'AsteroidPatrol',
+    touchControls: 'directions',
+    accentColor: 0x58a6c7,
+    symbol: '🚀',
   },
 ];

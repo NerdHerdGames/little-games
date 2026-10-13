@@ -4,8 +4,10 @@ import { GAME_HEIGHT, GAME_WIDTH } from './config/settings';
 import { getTouchControlProfile } from './config/touchControls';
 import { actions, preferences } from './core/services';
 import { InputCoordinator } from './input/InputCoordinator';
+import { RocketWorkshopScene } from './games/rocket-workshop/RocketWorkshopScene';
 import { BadgeCollectionScene } from './scenes/BadgeCollectionScene';
 import { AllWorldsCelebrationScene } from './scenes/AllWorldsCelebrationScene';
+import { AsteroidPatrolScene } from './scenes/AsteroidPatrolScene';
 import { BootScene } from './scenes/BootScene';
 import { CeresMissionScene } from './scenes/CeresMissionScene';
 import { DwarfFactMatchScene } from './scenes/DwarfFactMatchScene';
@@ -45,12 +47,14 @@ const game = new Phaser.Game({
   scene: [
     BootScene,
     GameHubScene,
+    RocketWorkshopScene,
     StarCollectorScene,
     SolarSystemExplorerScene,
     FishTankQuizScene,
     FishShapeMatchScene,
     ShapeFlipMatchScene,
     TractorTrailerScene,
+    AsteroidPatrolScene,
     PlanetFactMatchScene,
     DwarfFactMatchScene,
     SolarSystemOrderScene,

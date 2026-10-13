@@ -8,6 +8,20 @@ export class ActionState {
   private previous = emptyActions();
   private sources = new Map<InputMethod, Partial<Record<Action, boolean>>>();
   private lastMethod: InputMethod = 'touch';
+  private activations: string[] = [];
+
+  /** Queue a logical menu choice without exposing DOM or pointer events to gameplay. */
+  requestActivation(id: string): void {
+    this.activations.push(id);
+  }
+
+  consumeActivation(): string | undefined {
+    return this.activations.shift();
+  }
+
+  clearActivations(): void {
+    this.activations.length = 0;
+  }
 
   setSource(method: InputMethod, actions: Partial<Record<Action, boolean>>): void {
     this.sources.set(method, actions);

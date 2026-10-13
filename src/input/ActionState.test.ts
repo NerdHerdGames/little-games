@@ -2,6 +2,18 @@ import { describe, expect, it } from 'vitest';
 import { ActionState } from './ActionState';
 
 describe('ActionState', () => {
+  it('delivers menu activations once in order and clears them on navigation', () => {
+    const input = new ActionState();
+    input.requestActivation('nose:next');
+    input.requestActivation('launch');
+    input.update();
+    expect(input.consumeActivation()).toBe('nose:next');
+    expect(input.consumeActivation()).toBe('launch');
+    expect(input.consumeActivation()).toBeUndefined();
+    input.requestActivation('pause');
+    input.clearActivations();
+    expect(input.consumeActivation()).toBeUndefined();
+  });
   it('distinguishes pressed, held, and released actions', () => {
     const input = new ActionState();
     input.setSource('touch', { moveRight: true });

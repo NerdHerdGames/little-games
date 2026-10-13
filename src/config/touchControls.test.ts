@@ -3,6 +3,7 @@ import { getTouchControlProfile } from './touchControls';
 
 describe('touch control profiles', () => {
   it('uses the requested layout for each top-level game', () => {
+    expect(getTouchControlProfile('RocketWorkshop')).toBe('none');
     expect(getTouchControlProfile('StarCollector')).toBe('directions');
     expect(getTouchControlProfile('MainMenu')).toBe('full');
     expect(getTouchControlProfile('SolarSystemExplorer')).toBe('full');
