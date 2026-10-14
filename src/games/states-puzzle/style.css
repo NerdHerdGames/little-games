@@ -1,0 +1,341 @@
+.states-puzzle {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: auto;
+  padding: 20px 28px;
+  color: #263f48;
+  background: #f5f2e8;
+  touch-action: pan-y;
+}
+.states-puzzle [hidden] {
+  display: none;
+}
+.states-puzzle h1,
+.states-puzzle h2,
+.states-puzzle p {
+  margin: 0;
+}
+.states-puzzle button,
+.states-credits summary {
+  min-width: 64px;
+  min-height: 64px;
+  padding: 12px 18px;
+  border: 2px solid #819b9b;
+  border-radius: 14px;
+  color: #263f48;
+  background: #fffdf6;
+  font:
+    700 16px Arial,
+    sans-serif;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.states-puzzle button:active {
+  background: #d9e9df;
+}
+.states-puzzle button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.states-puzzle button:focus-visible,
+.states-credits summary:focus-visible {
+  outline: 4px solid #225e68;
+  outline-offset: 3px;
+}
+.states-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  color: #526b70;
+}
+.states-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid #d5ddd3;
+}
+.states-header h1 {
+  margin-top: 6px;
+  font-size: clamp(24px, 3vw, 38px);
+  letter-spacing: -1px;
+}
+.states-header nav {
+  display: flex;
+  gap: 10px;
+}
+.states-layout {
+  display: grid;
+  grid-template-columns: minmax(230px, 290px) minmax(0, 1fr);
+  gap: 24px;
+  max-width: 1600px;
+  margin: 24px auto 0;
+}
+.states-toolbox {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  background: #e4ece2;
+  border: 2px solid #ccd9ce;
+  border-radius: 22px;
+}
+.states-toolbox h2 {
+  font-size: 27px;
+}
+.states-toolbox p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+.states-puzzle .states-piece {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  padding: 20px 12px;
+  border: 2px dashed #6b8983;
+  border-radius: 18px;
+  background: #fffdf6;
+  touch-action: none;
+  box-shadow: 0 5px 0 #c8d7c9;
+  text-align: center;
+}
+.states-piece svg {
+  width: 100%;
+  height: 155px;
+  pointer-events: none;
+}
+.states-piece strong {
+  font-size: 24px;
+}
+.states-piece span {
+  font-size: 13px;
+  color: #526b70;
+}
+.states-tools {
+  display: grid;
+  gap: 10px;
+}
+.states-progress {
+  margin-top: auto;
+  font-size: 16px;
+  font-weight: 700;
+}
+.states-progress progress {
+  display: block;
+  width: 100%;
+  height: 14px;
+  margin-top: 10px;
+  accent-color: #286e65;
+}
+.states-feedback {
+  min-height: 72px;
+  color: #35564f;
+}
+.states-map-panel {
+  align-self: start;
+  min-width: 0;
+  padding: 22px;
+  border: 2px solid #d5ddd3;
+  border-radius: 22px;
+  background: #fffdf6;
+}
+.states-map-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.states-map-heading h2 {
+  margin-top: 7px;
+  font-size: clamp(18px, 2vw, 26px);
+}
+.states-map {
+  display: block;
+  width: 100%;
+  height: clamp(310px, 58vh, 680px);
+  margin: 12px 0;
+  border-radius: 14px;
+  background: #e8f1f1;
+  touch-action: none;
+}
+.state-slot {
+  stroke: #526b70;
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+}
+.states-map-labels {
+  fill: #263f48;
+  font:
+    700 12px Arial,
+    sans-serif;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+.state-hint {
+  fill: transparent;
+  stroke: #263f48;
+  stroke-width: 4;
+  stroke-dasharray: 8 4;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+[data-hint-marker] {
+  pointer-events: none;
+}
+[data-hint-marker] circle {
+  fill: #263f48;
+  stroke: #fffdf6;
+  stroke-width: 2;
+}
+[data-hint-marker] text {
+  fill: #fffdf6;
+  font:
+    700 18px Arial,
+    sans-serif;
+  text-anchor: middle;
+}
+.states-map-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #526b70;
+}
+.states-slot-picker {
+  margin-top: 18px;
+}
+.states-slot-picker > button {
+  width: 100%;
+}
+.states-slot-picker p {
+  margin: 14px 0;
+}
+.states-credits {
+  margin-top: 14px;
+}
+.states-credits pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font:
+    13px/1.5 Arial,
+    sans-serif;
+}
+[data-slot-choices] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 8px;
+}
+.states-puzzle .map-drag-ghost {
+  position: fixed;
+  z-index: 50;
+  min-height: 0;
+  padding: 8px;
+  transform: translate(-50%, -65%);
+  pointer-events: none;
+  opacity: 0.92;
+  box-shadow: 0 8px 22px #263f4833;
+}
+.map-drag-ghost svg {
+  height: 95px;
+}
+.map-drag-ghost strong {
+  font-size: 18px;
+}
+.map-drag-ghost span {
+  display: none;
+}
+.states-done {
+  display: grid;
+  gap: 16px;
+  place-items: center;
+  padding: 24px 0;
+  font-size: 52px;
+}
+.states-done strong {
+  font-size: 20px;
+}
+.states-completion {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 30px;
+  border-radius: 22px;
+  background: #e4ece2;
+  text-align: center;
+  border: 2px solid #6b8983;
+}
+.states-completion h2 {
+  margin: 12px 0;
+  font-size: 32px;
+}
+.states-completion p {
+  margin-bottom: 18px;
+}
+.states-completion button {
+  margin: 4px;
+}
+@media (max-width: 850px) {
+  .states-puzzle {
+    padding: 14px;
+  }
+  .states-layout {
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .states-toolbox,
+  .states-map-panel {
+    padding: 14px;
+  }
+  .states-header nav {
+    gap: 6px;
+  }
+  .states-puzzle button {
+    padding: 10px;
+  }
+  .states-map-caption {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+@media (max-width: 600px) {
+  .states-header {
+    flex-wrap: wrap;
+    padding-top: 35px;
+  }
+  .states-header nav {
+    width: 100%;
+  }
+  .states-header nav button {
+    flex: 1;
+  }
+  .states-layout {
+    grid-template-columns: 1fr;
+  }
+  .states-toolbox {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .states-toolbox > .states-eyebrow,
+  .states-toolbox > h2,
+  .states-toolbox > p {
+    grid-column: 1 / -1;
+  }
+  .states-piece svg {
+    height: 100px;
+  }
+  .states-piece strong {
+    font-size: 20px;
+  }
+  .states-map {
+    height: 370px;
+  }
+  .states-map-heading {
+    flex-wrap: wrap;
+  }
+}

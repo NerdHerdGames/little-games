@@ -7,6 +7,7 @@ import { InputCoordinator } from './input/InputCoordinator';
 import { RocketWorkshopScene } from './games/rocket-workshop/RocketWorkshopScene';
 import { SolarOrbitExplorerScene } from './games/solar-orbit-explorer/SolarOrbitExplorerScene';
 import { MoonExplorerScene } from './games/moon-explorer/MoonExplorerScene';
+import { StatesPuzzleScene } from './games/states-puzzle/StatesPuzzleScene';
 import { BadgeCollectionScene } from './scenes/BadgeCollectionScene';
 import { AllWorldsCelebrationScene } from './scenes/AllWorldsCelebrationScene';
 import { AsteroidPatrolScene } from './scenes/AsteroidPatrolScene';
@@ -52,6 +53,7 @@ const game = new Phaser.Game({
     GameHubScene,
     RocketWorkshopScene,
     MoonExplorerScene,
+    StatesPuzzleScene,
     SolarOrbitExplorerScene,
     StarCollectorScene,
     SolarSystemExplorerScene,

@@ -2,6 +2,18 @@ import { describe, expect, it } from 'vitest';
 import { ActionState } from './ActionState';
 
 describe('ActionState', () => {
+  it('delivers logical map placements once and clears them when leaving', () => {
+    const input = new ActionState();
+    const placement = { pieceId: '48', x: 434, y: 469, tolerance: 10 };
+    input.requestPlacement(placement);
+    input.requestPlacement({ ...placement, x: NaN });
+    input.update();
+    expect(input.consumePlacement()).toEqual(placement);
+    expect(input.consumePlacement()).toBeUndefined();
+    input.requestPlacement(placement);
+    input.clearPlacements();
+    expect(input.consumePlacement()).toBeUndefined();
+  });
   it('accumulates logical view gestures, consumes them once, and clears them on navigation', () => {
     const input = new ActionState();
     expect(input.consumeViewGesture()).toBeUndefined();

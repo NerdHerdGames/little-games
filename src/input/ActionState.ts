@@ -9,12 +9,20 @@ export interface ViewGesture {
   zoom: number;
 }
 
+export interface PlacementAction {
+  pieceId: string;
+  x: number;
+  y: number;
+  tolerance: number;
+}
+
 export class ActionState {
   private current = emptyActions();
   private previous = emptyActions();
   private sources = new Map<InputMethod, Partial<Record<Action, boolean>>>();
   private lastMethod: InputMethod = 'touch';
   private activations: string[] = [];
+  private placements: PlacementAction[] = [];
   private viewGesture: ViewGesture = { rotateX: 0, rotateY: 0, zoom: 0 };
 
   /** Accumulate device-independent view changes; device events stay in input adapters. */
@@ -49,6 +57,20 @@ export class ActionState {
 
   clearActivations(): void {
     this.activations.length = 0;
+  }
+
+  requestPlacement(placement: PlacementAction): void {
+    if ([placement.x, placement.y, placement.tolerance].every(Number.isFinite)) {
+      this.placements.push(placement);
+    }
+  }
+
+  consumePlacement(): PlacementAction | undefined {
+    return this.placements.shift();
+  }
+
+  clearPlacements(): void {
+    this.placements.length = 0;
   }
 
   setSource(method: InputMethod, actions: Partial<Record<Action, boolean>>): void {

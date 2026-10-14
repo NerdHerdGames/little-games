@@ -1,6 +1,6 @@
 # Little Games
 
-A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **Sun & Planet Explorer**, **Moon Explorer**, **Rocket Workshop**, **Star Collector**, **Dwarf Planet Explorer**, **Solar System Telescope**, **Fish Tank Quiz**, **Planet Fact Match**, **Dwarf Planet Fact Match**, **Solar System Order**, **Solar System Puzzle**, **Fish Shape Match**, **Shape Flip Match**, **Tractor Trailer Trip**, and **Asteroid Patrol**.
+A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **United States Puzzle**, **Sun & Planet Explorer**, **Moon Explorer**, **Rocket Workshop**, **Star Collector**, **Dwarf Planet Explorer**, **Solar System Telescope**, **Fish Tank Quiz**, **Planet Fact Match**, **Dwarf Planet Fact Match**, **Solar System Order**, **Solar System Puzzle**, **Fish Shape Match**, **Shape Flip Match**, **Tractor Trailer Trip**, and **Asteroid Patrol**.
 
 Star Collector is a small movement-and-collection game. Dwarf Planet Explorer contains five dwarf-planet missions. Solar System Telescope lets children explore the Sun, eight planets, and five dwarf planets. Fish Tank Quiz asks simple sea-animal questions before releasing six animals into a swimming tank. Planet Fact Match asks children to drag each of the eight planets to a matching fact and earn stars. Dwarf Planet Fact Match provides the same calm matching activity for Ceres, Pluto, Haumea, Makemake, and Eris. Solar System Order places the Sun, eight planets, and five dwarf planets into a near-to-far sequence. Solar System Puzzle is a separate flat orbit-map puzzle with a fixed Sun, thirteen empty slots, draggable worlds, optional name hints, and gentle distance clues. Its schematic uses average distance, not current orbital positions or true scale. Fish Shape Match asks children to find circle, square, and triangle fish in red, green, and blue. Shape Flip Match uses those same nine combinations in a spoken 18-card memory game. Tractor Trailer Trip asks children to hold Right or Go, then drag three randomly selected farm animals onto the trailers. Asteroid Patrol is a calm auto-shooter where children guide a shielded spaceship, clear five waves of harmless space rocks, and choose friendly upgrades.
 
@@ -11,6 +11,23 @@ Star Collector is a small movement-and-collection game. Dwarf Planet Explorer co
 **Sun & Planet Explorer** adds a separate 3D solar-system view alongside Moon Explorer. The Sun stays at the center while all eight planets follow circular orbit paths, with the inner planets moving faster. Drag, pinch, or use the large turn/zoom buttons; choose All together, Sun, or any planet for a close-up. Saturn has rings, Jupiter has illustrated bands and a storm, and Earth reuses the existing local NASA surface map. Pause, step all planets manually, hide orbit paths, and read short facts aloud. Saved mute and still-view preferences apply. Sizes, spacing, orbital periods, and planet spins are illustrative, not to scale or tied to real dates. Other surface maps are generated locally. An interactive 2D orbit diagram preserves the controls and facts if WebGL is unavailable. The Three.js view is loaded on entry and disposed on exit; it shares the existing offline renderer chunk and Earth image.
 
 The app uses only local code, local planet art, generated Phaser/SVG shapes, and the locally installed Three.js renderer for the explicitly requested 3D prototype. It has no accounts, ads, analytics, tracking, purchases, or gameplay network requests to external services. Three.js is loaded when the explorer opens and its GPU resources are released when it closes. Low-detail sphere meshes, 2K textures, a capped render resolution, and a 30 FPS animation limit keep the prototype lightweight. The app's service worker caches the renderer and JPEG textures for offline use. Devices without working WebGL 2 show a labeled picture view with facts and navigation instead.
+
+**United States Puzzle** offers all 50 states, one randomly ordered piece at a time.
+Drag each colored, labeled piece from the toolbox into its matching map outline,
+or tap an outline. Correct pieces snap into place and remain colored on the map;
+other drops return to the toolbox without losing progress. Alaska and Hawaii use
+insets. Every new piece starts in the whole-map view, with optional Closer view.
+Drops within 48 CSS pixels of the matching outline snap into place, including
+nearby neighboring outlines. After five unsuccessful attempts with the same piece,
+the game places it automatically; the count resets for the next piece. Cancelled
+drags and toolbox taps do not count. A question-mark hint can identify the current
+outline. A collapsible list of named slots provides
+an alternative for keyboard, controller, and screen-reader users. State names can
+be read aloud using local speech, and the saved mute preference applies. There are
+no automatic animations, timers, penalties, or gameplay network requests. Complete
+the map and replay with a new order. Boundary sources and licensing are documented
+in `src/games/states-puzzle/CREDITS.md`. Test dragging, small-state zoom, and speech
+on the target Android tablet before release.
 
 ## Prerequisites and installation
 

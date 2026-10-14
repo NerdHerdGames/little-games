@@ -13,6 +13,15 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'states-puzzle',
+    title: 'United States Puzzle',
+    description: 'Drag colorful, labeled states into their places on the map.',
+    sceneKey: 'StatesPuzzle',
+    touchControls: 'none',
+    accentColor: 0x90c9b0,
+    symbol: 'US',
+  },
+  {
     id: 'solar-orbit-explorer',
     title: 'Sun & Planet Explorer',
     description: 'Turn a 3D solar system and watch eight planets orbit the Sun.',
