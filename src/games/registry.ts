@@ -13,6 +13,16 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'solar-orbit-explorer',
+    title: 'Sun & Planet Explorer',
+    description: 'Turn a 3D solar system and watch eight planets orbit the Sun.',
+    sceneKey: 'SolarOrbitExplorer',
+    touchControls: 'none',
+    accentColor: 0xffb84d,
+    symbol: '☀',
+    icon: { key: 'solar-orbit-explorer-icon', path: 'assets/pixel-planets/individual/sun.png' },
+  },
+  {
     id: 'moon-explorer',
     title: 'Moon Explorer',
     description: 'Pick a world and explore it with all of its moons in 3D.',
