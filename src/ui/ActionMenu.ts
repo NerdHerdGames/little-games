@@ -24,8 +24,18 @@ export class ActionMenu {
   setContent(html: string): void {
     this.state.clearActivations();
     this.root.innerHTML = html;
-    this.buttons = [...this.root.querySelectorAll<HTMLButtonElement>('button[data-action]')];
+    this.refreshButtons();
+  }
+
+  /** Rebind keyboard/controller focus after a menu replaces a page of choices. */
+  refreshButtons(): void {
+    const selected = document.activeElement;
+    this.buttons = [...this.root.querySelectorAll<HTMLButtonElement>('button[data-action]')].filter(
+      (button) => !button.disabled && !button.closest('[hidden]'),
+    );
     this.focus = new MenuFocus(Math.max(1, this.buttons.length));
+    const index = this.buttons.indexOf(selected as HTMLButtonElement);
+    if (index >= 0) this.focus.set(index);
   }
 
   /** Touch, native keyboard activation, and logical keyboard/controller actions share one path. */

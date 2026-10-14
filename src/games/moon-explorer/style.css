@@ -157,6 +157,107 @@
   background: #14253d;
   overflow: auto;
 }
+.moon-picker {
+  padding: 30px clamp(18px, 4vw, 60px);
+  overflow: auto;
+}
+.moon-picker h2 {
+  margin: 8px 0;
+  font-size: clamp(26px, 3vw, 38px);
+  letter-spacing: -1px;
+}
+.moon-picker > p {
+  color: #d2e0ee;
+  line-height: 1.5;
+}
+.moon-world-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.earth-moon-explorer .moon-world {
+  display: grid;
+  justify-items: center;
+  gap: 9px;
+  min-height: 175px;
+  padding: 18px 10px;
+  border-color: #526980;
+  background: #14253d;
+}
+.moon-world img {
+  width: 90px;
+  height: 70px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.moon-world strong {
+  font-size: 22px;
+}
+.moon-world > span {
+  font-size: 13px;
+  color: #c3d7e8;
+}
+.moon-picker-note {
+  font-size: 13px;
+}
+.moon-system-targets {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.moon-catalogue {
+  display: grid;
+  gap: 12px;
+}
+.moon-catalogue-heading h2 {
+  font-size: 23px;
+}
+.moon-catalogue-heading > span {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: #b4e8d2;
+}
+.moon-list,
+.moon-page-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.moon-page-controls[hidden] {
+  display: none;
+}
+.earth-moon-explorer .moon-choice,
+.moon-page-controls button {
+  padding: 10px 6px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.moon-choice[aria-pressed='true'] {
+  border-color: #b4e8d2;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.moon-page-label,
+.earth-moon-fact-card .moon-surface-note {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #b4e8d2;
+}
+.moon-picture-fallback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: clamp(120px, 25vw, 250px);
+  aspect-ratio: 1;
+  border: 2px solid #f5f1e4;
+  border-radius: 50%;
+  box-shadow: inset -35px -20px 40px rgb(0 0 0 / 65%);
+  color: #fff;
+  text-shadow: 0 2px 4px #091425;
+  font-size: 22px;
+}
 .earth-moon-panel h2 {
   font-size: 28px;
   letter-spacing: -0.7px;
@@ -252,6 +353,9 @@
   width: clamp(100px, 25vw, 260px);
 }
 @media (max-width: 900px) {
+  .moon-world-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
   .earth-moon-header {
     padding: 12px 16px;
     flex-wrap: wrap;
@@ -272,6 +376,10 @@
   }
 }
 @media (max-width: 450px) {
+  .moon-world-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
   .earth-moon-view-heading {
     top: 18px;
     left: 18px;

@@ -13,16 +13,16 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
-    id: 'earth-moon-explorer',
-    title: 'Earth & Moon Explorer',
-    description: 'Turn real 3D worlds and watch the Moon travel around Earth.',
-    sceneKey: 'EarthMoonExplorer',
+    id: 'moon-explorer',
+    title: 'Moon Explorer',
+    description: 'Pick a world and explore it with all of its moons in 3D.',
+    sceneKey: 'MoonExplorer',
     touchControls: 'none',
     accentColor: 0x557bdc,
     symbol: '●',
     icon: {
-      key: 'earth-moon-explorer-icon',
-      path: 'assets/pixel-planets/individual/earth.png',
+      key: 'moon-explorer-icon',
+      path: 'assets/games/moon-explorer/moon-explorer-icon.svg',
     },
   },
   {
