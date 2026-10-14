@@ -29,6 +29,7 @@ import { PlutoMissionScene } from './scenes/PlutoMissionScene';
 import { SettingsScene } from './scenes/SettingsScene';
 import { ShapeFlipMatchScene } from './scenes/ShapeFlipMatchScene';
 import { SolarSystemExplorerScene } from './scenes/SolarSystemExplorerScene';
+import { SolarSystemPuzzleScene } from './games/solar-system-order/SolarSystemPuzzleScene';
 import { SolarSystemOrderScene } from './scenes/SolarSystemOrderScene';
 import { StarCollectorScene } from './scenes/StarCollectorScene';
 import { TractorTrailerScene } from './scenes/TractorTrailerScene';
@@ -62,6 +63,7 @@ const game = new Phaser.Game({
     PlanetFactMatchScene,
     DwarfFactMatchScene,
     SolarSystemOrderScene,
+    SolarSystemPuzzleScene,
     MainMenuScene,
     PlanetSelectScene,
     CeresMissionScene,
