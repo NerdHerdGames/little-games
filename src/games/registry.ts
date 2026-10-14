@@ -112,6 +112,15 @@ export const GAMES: readonly GameDefinition[] = [
     symbol: '↗',
   },
   {
+    id: 'solar-system-puzzle',
+    title: 'Solar System Puzzle',
+    description: 'Drag eight planets and five dwarf planets into a flat orbit map.',
+    sceneKey: 'SolarSystemPuzzle',
+    touchControls: 'none',
+    accentColor: 0x9acbe6,
+    symbol: '🪐',
+  },
+  {
     id: 'fish-shape-match',
     title: 'Fish Shape Match',
     description: 'Find circle, square, and triangle fish in three bright colors.',
