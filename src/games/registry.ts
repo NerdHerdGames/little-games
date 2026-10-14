@@ -13,6 +13,19 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'earth-moon-explorer',
+    title: 'Earth & Moon Explorer',
+    description: 'Turn real 3D worlds and watch the Moon travel around Earth.',
+    sceneKey: 'EarthMoonExplorer',
+    touchControls: 'none',
+    accentColor: 0x557bdc,
+    symbol: '●',
+    icon: {
+      key: 'earth-moon-explorer-icon',
+      path: 'assets/pixel-planets/individual/earth.png',
+    },
+  },
+  {
     id: 'rocket-workshop',
     title: 'Rocket Workshop',
     description: 'Build your own rocket, pick a planet, and watch it fly!',

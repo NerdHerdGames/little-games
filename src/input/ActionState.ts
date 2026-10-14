@@ -3,12 +3,40 @@ import { ACTIONS, type Action, type ActionSnapshot, type InputMethod } from './a
 const emptyActions = (): Record<Action, boolean> =>
   Object.fromEntries(ACTIONS.map((action) => [action, false])) as Record<Action, boolean>;
 
+export interface ViewGesture {
+  rotateX: number;
+  rotateY: number;
+  zoom: number;
+}
+
 export class ActionState {
   private current = emptyActions();
   private previous = emptyActions();
   private sources = new Map<InputMethod, Partial<Record<Action, boolean>>>();
   private lastMethod: InputMethod = 'touch';
   private activations: string[] = [];
+  private viewGesture: ViewGesture = { rotateX: 0, rotateY: 0, zoom: 0 };
+
+  /** Accumulate device-independent view changes; device events stay in input adapters. */
+  addViewGesture(rotateX: number, rotateY: number, zoom = 0): void {
+    if (![rotateX, rotateY, zoom].every(Number.isFinite)) return;
+    this.viewGesture.rotateX += rotateX;
+    this.viewGesture.rotateY += rotateY;
+    this.viewGesture.zoom += zoom;
+  }
+
+  consumeViewGesture(): ViewGesture | undefined {
+    const { rotateX, rotateY, zoom } = this.viewGesture;
+    if (rotateX === 0 && rotateY === 0 && zoom === 0) return undefined;
+    this.clearViewGestures();
+    return { rotateX, rotateY, zoom };
+  }
+
+  clearViewGestures(): void {
+    this.viewGesture.rotateX = 0;
+    this.viewGesture.rotateY = 0;
+    this.viewGesture.zoom = 0;
+  }
 
   /** Queue a logical menu choice without exposing DOM or pointer events to gameplay. */
   requestActivation(id: string): void {

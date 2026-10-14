@@ -28,7 +28,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,webp,webmanifest}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,jpg,jpeg,webp,webmanifest}'],
         // Keep the large, unused source sheet in the repository without precaching it.
         // Games should load the optimized individual planet sprites instead.
         globIgnores: ['assets/pixel-planets/PixelPlanetsSheet.png'],

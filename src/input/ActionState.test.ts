@@ -2,6 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { ActionState } from './ActionState';
 
 describe('ActionState', () => {
+  it('accumulates logical view gestures, consumes them once, and clears them on navigation', () => {
+    const input = new ActionState();
+    expect(input.consumeViewGesture()).toBeUndefined();
+    input.addViewGesture(0.2, 0.3, 0.1);
+    input.addViewGesture(0.1, -0.1, 0.2);
+    const gesture = input.consumeViewGesture();
+    expect(gesture?.rotateX).toBeCloseTo(0.3);
+    expect(gesture?.rotateY).toBeCloseTo(0.2);
+    expect(gesture?.zoom).toBeCloseTo(0.3);
+    expect(input.consumeViewGesture()).toBeUndefined();
+    input.addViewGesture(1, 1, 1);
+    input.clearViewGestures();
+    input.addViewGesture(Infinity, 0, 0);
+    expect(input.consumeViewGesture()).toBeUndefined();
+  });
   it('delivers menu activations once in order and clears them on navigation', () => {
     const input = new ActionState();
     input.requestActivation('nose:next');

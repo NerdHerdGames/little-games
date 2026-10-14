@@ -1,12 +1,14 @@
 # Little Games
 
-A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **Rocket Workshop**, **Star Collector**, **Dwarf Planet Explorer**, **Solar System Telescope**, **Fish Tank Quiz**, **Planet Fact Match**, **Dwarf Planet Fact Match**, **Solar System Order**, **Fish Shape Match**, **Shape Flip Match**, **Tractor Trailer Trip**, and **Asteroid Patrol**.
+A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **Earth & Moon Explorer**, **Rocket Workshop**, **Star Collector**, **Dwarf Planet Explorer**, **Solar System Telescope**, **Fish Tank Quiz**, **Planet Fact Match**, **Dwarf Planet Fact Match**, **Solar System Order**, **Fish Shape Match**, **Shape Flip Match**, **Tractor Trailer Trip**, and **Asteroid Patrol**.
 
 Star Collector is a small movement-and-collection game. Dwarf Planet Explorer contains five dwarf-planet missions. Solar System Telescope lets children explore the Sun, eight planets, and five dwarf planets. Fish Tank Quiz asks simple sea-animal questions before releasing six animals into a swimming tank. Planet Fact Match asks children to drag each of the eight planets to a matching fact and earn stars. Dwarf Planet Fact Match provides the same calm matching activity for Ceres, Pluto, Haumea, Makemake, and Eris. Solar System Order places the Sun, eight planets, and five dwarf planets into a near-to-far sequence. Fish Shape Match asks children to find circle, square, and triangle fish in red, green, and blue. Shape Flip Match uses those same nine combinations in a spoken 18-card memory game. Tractor Trailer Trip asks children to hold Right or Go, then drag three randomly selected farm animals onto the trailers. Asteroid Patrol is a calm auto-shooter where children guide a shielded spaceship, clear five waves of harmless space rocks, and choose friendly upgrades.
 
 **Rocket Workshop** lets children cycle through three noses, cabins, fin sets, and engines to create 81 different rockets. Every piece changes the rocket's speed, lift-off time, or wobble. Choose any of the eight planets or five dwarf planets using the shared pixel planet art, then watch a short automatic flight and safe arrival in orbit. Pause, replay, pick another planet, or change the rocket. All combinations arrive safely; distances and speeds are pretend, not an astronomy simulation. The workshop uses project-owned SVG pixel rocket pieces, so no additional art is required. Sound and still-view controls use the saved app preferences. Touch targets remain at least 64 CSS pixels, including on small screens, with scrolling where needed.
 
-The app uses only local code, local planet art, and generated Phaser/SVG shapes. It has no accounts, ads, analytics, tracking, purchases, or gameplay network requests.
+**Earth & Moon Explorer** is a 3D prototype with locally bundled NASA surface maps. Drag to turn the view, pinch or use the large buttons to zoom, and choose Together, Earth, or Moon for a closer look. Pause motion, move the Moon one step at a time, or read short facts aloud. Saved mute and reduced-motion preferences apply; still view stops automatic rotation and orbit while keeping manual controls available. The Moon's relative size is approximately realistic, while distance and motion are shortened for an easy-to-read demonstration. NASA imagery credits and source links are in `public/assets/games/earth-moon-explorer/CREDITS.md` and the viewer.
+
+The app uses only local code, local planet art, generated Phaser/SVG shapes, and the locally installed Three.js renderer for the explicitly requested 3D prototype. It has no accounts, ads, analytics, tracking, purchases, or gameplay network requests to external services. Three.js is loaded when the explorer opens and its GPU resources are released when it closes. Low-detail sphere meshes, 2K textures, a capped render resolution, and a 30 FPS animation limit keep the prototype lightweight. The app's service worker caches the renderer and JPEG textures for offline use. Devices without working WebGL 2 show a labeled picture view with facts and navigation instead.
 
 ## Prerequisites and installation
 
@@ -113,6 +115,7 @@ Device adapters feed shared logical actions. Scenes never read keyboard or gamep
 - `src/games/timing`: reusable timing-window, angular-distance, and reduced-motion rules
 - `src/games/search`: reusable ordered visual-search state, hints, and completion callbacks
 - `src/games/registry.ts`: top-level games displayed by the library grid
+- `src/games/earth-moon-explorer`: isolated 3D scene, disposable Three.js view, and renderer-independent orbit/camera rules
 - `src/scenes`: missions, navigation, fact cards, celebration, Free Explore, settings, and parent information
 - `src/ui`: reusable buttons and menu focus
 - `src/config`: shared dimensions and input tuning
@@ -142,3 +145,4 @@ Device adapters feed shared logical actions. Scenes never read keyboard or gamep
 - Star Collector, Solar System Telescope, and all five dwarf-planet missions are playable. Illustrations and sound feedback remain generated placeholders.
 - There are no bundled sounds. The mute preference also disables optional browser text-to-speech.
 - Speech voice and pronunciation depend on voices already installed in the browser/operating system; no external speech service is used.
+- The Earth and Moon prototype uses real NASA color maps on smooth spheres. It does not model terrain height, eclipses, real-time positions, or accurate orbital distance and speed. Performance should be checked on the target Android tablet.

@@ -17,11 +17,13 @@
     "validate": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run validate:games && npm run build"
   },
   "dependencies": {
-    "phaser": "4.2.1"
+    "phaser": "4.2.1",
+    "three": "0.186.1"
   },
   "devDependencies": {
     "@eslint/js": "9.31.0",
     "@types/node": "24.0.14",
+    "@types/three": "0.186.0",
     "eslint": "9.31.0",
     "eslint-config-prettier": "10.1.8",
     "globals": "16.3.0",

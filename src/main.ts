@@ -5,6 +5,7 @@ import { getTouchControlProfile } from './config/touchControls';
 import { actions, preferences } from './core/services';
 import { InputCoordinator } from './input/InputCoordinator';
 import { RocketWorkshopScene } from './games/rocket-workshop/RocketWorkshopScene';
+import { EarthMoonExplorerScene } from './games/earth-moon-explorer/EarthMoonExplorerScene';
 import { BadgeCollectionScene } from './scenes/BadgeCollectionScene';
 import { AllWorldsCelebrationScene } from './scenes/AllWorldsCelebrationScene';
 import { AsteroidPatrolScene } from './scenes/AsteroidPatrolScene';
@@ -48,6 +49,7 @@ const game = new Phaser.Game({
     BootScene,
     GameHubScene,
     RocketWorkshopScene,
+    EarthMoonExplorerScene,
     StarCollectorScene,
     SolarSystemExplorerScene,
     FishTankQuizScene,
