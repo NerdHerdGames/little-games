@@ -13,6 +13,19 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'astronaut-academy',
+    title: 'Astronaut Academy',
+    description: 'Suit up, work as a team, and explore life in space.',
+    sceneKey: 'AstronautAcademy',
+    touchControls: 'none',
+    accentColor: 0x8fbdb0,
+    symbol: 'A',
+    icon: {
+      key: 'astronaut-academy-icon',
+      path: 'assets/games/astronaut-academy/astronaut-icon.svg',
+    },
+  },
+  {
     id: 'states-puzzle',
     title: 'United States Puzzle',
     description: 'Drag colorful, labeled states into their places on the map.',
