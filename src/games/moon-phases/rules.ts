@@ -63,9 +63,10 @@ export function createMoonPuzzle(random: () => number = Math.random): MoonPuzzle
   return { order, placed: [], current: order[0], complete: false };
 }
 
-/** Two chronological rows, read left to right. Coordinates match the SVG viewBox. */
+/** Reference layout: new at left, waxing below Earth, full at right, waning above. */
 export function moonSlot(index: number): { x: number; y: number } {
-  return { x: 125 + (index % 4) * 250, y: index < 4 ? 120 : 380 };
+  const angle = Math.PI - (index * Math.PI) / 4;
+  return { x: 600 + Math.cos(angle) * 290, y: 450 + Math.sin(angle) * 290 };
 }
 
 export function moonSlotAtPoint(
@@ -74,10 +75,10 @@ export function moonSlotAtPoint(
 ): MoonPhaseId | undefined {
   if (![point.x, point.y, tolerance].every(Number.isFinite)) return undefined;
   // A capped margin keeps adjacent slots separate even on a small screen.
-  const margin = Math.min(24, Math.max(0, tolerance));
+  const margin = Math.min(20, Math.max(0, tolerance));
   return MOON_PHASES.find((_phase, index) => {
     const slot = moonSlot(index);
-    return Math.abs(point.x - slot.x) <= 94 + margin && Math.abs(point.y - slot.y) <= 94 + margin;
+    return Math.hypot(point.x - slot.x, point.y - slot.y) <= 78 + margin;
   })?.id;
 }
 

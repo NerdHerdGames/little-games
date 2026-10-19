@@ -90,3 +90,20 @@ export function moonArt(id: MoonPhaseId): string {
 export function moonIcon(id: MoonPhaseId): string {
   return `<svg viewBox="-44 -44 88 88" aria-hidden="true">${moonArt(id)}</svg>`;
 }
+
+/** Reuse the bundled, credited NASA Earth texture; all artwork remains offline. */
+export function earthArt(): string {
+  const texture = `${import.meta.env.BASE_URL}assets/games/earth-moon-explorer/earth-color.jpg`;
+  return `<defs>
+    <clipPath id="moon-puzzle-earth-clip"><circle r="143"/></clipPath>
+    <radialGradient id="moon-puzzle-atmosphere"><stop offset="65%" stop-color="#8cdfff" stop-opacity="0.45"/><stop offset="100%" stop-color="#8cdfff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="moon-puzzle-earth-shade" cx="38%" cy="32%" r="70%"><stop offset="30%" stop-color="#fff" stop-opacity="0.08"/><stop offset="73%" stop-color="#001536" stop-opacity="0.12"/><stop offset="100%" stop-color="#001026" stop-opacity="0.85"/></radialGradient>
+  </defs>
+  <g transform="translate(600 450)" role="img" aria-label="Earth at the center of the Moon's cycle">
+    <circle r="181" fill="url(#moon-puzzle-atmosphere)"/>
+    <circle r="143" fill="#1863a2"/>
+    <image href="${texture}" x="-286" y="-143" width="572" height="286" clip-path="url(#moon-puzzle-earth-clip)"/>
+    <circle r="143" fill="url(#moon-puzzle-earth-shade)" stroke="#b8e7ff" stroke-width="3"/>
+    <text y="189" class="moon-earth-label">Earth</text>
+  </g>`;
+}

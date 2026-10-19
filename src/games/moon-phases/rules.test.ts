@@ -64,12 +64,32 @@ describe('Moon Phases Puzzle', () => {
     MOON_PHASES.forEach(({ id }, index) => {
       const slot = moonSlot(index);
       expect(moonSlotAtPoint(slot)).toBe(id);
-      expect(moonSlotAtPoint({ x: slot.x + 110, y: slot.y }, 24)).toBe(id);
-      expect(moonSlotAtPoint({ x: slot.x + 125, y: slot.y }, 1000)).toBeUndefined();
+      expect(moonSlotAtPoint({ x: slot.x + 92, y: slot.y }, 20)).toBe(id);
+      const next = moonSlot((index + 1) % 8);
+      expect(
+        moonSlotAtPoint({ x: (slot.x + next.x) / 2, y: (slot.y + next.y) / 2 }, 1000),
+      ).toBeUndefined();
     });
     expect(moonSlotAtPoint({ x: -200, y: 10 })).toBeUndefined();
+    expect(moonSlotAtPoint({ x: 600, y: 450 }, 1000)).toBeUndefined();
     expect(moonSlotAtPoint({ x: NaN, y: 10 })).toBeUndefined();
     expect(moonSlotAtPoint({ x: 125, y: 120 }, Infinity)).toBeUndefined();
+  });
+
+  it('matches the reference orientation around Earth with no overlapping drop regions', () => {
+    expect(moonSlot(0).x).toBeCloseTo(310);
+    expect(moonSlot(0).y).toBeCloseTo(450);
+    expect(moonSlot(2).y).toBeCloseTo(740);
+    expect(moonSlot(4).x).toBeCloseTo(890);
+    expect(moonSlot(6).y).toBeCloseTo(160);
+    for (let i = 0; i < 8; i++) {
+      const a = moonSlot(i);
+      expect(Math.hypot(a.x - 600, a.y - 450)).toBeCloseTo(290);
+      for (let j = i + 1; j < 8; j++) {
+        const b = moonSlot(j);
+        expect(Math.hypot(a.x - b.x, a.y - b.y)).toBeGreaterThan(196);
+      }
+    }
   });
 
   it('draws growing right-hand phases and shrinking left-hand phases with correct lit areas', () => {

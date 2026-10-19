@@ -5,7 +5,7 @@ import { goToScene } from '../../core/SceneTransitions';
 import { actions, preferences } from '../../core/services';
 import { MapPlacementAdapter } from '../../input/MapPlacementAdapter';
 import { ActionMenu } from '../../ui/ActionMenu';
-import { moonArt, moonIcon } from './art';
+import { earthArt, moonArt, moonIcon } from './art';
 import {
   createMoonPuzzle,
   getMoonPhase,
@@ -55,24 +55,27 @@ export class MoonPhasesScene extends Phaser.Scene {
         </aside>
         <section class="moon-board" aria-label="Moon cycle puzzle">
           <h2>One Moon, eight familiar shapes</h2>
-          <p>Follow the numbers from 1 to 8. Then the cycle begins again.</p>
-          <svg class="moon-map" data-placement-map viewBox="0 0 1000 540" role="img" aria-label="Eight named moon phase slots in cycle order">
+          <p>Follow the phases around Earth, starting with New Moon on the left.</p>
+          <div class="moon-map-scroll"><svg class="moon-map" data-placement-map viewBox="0 0 1200 900" role="img" aria-label="Eight named moon phase slots around Earth: New Moon left, waxing phases below, Full Moon right, and waning phases above">
+            ${earthArt()}
             ${MOON_PHASES.map((phase, index) => {
               const { x, y } = moonSlot(index);
+              const side = x < 500 ? -1 : x > 700 ? 1 : 0;
+              const labelX = side * 92;
+              const labelY = side ? -8 : y < 450 ? -112 : 109;
+              const anchor = side < 0 ? 'end' : side > 0 ? 'start' : 'middle';
               return `<g transform="translate(${x} ${y})" data-slot="${phase.id}">
-                <rect x="-94" y="-94" width="188" height="188" rx="22" class="moon-slot"/>
-                <text y="-64" class="moon-number">${index + 1}</text>
-                <g transform="translate(0 -8)" data-moon="${phase.id}" hidden>${moonArt(phase.id)}</g>
-                <circle cy="-8" r="43" class="moon-empty" data-empty="${phase.id}"/>
-                <text y="1" class="moon-question" data-question="${phase.id}">?</text>
-                <text y="57" class="moon-name">${phase.lines[0]}<tspan x="0" dy="25">${phase.lines[1]}</tspan></text>
-                <text x="68" y="-64" class="moon-check" data-check="${phase.id}" hidden>✓</text>
+                <circle r="78" class="moon-slot"/>
+                <g transform="scale(1.5)" data-moon="${phase.id}" hidden>${moonArt(phase.id)}</g>
+                <circle r="65" class="moon-empty" data-empty="${phase.id}"/>
+                <text y="12" class="moon-question" data-question="${phase.id}">?</text>
+                <text x="${labelX}" y="${labelY}" class="moon-name" style="text-anchor:${anchor}">${index + 1}. ${phase.lines[0]}<tspan x="${labelX}" dy="30">${phase.lines[1]}</tspan></text>
+                <text x="59" y="-55" class="moon-check" data-check="${phase.id}" hidden>✓</text>
               </g>`;
             }).join('')}
-            <text x="500" y="253" class="moon-cycle-label">1 → 2 → 3 → 4 · continue below ↓</text>
-            <text x="500" y="523" class="moon-cycle-label">5 → 6 → 7 → 8 · back to New Moon ↺</text>
-          </svg>
+          </svg></div>
           <p class="moon-note">Waxing means growing brighter. Waning means growing darker.<br>Illustrations show the view from the Northern Hemisphere. The cycle takes about 29½ days.</p>
+          <p class="moon-credit">Earth texture: NASA Earth Observatory / Blue Marble. Diagram sizes and spacing are simplified.</p>
           <section class="moon-slot-picker">${button('slots', 'Choose a spot by name', 'aria-expanded="false" aria-controls="moon-named-slots"')}<div id="moon-named-slots" data-named-slots hidden></div></section>
         </section>
       </div>
@@ -148,7 +151,7 @@ export class MoonPhasesScene extends Phaser.Scene {
     if (tray)
       tray.innerHTML = phase
         ? `<div class="moon-piece-display"><button type="button" class="moon-piece" data-action="piece" data-piece="${phase.id}" aria-label="${phase.name} piece. Drag to its named spot, or tap a spot." aria-describedby="moon-piece-name moon-piece-help">${moonIcon(phase.id)}</button><strong id="moon-piece-name">${phase.name}</strong><span id="moon-piece-help">Drag me to my spot</span></div>`
-        : '<p class="moon-done">✓ All eight moons placed!</p>';
+        : '<p class="moon-done">✓ All eight phases placed!</p>';
     const map = this.menu.root.querySelector<SVGSVGElement>('[data-placement-map]');
     if (map) map.dataset.currentPiece = phase?.id ?? '';
     this.setText('[data-progress]', `${this.puzzle.placed.length} / 8 phases placed`);

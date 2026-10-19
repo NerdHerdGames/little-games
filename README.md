@@ -30,10 +30,13 @@ in `src/games/states-puzzle/CREDITS.md`. Test dragging, small-state zoom, and sp
 on the target Android tablet before release.
 
 **Moon Phases Puzzle** lets players drag eight labeled Moon phases into named
-spots in lunar-cycle order. One shuffled piece appears at a time; tapping a spot or
+spots in a circle around Earth: New Moon at left, waxing phases below, Full Moon
+at right, and waning phases above. The central globe reuses the locally bundled
+NASA Blue Marble texture (credits in `public/assets/games/earth-moon-explorer/CREDITS.md`).
+One shuffled piece appears at a time; tapping a spot or
 using the named-slot buttons also works. Wrong drops return to the tray without
 losing progress. Optional picture hints show the Northern Hemisphere phase
-illustrations. All art is generated locally; there are no timers, penalties, or
+illustrations. All art is bundled locally; there are no timers, penalties, or
 automatic animations. Sound and local speech follow the saved mute setting.
 Complete all eight phases and replay with a new order. Check touch dragging,
 readability, and local speech on the target Android tablet before release.

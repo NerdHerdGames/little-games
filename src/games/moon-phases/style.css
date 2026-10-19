@@ -9,15 +9,17 @@
   z-index: 5;
   overflow: auto;
   padding: 22px 28px;
-  background-color: #020308;
-  background-image: var(--moon-stars);
+  background-color: #092d43;
+  background-image:
+    var(--moon-stars), radial-gradient(ellipse at 90% 100%, #43839488, transparent 75%);
   background-size:
     233px 211px,
     307px 283px,
     379px 337px,
-    443px 397px;
+    443px 397px,
+    100% 100%;
   color: #edf2ff;
-  touch-action: pan-y;
+  touch-action: pan-x pan-y;
 }
 .moon-phases [hidden] {
   display: none;
@@ -79,7 +81,7 @@
 }
 .moon-layout {
   display: grid;
-  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  grid-template-columns: minmax(210px, 250px) minmax(0, 1fr);
   gap: 24px;
   max-width: 1550px;
   margin: 22px auto;
@@ -154,6 +156,9 @@
 .moon-board {
   align-self: start;
   min-width: 0;
+  border-color: transparent;
+  background: transparent;
+  padding: 12px;
 }
 .moon-board h2 {
   margin-bottom: 8px;
@@ -162,17 +167,22 @@
 .moon-map {
   display: block;
   width: 100%;
-  margin: 14px 0;
-  touch-action: none;
+  min-width: 640px;
+  margin: 0;
+  touch-action: pan-x;
+}
+.moon-map-scroll {
+  overflow-x: auto;
+  margin: 8px 0 16px;
 }
 .moon-slot {
-  fill: #080c15;
-  stroke: #8399bd;
+  fill: #09283d44;
+  stroke: transparent;
   stroke-width: 2;
 }
 .moon-empty {
-  fill: #141c2a;
-  stroke: #8399bd;
+  fill: #7f9eaf55;
+  stroke: #b2d3e3;
   stroke-width: 2;
   stroke-dasharray: 5 5;
 }
@@ -182,20 +192,16 @@
   font-weight: 700;
   text-anchor: middle;
 }
-.moon-map .moon-number {
-  font-size: 22px;
-  fill: #bbcae4;
-}
 .moon-map .moon-name {
-  font-size: 23px;
+  font-size: 27px;
 }
 .moon-map .moon-question {
-  font-size: 34px;
+  font-size: 40px;
   fill: #bbcae4;
 }
-.moon-map .moon-cycle-label {
-  font-size: 22px;
-  fill: #bbcae4;
+.moon-map .moon-earth-label {
+  font-size: 27px;
+  fill: #d9f3ff;
 }
 .moon-map .moon-check {
   fill: #ffe8ae;
@@ -208,6 +214,11 @@
 .moon-note {
   color: #bbcae4;
   font-size: 15px;
+}
+.moon-credit {
+  margin-top: 8px !important;
+  color: #bbcae4;
+  font-size: 13px;
 }
 .moon-slot-picker {
   margin-top: 18px;
@@ -302,11 +313,5 @@
   .moon-phases .moon-piece {
     width: 90px;
     height: 90px;
-  }
-  .moon-map {
-    min-width: 480px;
-  }
-  .moon-board {
-    overflow-x: auto;
   }
 }
