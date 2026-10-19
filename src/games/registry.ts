@@ -13,6 +13,15 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'piano-player',
+    title: 'Piano Player',
+    description: 'Play colorful piano keys and follow a song, one note at a time.',
+    sceneKey: 'PianoPlayer',
+    touchControls: 'none',
+    accentColor: 0x89d99b,
+    symbol: '♫',
+  },
+  {
     id: 'moon-phases',
     title: 'Moon Phases Puzzle',
     description: 'Drag eight Moon phases into their places in the lunar cycle.',

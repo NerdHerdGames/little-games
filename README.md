@@ -41,6 +41,19 @@ automatic animations. Sound and local speech follow the saved mute setting.
 Complete all eight phases and replay with a new order. Check touch dragging,
 readability, and local speech on the target Android tablet before release.
 
+**Piano Player** has a collapsible songbook occupying at most 20% of the view,
+a labeled chromatic A3–G♯4 octave, and key colors matched to the supplied keyboard
+photo. Free play and three guided songs are included: the supplied **This Is
+Halloween** sheet excerpt, **Ode to Joy**, and **Mary Had a Little Lamb**. Song notes
+show letter names, colors, and the supplied fingering/lyric cues. Correct notes
+turn gray with checkmarks; each completed row moves out and the next row enters
+above the keyboard. Incorrect keys still sound and leave progress unchanged.
+There is no tempo requirement or penalty. Start again, switch songs, hide labels,
+or return to free play at any time. Sound is synthesized locally with Web Audio;
+saved mute and reduced-motion preferences apply. The song/piano area uses a 30/70
+split on tablet screens, with scrolling to preserve 64-pixel keys on narrow
+screens. Check note audio, touch, and row transitions on the target Android tablet.
+
 ## Prerequisites and installation
 
 - Node.js 20.19 or newer (Node 24 recommended)
