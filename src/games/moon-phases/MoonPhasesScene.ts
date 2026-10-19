@@ -23,9 +23,10 @@ const button = (action: string, label: string, extra = ''): string =>
 export class MoonPhasesScene extends Phaser.Scene {
   private puzzle: MoonPuzzle = createMoonPuzzle();
   private menu!: ActionMenu;
+  private completionMenu!: ActionMenu;
   private adapter!: MapPlacementAdapter;
+  private completionOpen = false;
   private hints = false;
-  private namedSlots = false;
   private leaving = false;
 
   constructor() {
@@ -35,7 +36,7 @@ export class MoonPhasesScene extends Phaser.Scene {
   create(): void {
     this.puzzle = createMoonPuzzle();
     this.hints = false;
-    this.namedSlots = false;
+    this.completionOpen = false;
     this.leaving = false;
     this.menu = new ActionMenu(actions, 'moon-phases', 'Moon Phases Puzzle');
     this.menu.setContent(`
@@ -45,18 +46,16 @@ export class MoonPhasesScene extends Phaser.Scene {
       </header>
       <div class="moon-layout">
         <aside class="moon-tray" aria-label="Moon piece tray">
-          <p class="moon-eyebrow">YOUR MOON PIECE</p><h2>Find its place</h2>
+          <h2>Find its place</h2>
           <p>Drag the Moon to its named spot.<br>Or tap the spot to place it.</p>
           <div data-piece-tray></div>
           ${button('hint', 'Show picture hints', 'aria-pressed="false"')}
           ${button('hear', 'Hear phase name')}
           <div><p data-progress></p><progress value="0" max="8" aria-label="Moon phases placed"></progress></div>
-          <p class="moon-feedback" data-feedback role="status" aria-live="polite">Take your time. Every phase has a place!</p>
+          <p class="moon-feedback" data-feedback role="status" aria-live="polite"></p>
         </aside>
         <section class="moon-board" aria-label="Moon cycle puzzle">
-          <h2>One Moon, eight familiar shapes</h2>
-          <p>Follow the phases around Earth, starting with New Moon on the left.</p>
-          <div class="moon-map-scroll"><svg class="moon-map" data-placement-map viewBox="0 0 1200 900" role="img" aria-label="Eight named moon phase slots around Earth: New Moon left, waxing phases below, Full Moon right, and waning phases above">
+          <div class="moon-map-scroll"><svg class="moon-map" data-placement-map viewBox="0 0 1200 900" preserveAspectRatio="xMidYMin meet" role="img" aria-label="Eight named moon phase slots around Earth: New Moon left, waxing phases below, Full Moon right, and waning phases above">
             ${earthArt()}
             ${MOON_PHASES.map((phase, index) => {
               const { x, y } = moonSlot(index);
@@ -74,20 +73,29 @@ export class MoonPhasesScene extends Phaser.Scene {
               </g>`;
             }).join('')}
           </svg></div>
-          <p class="moon-note">Waxing means growing brighter. Waning means growing darker.<br>Illustrations show the view from the Northern Hemisphere. The cycle takes about 29½ days.</p>
-          <p class="moon-credit">Earth texture: NASA Earth Observatory / Blue Marble. Diagram sizes and spacing are simplified.</p>
-          <section class="moon-slot-picker">${button('slots', 'Choose a spot by name', 'aria-expanded="false" aria-controls="moon-named-slots"')}<div id="moon-named-slots" data-named-slots hidden></div></section>
         </section>
-      </div>
-      <section class="moon-complete" data-completion hidden aria-label="Puzzle complete">
-        <p class="moon-eyebrow">A WHOLE MOON CYCLE</p><h2>You matched every phase!</h2>
-        <p>The Sun always lights half the Moon. As the Moon orbits Earth, we see different amounts of that bright half.</p>
-        ${button('replay', 'Play again')}${button('library', 'Game Library')}
+      </div>`);
+    this.completionMenu = new ActionMenu(
+      actions,
+      'moon-phases moon-completion-overlay',
+      'Puzzle complete',
+    );
+    this.completionMenu.root.hidden = true;
+    this.completionMenu.root.setAttribute('role', 'dialog');
+    this.completionMenu.root.setAttribute('aria-modal', 'true');
+    this.completionMenu.root.setAttribute('aria-labelledby', 'moon-complete-title');
+    this.completionMenu.root.setAttribute('aria-describedby', 'moon-complete-description');
+    this.completionMenu.setContent(`
+      <section class="moon-complete">
+        <p class="moon-eyebrow">A WHOLE MOON CYCLE</p><h2 id="moon-complete-title">You matched every phase!</h2>
+        <p id="moon-complete-description">The Sun always lights half the Moon. As the Moon orbits Earth, we see different amounts of that bright half.</p>
+        <div class="moon-complete-actions">${button('dismiss', 'Back to puzzle')}${button('replay', 'Play again')}${button('library', 'Game Library')}</div>
       </section>`);
     this.adapter = new MapPlacementAdapter(this.menu.root, actions);
     this.refresh();
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       this.adapter.destroy();
+      this.completionMenu.destroy();
       this.menu.destroy();
       stopSpeaking();
     });
@@ -96,11 +104,19 @@ export class MoonPhasesScene extends Phaser.Scene {
   update(): void {
     if (this.leaving) return;
     if (actions.wasPressed('cancel')) {
-      this.leave();
+      if (this.completionOpen) this.dismissCompletion();
+      else this.leave();
+      return;
+    }
+    if (this.completionOpen) {
+      actions.clearPlacements();
+      const activation = this.completionMenu.readActivation();
+      if (activation) this.activate(activation);
       return;
     }
     const placement = actions.consumePlacement();
     if (placement) this.place(placement.pieceId, moonSlotAtPoint(placement, placement.tolerance));
+    if (this.completionOpen) return;
     const activation = this.menu.readActivation();
     if (activation) this.activate(activation);
   }
@@ -109,6 +125,7 @@ export class MoonPhasesScene extends Phaser.Scene {
     const phase = getMoonPhase(this.puzzle.current ?? '');
     if (id === 'library') this.leave();
     else if (id === 'replay') this.scene.restart();
+    else if (id === 'dismiss') this.dismissCompletion();
     else if (id === 'mute') {
       preferences.toggleMute();
       if (preferences.current.muted) stopSpeaking();
@@ -116,18 +133,9 @@ export class MoonPhasesScene extends Phaser.Scene {
     } else if (id === 'hint') {
       this.hints = !this.hints;
       this.refreshBoard();
-    } else if (id === 'slots') {
-      this.namedSlots = !this.namedSlots;
-      this.menu.root
-        .querySelector('[data-named-slots]')
-        ?.toggleAttribute('hidden', !this.namedSlots);
-      this.menu.root
-        .querySelector('[data-action="slots"]')
-        ?.setAttribute('aria-expanded', String(this.namedSlots));
-      this.menu.refreshButtons();
     } else if ((id === 'hear' || id === 'piece') && phase) {
       speak(`${phase.name}. ${phase.fact}`, preferences.current.muted);
-    } else if (id.startsWith('slot:') && phase) this.place(phase.id, id.slice(5));
+    }
   }
 
   private place(pieceId: string, slotId: string | undefined): void {
@@ -137,11 +145,9 @@ export class MoonPhasesScene extends Phaser.Scene {
     this.puzzle = result.puzzle;
     playPlacementTone(preferences.current.muted);
     this.refresh();
-    if (this.namedSlots && !this.puzzle.complete)
-      this.menu.root.querySelector<HTMLButtonElement>('[data-action="slots"]')?.focus();
     if (this.puzzle.complete) {
       speak(result.message, preferences.current.muted);
-      this.menu.root.querySelector<HTMLButtonElement>('[data-action="replay"]')?.focus();
+      this.showCompletion();
     }
   }
 
@@ -151,28 +157,16 @@ export class MoonPhasesScene extends Phaser.Scene {
     if (tray)
       tray.innerHTML = phase
         ? `<div class="moon-piece-display"><button type="button" class="moon-piece" data-action="piece" data-piece="${phase.id}" aria-label="${phase.name} piece. Drag to its named spot, or tap a spot." aria-describedby="moon-piece-name moon-piece-help">${moonIcon(phase.id)}</button><strong id="moon-piece-name">${phase.name}</strong><span id="moon-piece-help">Drag me to my spot</span></div>`
-        : '<p class="moon-done">✓ All eight phases placed!</p>';
+        : `<p class="moon-done">✓ All eight phases placed!</p>${button('replay', 'Play again')}`;
     const map = this.menu.root.querySelector<SVGSVGElement>('[data-placement-map]');
     if (map) map.dataset.currentPiece = phase?.id ?? '';
     this.setText('[data-progress]', `${this.puzzle.placed.length} / 8 phases placed`);
     const progress = this.menu.root.querySelector('progress');
     if (progress) progress.value = this.puzzle.placed.length;
-    const choices = this.menu.root.querySelector('[data-named-slots]');
-    if (choices)
-      choices.innerHTML = MOON_PHASES.map(({ id, name }, index) =>
-        button(
-          `slot:${id}`,
-          `${index + 1}. ${name}${this.puzzle.placed.includes(id) ? ' ✓' : ''}`,
-          this.puzzle.placed.includes(id) || !phase ? 'disabled' : '',
-        ),
-      ).join('');
     for (const action of ['hint', 'hear']) {
       const control = this.menu.root.querySelector<HTMLButtonElement>(`[data-action="${action}"]`);
       if (control) control.disabled = !phase;
     }
-    this.menu.root
-      .querySelector('[data-completion]')
-      ?.toggleAttribute('hidden', !this.puzzle.complete);
     this.refreshBoard();
     this.refreshMute();
     this.menu.refreshButtons();
@@ -202,6 +196,27 @@ export class MoonPhasesScene extends Phaser.Scene {
       ?.setAttribute('aria-pressed', String(this.hints));
   }
 
+  private showCompletion(): void {
+    this.completionOpen = true;
+    this.menu.root.inert = true;
+    this.completionMenu.root.hidden = false;
+    actions.clearActivations();
+    actions.clearPlacements();
+    this.completionMenu.root.querySelector<HTMLButtonElement>('[data-action="dismiss"]')?.focus();
+    this.completionMenu.refreshButtons();
+  }
+
+  private dismissCompletion(): void {
+    this.completionOpen = false;
+    this.completionMenu.root.hidden = true;
+    this.menu.root.inert = false;
+    actions.clearActivations();
+    actions.clearPlacements();
+    stopSpeaking();
+    this.menu.root.querySelector<HTMLButtonElement>('[data-action="replay"]')?.focus();
+    this.menu.refreshButtons();
+  }
+
   private refreshMute(): void {
     this.setText('[data-action="mute"]', preferences.current.muted ? 'Sound off' : 'Sound on');
     this.menu.root
@@ -217,6 +232,7 @@ export class MoonPhasesScene extends Phaser.Scene {
   private leave(): void {
     this.leaving = true;
     this.menu.root.style.pointerEvents = 'none';
+    this.completionMenu.root.style.pointerEvents = 'none';
     goToScene(this, 'GameHub');
   }
 }
