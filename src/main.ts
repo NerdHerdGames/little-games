@@ -9,6 +9,7 @@ import { AstronautAcademyScene } from './games/astronaut-academy/AstronautAcadem
 import { SolarOrbitExplorerScene } from './games/solar-orbit-explorer/SolarOrbitExplorerScene';
 import { MoonExplorerScene } from './games/moon-explorer/MoonExplorerScene';
 import { StatesPuzzleScene } from './games/states-puzzle/StatesPuzzleScene';
+import { MoonPhasesScene } from './games/moon-phases/MoonPhasesScene';
 import { BadgeCollectionScene } from './scenes/BadgeCollectionScene';
 import { AllWorldsCelebrationScene } from './scenes/AllWorldsCelebrationScene';
 import { AsteroidPatrolScene } from './scenes/AsteroidPatrolScene';
@@ -56,6 +57,7 @@ const game = new Phaser.Game({
     RocketWorkshopScene,
     MoonExplorerScene,
     StatesPuzzleScene,
+    MoonPhasesScene,
     SolarOrbitExplorerScene,
     StarCollectorScene,
     SolarSystemExplorerScene,

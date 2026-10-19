@@ -1,0 +1,283 @@
+.moon-phases {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: auto;
+  padding: 22px 28px;
+  background: #111e35;
+  color: #edf2ff;
+  touch-action: pan-y;
+}
+.moon-phases [hidden] {
+  display: none;
+}
+.moon-phases h1,
+.moon-phases h2,
+.moon-phases p {
+  margin: 0;
+}
+.moon-phases p {
+  line-height: 1.5;
+}
+.moon-phases button,
+.moon-phases .moon-slot-picker > button {
+  min-height: 64px;
+  min-width: 64px;
+  padding: 12px 16px;
+  border: 2px solid #8399bd;
+  border-radius: 16px;
+  background: #233653;
+  color: #fff4cf;
+  font:
+    700 16px Arial,
+    sans-serif;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.moon-phases button:active {
+  background: #3d5276;
+}
+.moon-phases button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.moon-phases button:focus-visible,
+.moon-phases .moon-slot-picker > button:focus-visible {
+  outline: 4px solid #ffe8ae;
+  outline-offset: 3px;
+}
+.moon-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.moon-header h1 {
+  margin-top: 6px;
+  font-size: clamp(26px, 3vw, 40px);
+}
+.moon-header nav {
+  display: flex;
+  gap: 10px;
+}
+.moon-eyebrow {
+  color: #bbcae4;
+  font-size: 12px;
+  letter-spacing: 1.7px;
+  font-weight: 700;
+}
+.moon-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  gap: 24px;
+  max-width: 1550px;
+  margin: 22px auto;
+}
+.moon-tray,
+.moon-board {
+  border: 2px solid #465d80;
+  border-radius: 24px;
+  padding: 22px;
+  background: #192a45;
+}
+.moon-tray {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.moon-tray h2 {
+  font-size: 26px;
+}
+.moon-phases .moon-piece {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  border-style: dashed;
+  background: #111e35;
+  touch-action: none;
+}
+.moon-piece svg {
+  width: 130px;
+  height: 130px;
+  pointer-events: none;
+}
+.moon-piece strong {
+  font-size: 23px;
+}
+.moon-piece span {
+  font-size: 14px;
+  color: #bbcae4;
+}
+.moon-tray progress {
+  width: 100%;
+  height: 14px;
+  margin-top: 8px;
+  accent-color: #ffe8ae;
+}
+.moon-feedback {
+  min-height: 80px;
+  color: #ffe8ae;
+}
+.moon-board {
+  align-self: start;
+  min-width: 0;
+}
+.moon-board h2 {
+  margin-bottom: 8px;
+  font-size: clamp(20px, 2.3vw, 29px);
+}
+.moon-map {
+  display: block;
+  width: 100%;
+  margin: 14px 0;
+  touch-action: none;
+}
+.moon-slot {
+  fill: #111e35;
+  stroke: #8399bd;
+  stroke-width: 2;
+}
+.moon-empty {
+  fill: #253754;
+  stroke: #8399bd;
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+}
+.moon-map text {
+  fill: #edf2ff;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  text-anchor: middle;
+}
+.moon-map .moon-number {
+  font-size: 22px;
+  fill: #bbcae4;
+}
+.moon-map .moon-name {
+  font-size: 23px;
+}
+.moon-map .moon-question {
+  font-size: 34px;
+  fill: #bbcae4;
+}
+.moon-map .moon-cycle-label {
+  font-size: 22px;
+  fill: #bbcae4;
+}
+.moon-map .moon-check {
+  fill: #ffe8ae;
+  font-size: 28px;
+}
+.moon-map .is-placed .moon-slot {
+  stroke: #ffe8ae;
+  stroke-width: 4;
+}
+.moon-note {
+  color: #bbcae4;
+  font-size: 15px;
+}
+.moon-slot-picker {
+  margin-top: 18px;
+}
+.moon-slot-picker > button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.moon-slot-picker [data-named-slots]:not([hidden]) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.moon-phases .map-drag-ghost {
+  position: fixed;
+  z-index: 50;
+  min-height: 0;
+  padding: 8px;
+  transform: translate(-50%, -65%);
+  pointer-events: none;
+  opacity: 0.95;
+  box-shadow: 0 8px 24px #0006;
+}
+.moon-phases .map-drag-ghost svg {
+  width: 90px;
+  height: 90px;
+}
+.moon-phases .map-drag-ghost strong {
+  font-size: 18px;
+}
+.moon-phases .map-drag-ghost span {
+  display: none;
+}
+.moon-done {
+  padding: 24px 0;
+  color: #ffe8ae;
+  font-size: 24px;
+  font-weight: 700;
+}
+.moon-complete {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 28px;
+  border: 2px solid #ffe8ae;
+  border-radius: 24px;
+  background: #233653;
+  text-align: center;
+}
+.moon-complete h2 {
+  margin: 10px 0;
+  font-size: 32px;
+}
+.moon-complete p {
+  margin-bottom: 16px;
+}
+.moon-complete button {
+  margin: 4px;
+}
+@media (max-width: 900px) {
+  .moon-phases {
+    padding: 14px;
+  }
+  .moon-layout {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .moon-tray,
+  .moon-board {
+    padding: 14px;
+  }
+  .moon-header {
+    gap: 12px;
+  }
+}
+@media (max-width: 650px) {
+  .moon-header {
+    flex-wrap: wrap;
+    padding-top: 35px;
+  }
+  .moon-header nav {
+    width: 100%;
+  }
+  .moon-header nav button {
+    flex: 1;
+  }
+  .moon-layout {
+    grid-template-columns: 1fr;
+  }
+  .moon-tray {
+    gap: 10px;
+  }
+  .moon-piece svg {
+    width: 90px;
+    height: 90px;
+  }
+  .moon-map {
+    min-width: 480px;
+  }
+  .moon-board {
+    overflow-x: auto;
+  }
+}

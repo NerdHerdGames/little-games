@@ -29,6 +29,15 @@ the map and replay with a new order. Boundary sources and licensing are document
 in `src/games/states-puzzle/CREDITS.md`. Test dragging, small-state zoom, and speech
 on the target Android tablet before release.
 
+**Moon Phases Puzzle** lets players drag eight labeled Moon phases into named
+spots in lunar-cycle order. One shuffled piece appears at a time; tapping a spot or
+using the named-slot buttons also works. Wrong drops return to the tray without
+losing progress. Optional picture hints show the Northern Hemisphere phase
+illustrations. All art is generated locally; there are no timers, penalties, or
+automatic animations. Sound and local speech follow the saved mute setting.
+Complete all eight phases and replay with a new order. Check touch dragging,
+readability, and local speech on the target Android tablet before release.
+
 ## Prerequisites and installation
 
 - Node.js 20.19 or newer (Node 24 recommended)

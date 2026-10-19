@@ -13,6 +13,15 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'moon-phases',
+    title: 'Moon Phases Puzzle',
+    description: 'Drag eight Moon phases into their places in the lunar cycle.',
+    sceneKey: 'MoonPhases',
+    touchControls: 'none',
+    accentColor: 0xffe8ae,
+    symbol: '☾',
+  },
+  {
     id: 'astronaut-academy',
     title: 'Astronaut Academy',
     description: 'Suit up, work as a team, and explore life in space.',
