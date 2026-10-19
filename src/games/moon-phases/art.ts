@@ -22,10 +22,71 @@ export function moonLightPath(id: MoonPhaseId, radius = 42): string {
   return `M${points.join(' L')} Z`;
 }
 
+// A shared, locally drawn lunar face: darker maria, crater rims, and a shaded limb.
+// Grouping the pixels by shade keeps each illustration to a handful of SVG paths.
+const MOON_PALETTE = [
+  '#626773',
+  '#747985',
+  '#878c96',
+  '#999ea7',
+  '#aab0b8',
+  '#bcc1c8',
+  '#cdd1d7',
+  '#dde0e4',
+  '#eceef0',
+];
+const MARIA = [
+  { x: -15, y: -15, rx: 18, ry: 15 },
+  { x: 10, y: -22, rx: 14, ry: 10 },
+  { x: -23, y: 5, rx: 12, ry: 17 },
+  { x: 16, y: -5, rx: 12, ry: 11 },
+];
+const CRATERS = [
+  { x: -23, y: -22, r: 6 },
+  { x: 6, y: -14, r: 5 },
+  { x: 25, y: 7, r: 7 },
+  { x: -9, y: 22, r: 9 },
+  { x: -27, y: 14, r: 4 },
+  { x: 12, y: 30, r: 4 },
+  { x: 1, y: 5, r: 3 },
+];
+
+function createMoonSurface(): string {
+  const shades: string[][] = MOON_PALETTE.map(() => []);
+  for (let y = -42; y < 42; y += 3) {
+    for (let x = -42; x < 42; x += 3) {
+      const cx = x + 1.5;
+      const cy = y + 1.5;
+      const distance = Math.hypot(cx, cy);
+      if (distance > 41) continue;
+      let brightness = 4 + 4 * Math.sqrt(1 - (distance / 42) ** 2);
+      for (const mare of MARIA) {
+        if (((cx - mare.x) / mare.rx) ** 2 + ((cy - mare.y) / mare.ry) ** 2 < 1) brightness -= 2;
+      }
+      for (const crater of CRATERS) {
+        const depth = Math.hypot(cx - crater.x, cy - crater.y) / crater.r;
+        if (depth < 0.72) brightness -= 2.5;
+        else if (depth < 1.15) brightness += cy < crater.y ? 1.5 : -1;
+      }
+      // Fixed grain gives every phase the same face, including when dragged.
+      brightness += Math.sin(cx * 17 + cy * 31) * 0.6;
+      const shade = Math.max(0, Math.min(MOON_PALETTE.length - 1, Math.round(brightness)));
+      shades[shade]!.push(`M${x},${y}h3v3h-3Z`);
+    }
+  }
+  return shades
+    .map((pixels, index) => `<path fill="${MOON_PALETTE[index]}" d="${pixels.join('')}"/>`)
+    .join('');
+}
+
+const MOON_SURFACE = createMoonSurface();
+
 export function moonArt(id: MoonPhaseId): string {
-  return `<circle r="43" fill="#253754" stroke="#b9c8e4" stroke-width="2"/><path d="${moonLightPath(id)}" fill="#ffe8ae"/>`;
+  const index = MOON_PHASES.findIndex((phase) => phase.id === id);
+  const shadow = MOON_PHASES[(index + 4) % MOON_PHASES.length]!.id;
+  return `<circle r="43" fill="#717783"/>${MOON_SURFACE}<path d="${moonLightPath(shadow, 43)}" fill="#05080e" fill-opacity="0.94"/><circle r="43" fill="none" stroke="#8993a3" stroke-width="1"/>`;
 }
 
 export function moonIcon(id: MoonPhaseId): string {
-  return `<svg viewBox="-54 -54 108 108" aria-hidden="true">${moonArt(id)}</svg>`;
+  return `<svg viewBox="-44 -44 88 88" aria-hidden="true">${moonArt(id)}</svg>`;
 }

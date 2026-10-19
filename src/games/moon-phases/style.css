@@ -1,10 +1,21 @@
 .moon-phases {
+  --moon-stars:
+    radial-gradient(circle at 24px 35px, #e6edffb3 0 0.8px, transparent 1.2px),
+    radial-gradient(circle at 137px 113px, #aebbd17a 0 0.7px, transparent 1.1px),
+    radial-gradient(circle at 71px 173px, #ffffff8c 0 1px, transparent 1.4px),
+    radial-gradient(circle at 191px 67px, #a7bada66 0 0.6px, transparent 1px);
   position: absolute;
   inset: 0;
   z-index: 5;
   overflow: auto;
   padding: 22px 28px;
-  background: #111e35;
+  background-color: #020308;
+  background-image: var(--moon-stars);
+  background-size:
+    233px 211px,
+    307px 283px,
+    379px 337px,
+    443px 397px;
   color: #edf2ff;
   touch-action: pan-y;
 }
@@ -26,7 +37,7 @@
   padding: 12px 16px;
   border: 2px solid #8399bd;
   border-radius: 16px;
-  background: #233653;
+  background: #141b2a;
   color: #fff4cf;
   font:
     700 16px Arial,
@@ -35,7 +46,7 @@
   touch-action: manipulation;
 }
 .moon-phases button:active {
-  background: #3d5276;
+  background: #29364e;
 }
 .moon-phases button:disabled {
   opacity: 0.55;
@@ -75,10 +86,16 @@
 }
 .moon-tray,
 .moon-board {
-  border: 2px solid #465d80;
+  border: 2px solid #3e4c65;
   border-radius: 24px;
   padding: 22px;
-  background: #192a45;
+  background-color: #060910;
+  background-image: var(--moon-stars);
+  background-size:
+    379px 337px,
+    443px 397px,
+    307px 283px,
+    233px 211px;
 }
 .moon-tray {
   display: flex;
@@ -88,25 +105,39 @@
 .moon-tray h2 {
   font-size: 26px;
 }
-.moon-phases .moon-piece {
+.moon-piece-display {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   width: 100%;
-  border-style: dashed;
-  background: #111e35;
-  touch-action: none;
+  text-align: center;
 }
-.moon-piece svg {
+.moon-phases .moon-piece {
+  display: block;
   width: 130px;
   height: 130px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: grab;
+  touch-action: none;
+}
+.moon-phases .moon-piece:active {
+  background: transparent;
+  cursor: grabbing;
+}
+.moon-piece svg {
+  display: block;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
-.moon-piece strong {
+.moon-piece-display strong {
   font-size: 23px;
 }
-.moon-piece span {
+.moon-piece-display span {
   font-size: 14px;
   color: #bbcae4;
 }
@@ -135,12 +166,12 @@
   touch-action: none;
 }
 .moon-slot {
-  fill: #111e35;
+  fill: #080c15;
   stroke: #8399bd;
   stroke-width: 2;
 }
 .moon-empty {
-  fill: #253754;
+  fill: #141c2a;
   stroke: #8399bd;
   stroke-width: 2;
   stroke-dasharray: 5 5;
@@ -196,21 +227,13 @@
   position: fixed;
   z-index: 50;
   min-height: 0;
-  padding: 8px;
+  height: auto;
+  aspect-ratio: 1;
+  padding: 0;
   transform: translate(-50%, -65%);
   pointer-events: none;
   opacity: 0.95;
-  box-shadow: 0 8px 24px #0006;
-}
-.moon-phases .map-drag-ghost svg {
-  width: 90px;
-  height: 90px;
-}
-.moon-phases .map-drag-ghost strong {
-  font-size: 18px;
-}
-.moon-phases .map-drag-ghost span {
-  display: none;
+  filter: drop-shadow(0 8px 12px #0009);
 }
 .moon-done {
   padding: 24px 0;
@@ -224,7 +247,13 @@
   padding: 28px;
   border: 2px solid #ffe8ae;
   border-radius: 24px;
-  background: #233653;
+  background-color: #080c15;
+  background-image: var(--moon-stars);
+  background-size:
+    233px 211px,
+    307px 283px,
+    379px 337px,
+    443px 397px;
   text-align: center;
 }
 .moon-complete h2 {
@@ -270,7 +299,7 @@
   .moon-tray {
     gap: 10px;
   }
-  .moon-piece svg {
+  .moon-phases .moon-piece {
     width: 90px;
     height: 90px;
   }

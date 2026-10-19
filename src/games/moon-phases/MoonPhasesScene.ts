@@ -147,7 +147,7 @@ export class MoonPhasesScene extends Phaser.Scene {
     const tray = this.menu.root.querySelector('[data-piece-tray]');
     if (tray)
       tray.innerHTML = phase
-        ? `<button type="button" class="moon-piece" data-action="piece" data-piece="${phase.id}" aria-label="${phase.name} piece. Drag to its named spot, or tap a spot.">${moonIcon(phase.id)}<strong>${phase.name}</strong><span>Drag me to my spot</span></button>`
+        ? `<div class="moon-piece-display"><button type="button" class="moon-piece" data-action="piece" data-piece="${phase.id}" aria-label="${phase.name} piece. Drag to its named spot, or tap a spot." aria-describedby="moon-piece-name moon-piece-help">${moonIcon(phase.id)}</button><strong id="moon-piece-name">${phase.name}</strong><span id="moon-piece-help">Drag me to my spot</span></div>`
         : '<p class="moon-done">✓ All eight moons placed!</p>';
     const map = this.menu.root.querySelector<SVGSVGElement>('[data-placement-map]');
     if (map) map.dataset.currentPiece = phase?.id ?? '';
