@@ -214,6 +214,7 @@
   color: #526459;
 }
 .piano-instrument {
+  position: relative;
   padding: 22px 26px;
   display: flex;
   flex-direction: column;
@@ -224,14 +225,15 @@
 }
 .piano-instrument-heading {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 12px;
 }
-.piano-key-scroll {
+.piano-keyboard {
   flex: 1;
+  min-width: 0;
   min-height: 245px;
-  overflow-x: auto;
-  touch-action: pan-x;
+  overflow: hidden;
+  container-type: inline-size;
   border-radius: 14px;
   background: #273730;
   border: 10px solid #273730;
@@ -239,9 +241,8 @@
 }
 .piano-keys {
   position: relative;
+  width: 100%;
   height: 100%;
-  min-height: 225px;
-  min-width: 740px;
 }
 .piano-player .piano-key {
   position: absolute;
@@ -249,7 +250,8 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  padding: 12px 4px;
+  min-width: 0;
+  padding: 12px clamp(1px, 0.5cqw, 4px);
   border-radius: 0 0 10px 10px;
 }
 .piano-player .piano-white {
@@ -270,19 +272,28 @@
 .piano-key-label {
   display: grid;
   place-items: center;
-  min-width: 42px;
+  min-width: 0;
+  width: min(52px, 100%);
   min-height: 44px;
-  padding: 4px;
+  padding: clamp(1px, 0.5cqw, 4px);
   background: var(--note-color);
   color: #23332e;
   border: 1px solid #526459;
   border-radius: 6px;
-  font-size: 23px;
+  font-size: clamp(12px, calc(28cqw / var(--piano-key-units)), 23px);
+  line-height: 1.1;
 }
 .piano-black .piano-key-label {
   min-width: 0;
   width: 100%;
-  font-size: 13px;
+  font-size: clamp(9px, calc(18cqw / var(--piano-key-units)), 13px);
+}
+.piano-extra .piano-key-label {
+  color: #000;
+}
+.piano-octave {
+  font-size: clamp(8px, calc(16cqw / var(--piano-key-units)), 11px);
+  font-weight: 400;
 }
 .piano-player .piano-key.pressed {
   background: var(--note-color);
@@ -298,13 +309,6 @@
 .piano-black.expected::after {
   top: 10%;
   color: #fffdf7;
-}
-.piano-help {
-  margin: 0;
-  min-height: 22px;
-  color: #3f5548;
-  font-size: 16px;
-  line-height: 1.4;
 }
 .piano-sr {
   position: absolute;

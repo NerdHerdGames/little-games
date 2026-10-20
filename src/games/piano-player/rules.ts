@@ -15,10 +15,11 @@ export const PIANO_KEYS = [
 
 export type NoteId = (typeof PIANO_KEYS)[number]['id'];
 export type PianoKey = {
-  id: NoteId;
+  note: NoteId;
   midi: number;
   label: string;
   color: string;
+  supplemental: boolean;
 } & ({ white: number } | { after: number });
 
 export type KeyboardId = 'a' | 'c';
@@ -28,19 +29,37 @@ export interface PianoKeyboard {
   whiteKeyUnits: number;
 }
 
-function createCKeyboard(): PianoKey[] {
+function createKeyboard(
+  start: number,
+  end: number,
+  activeStart: number,
+  activeEnd: number,
+): PianoKey[] {
   let white = 0;
-  return PIANO_KEYS.map((key) => ({ ...key, midi: key.midi < 60 ? key.midi + 12 : key.midi }))
-    .sort((a, b) => a.midi - b.midi)
-    .map((key) => ('white' in key ? { ...key, white: white++ } : { ...key, after: white - 1 }));
+  return Array.from({ length: end - start + 1 }, (_, index) => {
+    const midi = start + index;
+    const source = PIANO_KEYS.find((key) => key.midi % 12 === midi % 12)!;
+    const supplemental = midi < activeStart || midi > activeEnd;
+    const key = {
+      note: source.id,
+      midi,
+      label: source.label,
+      color: supplemental ? '#d4d7d4' : source.color,
+      supplemental,
+    };
+    return 'white' in source ? { ...key, white: white++ } : { ...key, after: white - 1 };
+  });
 }
 
 const KEYBOARDS: Readonly<Record<KeyboardId, PianoKeyboard>> = {
-  a: { range: 'A3 – G♯4', keys: PIANO_KEYS, whiteKeyUnits: 7.4 },
-  c: { range: 'C4 – B4', keys: createCKeyboard(), whiteKeyUnits: 7 },
+  a: { range: 'F3 – B4', keys: createKeyboard(53, 71, 57, 68), whiteKeyUnits: 11 },
+  c: { range: 'C4 – B4', keys: createKeyboard(60, 71, 60, 71), whiteKeyUnits: 7 },
 };
 
 export const getSongKeyboard = (song?: Song): PianoKeyboard => KEYBOARDS[song?.keyboard ?? 'c'];
+
+export const getSongKey = (song: Song, note: NoteId | undefined): PianoKey | undefined =>
+  getSongKeyboard(song).keys.find((key) => key.note === note && !key.supplemental);
 
 export interface SongNote {
   key: NoteId;
@@ -64,8 +83,9 @@ export interface SongProgress {
 export const startSong = (): SongProgress => ({ row: 0, note: 0, played: 0, complete: false });
 
 /** Incorrect notes are free to explore; only the next matching key advances the song. */
-export function playNote(song: Song, state: SongProgress, key: NoteId): SongProgress {
-  if (state.complete || song.rows[state.row]?.[state.note]?.key !== key) return state;
+export function playNote(song: Song, state: SongProgress, midi: number): SongProgress {
+  if (state.complete || getSongKey(song, song.rows[state.row]?.[state.note]?.key)?.midi !== midi)
+    return state;
   const played = state.played + 1;
   if (state.note + 1 < song.rows[state.row]!.length)
     return { ...state, note: state.note + 1, played };
