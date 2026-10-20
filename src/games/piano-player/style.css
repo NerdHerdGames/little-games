@@ -254,7 +254,7 @@
 }
 .piano-player .piano-white {
   height: calc(100% - 4px);
-  width: calc(100% / 7.4);
+  width: calc(100% / var(--piano-key-units));
   background: #fffdf4;
   border: 1px solid #8c9589;
   border-bottom: 7px solid #c9c8bb;
@@ -262,7 +262,7 @@
 .piano-player .piano-black {
   z-index: 1;
   height: 59%;
-  width: calc(64% / 7.4);
+  width: calc(64% / var(--piano-key-units));
   background: #27312e;
   border: 1px solid #141f1b;
   border-bottom: 7px solid #101d17;

@@ -14,6 +14,34 @@ export const PIANO_KEYS = [
 ] as const;
 
 export type NoteId = (typeof PIANO_KEYS)[number]['id'];
+export type PianoKey = {
+  id: NoteId;
+  midi: number;
+  label: string;
+  color: string;
+} & ({ white: number } | { after: number });
+
+export type KeyboardId = 'a' | 'c';
+export interface PianoKeyboard {
+  range: string;
+  keys: readonly PianoKey[];
+  whiteKeyUnits: number;
+}
+
+function createCKeyboard(): PianoKey[] {
+  let white = 0;
+  return PIANO_KEYS.map((key) => ({ ...key, midi: key.midi < 60 ? key.midi + 12 : key.midi }))
+    .sort((a, b) => a.midi - b.midi)
+    .map((key) => ('white' in key ? { ...key, white: white++ } : { ...key, after: white - 1 }));
+}
+
+const KEYBOARDS: Readonly<Record<KeyboardId, PianoKeyboard>> = {
+  a: { range: 'A3 – G♯4', keys: PIANO_KEYS, whiteKeyUnits: 7.4 },
+  c: { range: 'C4 – B4', keys: createCKeyboard(), whiteKeyUnits: 7 },
+};
+
+export const getSongKeyboard = (song?: Song): PianoKeyboard => KEYBOARDS[song?.keyboard ?? 'c'];
+
 export interface SongNote {
   key: NoteId;
   syllable?: string;
@@ -23,6 +51,7 @@ export interface Song {
   id: string;
   title: string;
   source: string;
+  keyboard: KeyboardId;
   rows: readonly (readonly SongNote[])[];
 }
 export interface SongProgress {

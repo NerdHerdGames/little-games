@@ -4,7 +4,7 @@ import { actions, preferences } from '../../core/services';
 import { goToScene } from '../../core/SceneTransitions';
 import { ActionMenu } from '../../ui/ActionMenu';
 import {
-  PIANO_KEYS,
+  getSongKeyboard,
   playNote,
   startSong,
   type NoteId,
@@ -18,6 +18,7 @@ export class PianoPlayerScene extends Phaser.Scene {
   private menu!: ActionMenu;
   private audio!: PianoAudio;
   private song: Song | undefined;
+  private keyboard = getSongKeyboard();
   private progress: SongProgress = startSong();
   private songsOpen = true;
   private labels = true;
@@ -72,7 +73,7 @@ export class PianoPlayerScene extends Phaser.Scene {
       this.song = SONGS.find((song) => song.id === id.slice(5));
       this.progress = startSong();
     } else if (id.startsWith('key:')) {
-      const key = PIANO_KEYS.find((key) => key.id === id.slice(4));
+      const key = this.keyboard.keys.find((key) => key.id === id.slice(4));
       if (!key) return;
       this.audio.play(key.midi);
       if (this.lastKey)
@@ -93,6 +94,8 @@ export class PianoPlayerScene extends Phaser.Scene {
   }
 
   private render(focus?: string): void {
+    this.keyboard = getSongKeyboard(this.song);
+    this.lastKey = undefined;
     this.menu.root.classList.toggle('piano-songs-closed', !this.songsOpen);
     this.menu.setContent(`
       <header class="piano-header">
@@ -119,13 +122,17 @@ export class PianoPlayerScene extends Phaser.Scene {
             <div data-score></div>
           </section>
           <section class="piano-instrument" aria-label="One octave piano">
-            <div class="piano-instrument-heading"><span>YOUR COLOR KEYBOARD</span><span>A3 – G♯4 · One octave</span></div>
-            <div class="piano-key-scroll"><div class="piano-keys">
-            ${PIANO_KEYS.map((key) => {
-              const black = 'after' in key;
-              const left = black ? ((key.after + 1 - 0.32) / 7.4) * 100 : (key.white / 7.4) * 100;
-              return `<button data-action="key:${key.id}" class="piano-key ${black ? 'piano-black' : 'piano-white'}" style="left:${left}%;--note-color:${key.color}" aria-label="Play ${key.label}"><span class="piano-key-label" ${this.labels ? '' : 'hidden'}>${key.label}</span></button>`;
-            }).join('')}
+            <div class="piano-instrument-heading"><span>YOUR COLOR KEYBOARD</span><span>${this.keyboard.range} · One octave</span></div>
+            <div class="piano-key-scroll"><div class="piano-keys" style="--piano-key-units:${this.keyboard.whiteKeyUnits}">
+            ${this.keyboard.keys
+              .map((key) => {
+                const black = 'after' in key;
+                const left = black
+                  ? ((key.after + 1 - 0.32) / this.keyboard.whiteKeyUnits) * 100
+                  : (key.white / this.keyboard.whiteKeyUnits) * 100;
+                return `<button data-action="key:${key.id}" class="piano-key ${black ? 'piano-black' : 'piano-white'}" style="left:${left}%;--note-color:${key.color}" aria-label="Play ${key.label}"><span class="piano-key-label" ${this.labels ? '' : 'hidden'}>${key.label}</span></button>`;
+              })
+              .join('')}
             </div></div>
             <p class="piano-help" data-help role="status"></p>
           </section>
@@ -160,19 +167,21 @@ export class PianoPlayerScene extends Phaser.Scene {
       <div class="piano-note-scroll"><ol class="piano-note-row" aria-label="Row ${row + 1}">${song.rows[
         row
       ]!.map((entry, i) => {
-        const key = PIANO_KEYS.find((key) => key.id === entry.key)!;
+        const key = this.keyboard.keys.find((key) => key.id === entry.key)!;
         const done = complete || i < note;
         return `<li class="${done ? 'played' : i === note ? 'next' : ''}" ${!done && i === note ? 'aria-current="step"' : ''} style="--note-color:${key.color}"><span class="piano-finger">${entry.finger ?? ''}</span><span class="piano-note">${key.label.split(' / ')[0]}<small>${done ? '✓' : '♩'}</small></span><span class="piano-syllable">${entry.syllable ?? ''}</span><span class="piano-sr">${done ? 'Played' : i === note ? 'Next note' : ''}</span></li>`;
       }).join('')}</ol></div><p class="piano-source">${song.source}</p>`;
     const expected = song.rows[row]?.[note];
-    const nextKey = PIANO_KEYS.find((key) => key.id === expected?.key);
+    const nextKey = this.keyboard.keys.find((key) => key.id === expected?.key);
     help.textContent = complete
       ? 'You played the whole song! Start again or choose another tune.'
       : `Next: ${nextKey?.label ?? ''}. Match the letter and color. Take your time.`;
     for (const key of this.menu.root.querySelectorAll<HTMLButtonElement>('.piano-key')) {
       const next = !complete && key.dataset.action === `key:${expected?.key}`;
       key.classList.toggle('expected', next);
-      const definition = PIANO_KEYS.find((entry) => `key:${entry.id}` === key.dataset.action)!;
+      const definition = this.keyboard.keys.find(
+        (entry) => `key:${entry.id}` === key.dataset.action,
+      )!;
       key.setAttribute('aria-label', `Play ${definition.label}${next ? ', next note' : ''}`);
     }
     const current = score.querySelector<HTMLElement>('[aria-current]');
