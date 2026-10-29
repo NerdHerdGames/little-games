@@ -1,10 +1,13 @@
 import { defineConfig } from 'vitest/config';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig({
-  base: process.env.VITE_BASE_PATH ?? '/',
+export default defineConfig(({ mode }) => ({
+  // WebViewAssetLoader serves the packaged assets at this fixed local path.
+  base: mode === 'android' ? '/assets/' : (process.env.VITE_BASE_PATH ?? '/'),
+  build: { outDir: mode === 'android' ? 'dist-android' : 'dist' },
   plugins: [
     VitePWA({
+      disable: mode === 'android',
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon.svg'],
       manifest: {
@@ -38,4 +41,4 @@ export default defineConfig({
     }),
   ],
   test: { environment: 'node', include: ['src/**/*.test.ts'] },
-});
+}));
