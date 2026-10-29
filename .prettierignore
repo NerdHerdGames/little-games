@@ -2,3 +2,9 @@ dist
 coverage
 node_modules
 package-lock.json
+dist-android
+android/.gradle
+android/.idea
+android/**/build
+android/gradlew
+android/gradlew.bat

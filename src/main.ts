@@ -41,10 +41,12 @@ import { TractorTrailerScene } from './scenes/TractorTrailerScene';
 import { AlphabetTracingScene } from './games/alphabet-tracing/AlphabetTracingScene';
 import './styles.css';
 
-registerSW({
-  immediate: true,
-  onRegisterError: (error) => console.error('Offline setup failed:', error),
-});
+if (import.meta.env.MODE !== 'android') {
+  registerSW({
+    immediate: true,
+    onRegisterError: (error) => console.error('Offline setup failed:', error),
+  });
+}
 
 const coordinator = new InputCoordinator(actions);
 const game = new Phaser.Game({

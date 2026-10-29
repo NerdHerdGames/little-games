@@ -1,0 +1,47 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.nerdherdgames.littlegames'
+    compileSdk 36
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    defaultConfig {
+        applicationId 'com.nerdherdgames.littlegames'
+        minSdk 26
+        targetSdk 36
+        versionCode 1
+        versionName '0.1.0'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    sourceSets {
+        main.assets.srcDirs = [rootProject.file('../dist-android')]
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.14.0'
+}
+
+// Run on every package build so Gradle and Android Studio cannot package stale games.
+def buildWebAssets = tasks.register('buildWebAssets', Exec) {
+    workingDir rootProject.file('..')
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'npm', 'run', 'build:android:web'
+    } else {
+        commandLine 'npm', 'run', 'build:android:web'
+    }
+}
+
+tasks.named('preBuild').configure {
+    dependsOn buildWebAssets
+}
