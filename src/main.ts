@@ -12,6 +12,7 @@ import { StatesPuzzleScene } from './games/states-puzzle/StatesPuzzleScene';
 import { MoonPhasesScene } from './games/moon-phases/MoonPhasesScene';
 import { PianoPlayerScene } from './games/piano-player/PianoPlayerScene';
 import { PaintByNumbersScene } from './games/paint-by-numbers/PaintByNumbersScene';
+import { DrumSimulatorScene } from './games/drum-simulator/DrumSimulatorScene';
 import { BadgeCollectionScene } from './scenes/BadgeCollectionScene';
 import { AllWorldsCelebrationScene } from './scenes/AllWorldsCelebrationScene';
 import { AsteroidPatrolScene } from './scenes/AsteroidPatrolScene';
@@ -59,6 +60,7 @@ const game = new Phaser.Game({
     PaintByNumbersScene,
     PianoPlayerScene,
     AlphabetTracingScene,
+    DrumSimulatorScene,
     AstronautAcademyScene,
     RocketWorkshopScene,
     MoonExplorerScene,
