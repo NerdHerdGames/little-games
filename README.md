@@ -54,6 +54,21 @@ saved mute and reduced-motion preferences apply. The song/piano area uses a 30/7
 split on tablet screens, with scrolling to preserve 64-pixel keys on narrow
 screens. Check note audio, touch, and row transitions on the target Android tablet.
 
+**Paint by Numbers** adds 28 original local vector pictures in Space (Solar System
+and all eight planets), Vehicles (police car, ambulance, fire truck, school bus,
+garbage truck, race car, airplane, motorcycle), Animals (cat, dog, lion, butterfly,
+turtle, fish), and Food (pizza, pasta, chicken tenders with mac ’n’ cheese,
+breakfast, sandwich with chips). Pick a collection and picture, select a numbered
+color in the right-hand palette, then drag to brush it into matching sections.
+The workspace uses an 85% picture / 15% palette split. Strokes are clipped to
+visible matching sections, including where shapes overlap; wrong colors leave
+the picture unchanged. Three brush sizes, numbered labels, per-color completion,
+gentle edge cleanup after 88% coverage, and a confirmed picture reset support calm
+touch play. The current picture is retained while browsing; choosing another
+picture or leaving the game starts fresh. Saved mute applies; there are no
+automatic animations or gameplay network requests. Review the original artwork in
+`src/games/paint-by-numbers/art.ts` and test brush feel on the target Android tablet.
+
 ## Prerequisites and installation
 
 - Node.js 20.19 or newer (Node 24 recommended)

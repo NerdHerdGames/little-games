@@ -1,0 +1,436 @@
+.paint-game {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(16px, 2.5vw, 36px);
+  overflow: auto;
+  background: #f7f7f0;
+  color: #29483f;
+  touch-action: pan-x pan-y;
+}
+.paint-game [hidden] {
+  display: none;
+}
+.paint-game h1,
+.paint-game h2,
+.paint-game p {
+  margin: 0;
+}
+.paint-game button {
+  min-width: 64px;
+  min-height: 64px;
+  border: 1px solid #c6d4c8;
+  border-radius: 16px;
+  padding: 12px 18px;
+  background: #fff;
+  color: #29483f;
+  font:
+    700 16px Arial,
+    sans-serif;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.paint-game button:hover {
+  border-color: #567c67;
+}
+.paint-game button:active {
+  background: #e7efdf;
+}
+.paint-game button:focus-visible {
+  outline: 4px solid #335f4d;
+  outline-offset: 3px;
+}
+.paint-header {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding-bottom: 24px;
+}
+.paint-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #587361;
+}
+.paint-header h1 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(28px, 3.5vw, 48px);
+  margin: 10px 0;
+}
+.paint-intro {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #5b6d60;
+}
+.paint-header nav {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.paint-gallery-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  margin: 12px 0 20px;
+}
+.paint-gallery-heading h2 {
+  font-size: 19px;
+}
+.paint-gallery-heading > span {
+  font-size: 13px;
+  color: #5b6d60;
+}
+.paint-category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin: auto 0;
+}
+.paint-game .paint-category,
+.paint-game .paint-picture {
+  overflow: hidden;
+  padding: 0;
+  text-align: left;
+  border-radius: 24px;
+}
+.paint-cover {
+  background: var(--card-color);
+  border-radius: 0 0 50% 0 / 0 0 12% 0;
+}
+.paint-cover svg {
+  display: block;
+  width: 100%;
+  aspect-ratio: 10 / 7;
+  padding: 10px;
+}
+.paint-card-copy {
+  position: relative;
+  padding: 24px;
+}
+.paint-count {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  color: #5b6d60;
+}
+.paint-card-copy h2 {
+  font:
+    400 30px Georgia,
+    serif;
+  margin: 10px 0;
+}
+.paint-card-copy p {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  padding-right: 28px;
+  color: #5b6d60;
+}
+.paint-card-arrow {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  font-size: 26px;
+}
+.paint-footer {
+  text-align: center;
+  padding-top: 30px;
+  font-size: 14px;
+  color: #5b6d60;
+}
+.paint-picture-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+.paint-picture .paint-card-copy {
+  padding: 16px 20px;
+}
+.paint-picture .paint-card-copy h2 {
+  font:
+    700 18px Arial,
+    sans-serif;
+  line-height: 1.3;
+  margin: 0 0 12px;
+}
+.paint-picture .paint-card-copy > span {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 400;
+  color: #5b6d60;
+}
+.paint-tools {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 16px;
+  padding: 0 0 16px;
+}
+.paint-brushes {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.paint-brushes > span {
+  margin-right: 8px;
+  font-size: 13px;
+}
+.paint-brushes button {
+  display: grid;
+  place-items: center;
+  padding: 8px;
+}
+.paint-brush-dot {
+  display: block;
+  border-radius: 50%;
+  background: #587361;
+}
+.paint-game [aria-pressed='true'] {
+  border: 3px solid #335f4d;
+  background: #eaf0e4;
+}
+.paint-brush-help {
+  flex: 1;
+  font-size: 13px;
+  color: #5b6d60;
+}
+.paint-workspace {
+  display: grid;
+  grid-template-columns: 85fr 15fr;
+  flex: 1;
+  min-width: 540px;
+  min-height: 380px;
+  border: 1px solid #dce2d7;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
+}
+.paint-paper {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  overflow: hidden;
+  padding: 12px;
+  background: #fff;
+}
+.paint-art {
+  position: relative;
+  width: 100%;
+  max-width: calc((100dvh - 285px) * 10 / 7);
+  min-width: 300px;
+  aspect-ratio: 10 / 7;
+}
+.paint-art canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+.paint-details {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.paint-palette {
+  min-width: 0;
+  padding: 20px 8px;
+  background: #edf0e7;
+  border-left: 1px solid #dce2d7;
+  overflow-y: auto;
+}
+.paint-palette h2 {
+  font:
+    400 23px Georgia,
+    serif;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.paint-palette > p {
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+  color: #5b6d60;
+}
+.paint-swatches {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 20px 0;
+}
+.paint-game .paint-swatch {
+  display: flex;
+  position: relative;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px;
+  border-radius: 14px;
+}
+.paint-color-chip {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #0002;
+}
+.paint-color-chip b {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  color: #29483f;
+  font-size: 18px;
+}
+.paint-color-name {
+  font-size: 13px;
+}
+.paint-color-check {
+  margin-left: auto;
+}
+.is-finished .paint-color-chip {
+  border: 3px solid #335f4d;
+}
+.paint-progress {
+  border-top: 1px solid #c6d4c8;
+  padding-top: 16px;
+  text-align: center;
+}
+.paint-progress strong {
+  font-size: 13px;
+}
+.paint-progress progress {
+  width: 100%;
+  height: 10px;
+  margin: 12px 0;
+  accent-color: #587361;
+}
+.paint-progress p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.paint-celebration {
+  position: absolute;
+  bottom: 18px;
+  left: 16px;
+  right: 16px;
+  padding: 14px;
+  border: 1px solid #b9cfb8;
+  border-radius: 18px;
+  background: #f5faedfa;
+  text-align: center;
+}
+.paint-celebration > span {
+  font-size: 28px;
+}
+.paint-celebration h2 {
+  font:
+    400 28px Georgia,
+    serif;
+}
+.paint-celebration p {
+  margin: 8px 0 12px;
+}
+.paint-reset {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: #29483f99;
+  z-index: 8;
+}
+.paint-reset > div {
+  padding: 28px;
+  border-radius: 24px;
+  background: #f7f7f0;
+  max-width: 460px;
+}
+.paint-reset h2 {
+  font:
+    400 28px Georgia,
+    serif;
+}
+.paint-reset p {
+  margin: 16px 0;
+  line-height: 1.5;
+}
+.paint-reset button {
+  margin: 4px;
+}
+.paint-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+@media (max-width: 1100px) {
+  .paint-category-grid,
+  .paint-picture-grid {
+    gap: 12px;
+  }
+  .paint-card-copy {
+    padding: 20px 14px;
+  }
+  .paint-color-name {
+    display: none;
+  }
+  .paint-game .paint-swatch {
+    justify-content: center;
+  }
+  .paint-color-check {
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+  }
+  .paint-palette h2 {
+    font-size: 19px;
+  }
+}
+@media (max-width: 750px) {
+  .paint-category-grid,
+  .paint-picture-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .paint-header {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 20px;
+    padding-bottom: 16px;
+  }
+  .paint-header nav {
+    width: 100%;
+  }
+  .paint-header nav button {
+    flex: 1;
+  }
+  .paint-brush-help {
+    display: none;
+  }
+  .paint-tools {
+    justify-content: space-between;
+  }
+  .paint-gallery-heading {
+    flex-wrap: wrap;
+  }
+  .paint-art {
+    max-width: none;
+  }
+}

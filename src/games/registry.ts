@@ -13,6 +13,15 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'paint-by-numbers',
+    title: 'Paint by Numbers',
+    description: 'Choose a picture and brush matching colors into numbered sections.',
+    sceneKey: 'PaintByNumbers',
+    touchControls: 'none',
+    accentColor: 0x8fb993,
+    symbol: '✎',
+  },
+  {
     id: 'piano-player',
     title: 'Piano Player',
     description: 'Play colorful piano keys and follow a song, one note at a time.',

@@ -16,6 +16,11 @@ export interface PlacementAction {
   tolerance: number;
 }
 
+export interface PaintAction {
+  from: { x: number; y: number };
+  to: { x: number; y: number };
+}
+
 export class ActionState {
   private current = emptyActions();
   private previous = emptyActions();
@@ -23,6 +28,23 @@ export class ActionState {
   private lastMethod: InputMethod = 'touch';
   private activations: string[] = [];
   private placements: PlacementAction[] = [];
+  private paint: PaintAction[] = [];
+
+  requestPaint(segment: PaintAction): void {
+    if ([segment.from.x, segment.from.y, segment.to.x, segment.to.y].every(Number.isFinite)) {
+      this.paint.push(segment);
+    }
+  }
+
+  consumePaint(): PaintAction[] {
+    const segments = this.paint;
+    this.paint = [];
+    return segments;
+  }
+
+  clearPaint(): void {
+    this.paint.length = 0;
+  }
   private viewGesture: ViewGesture = { rotateX: 0, rotateY: 0, zoom: 0 };
 
   /** Accumulate device-independent view changes; device events stay in input adapters. */
