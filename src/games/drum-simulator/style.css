@@ -1,0 +1,344 @@
+.drum-simulator {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  background: #faf5eb;
+  color: #283b3d;
+  touch-action: pan-y;
+}
+.drum-simulator button {
+  min-width: 64px;
+  min-height: 64px;
+  padding: 12px 16px;
+  border: 1px solid #9da9a2;
+  border-radius: 12px;
+  background: #fffdf7;
+  color: #283b3d;
+  font:
+    700 16px/1.3 Arial,
+    sans-serif;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.drum-simulator button:focus-visible {
+  outline: 4px solid #235e59;
+  outline-offset: -5px;
+}
+.drums-header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 18px 26px;
+  border-bottom: 1px solid #cdd1c6;
+}
+.drums-eyebrow {
+  color: #52635b;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+.drums-header h1 {
+  margin: 5px 0 0;
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -1px;
+}
+.drums-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.drums-header button {
+  font-size: 14px;
+}
+.drums-workspace {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  flex: 1;
+  min-height: 0;
+}
+.drums-practice {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px 16px;
+  overflow-y: auto;
+  background: #eeeee2;
+  border-right: 1px solid #cdd1c6;
+}
+.drums-practice button {
+  flex-shrink: 0;
+  text-align: left;
+}
+.drums-practice button span {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: 400;
+}
+.drums-practice button[aria-pressed='true'] {
+  background: #dceae1;
+  border: 2px solid #235e59;
+}
+.drums-practice button[aria-pressed='true']::before {
+  content: '✓ ';
+}
+.drums-practice p {
+  margin-top: auto;
+  color: #52635b;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.drums-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+.drums-score {
+  padding: 14px 24px 10px;
+  background: #fffdf7;
+}
+.drums-score-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.drums-score h2 {
+  margin: 0;
+  font-size: clamp(21px, 2.6vw, 30px);
+  letter-spacing: -0.7px;
+}
+.drums-badge {
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #ede9df;
+  color: #52635b;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.drums-welcome {
+  color: #52635b;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 12px 0;
+}
+.drums-help {
+  margin: 10px 0 0;
+  min-height: 18px;
+  color: #43584f;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.drums-steps {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  padding: 6px 3px;
+  margin: 6px 0 0;
+  overflow-x: auto;
+  touch-action: pan-x;
+}
+.drums-steps li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 8px;
+  background: #efede5;
+  border: 1px solid #cdd1c6;
+  border-radius: 8px;
+  font-size: 13px;
+}
+.drums-steps li span {
+  font-weight: 700;
+}
+.drums-steps [aria-current] {
+  outline: 2px solid #235e59;
+}
+.drums-steps .done {
+  background: #dceae1;
+}
+.drums-instrument {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 0 340px;
+  padding: 16px 24px;
+  background: #e2e8df;
+  border-top: 1px solid #cdd1c6;
+}
+.drums-kit-heading,
+.drums-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: #43584f;
+  font-size: 12px;
+}
+.drums-kit-heading {
+  font-weight: 700;
+}
+.drums-kit {
+  display: grid;
+  grid-template-areas: 'crash high-tom low-tom ride' 'hi-hat snare kick floor-tom';
+  grid-template-columns: repeat(4, minmax(64px, 1fr));
+  grid-template-rows: repeat(2, minmax(120px, 1fr));
+  align-items: center;
+  gap: clamp(8px, 1.5vw, 22px);
+  flex: 1;
+  width: 100%;
+  max-width: 1050px;
+  align-self: center;
+}
+.drum-simulator .drums-pad {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  max-height: 240px;
+  padding: 22px 6px;
+  border: 6px solid #516360;
+  border-radius: 50%;
+  background: var(--drum-color);
+  box-shadow:
+    inset 0 0 0 3px #fffdf799,
+    0 6px 0 #94a298;
+  touch-action: none;
+}
+.drum-simulator .drums-cymbal {
+  height: 85%;
+  min-height: 108px;
+  border: 3px solid #8a6d3c;
+  background:
+    repeating-radial-gradient(ellipse, transparent 0 7px, #8a6d3c20 8px 9px), var(--drum-color);
+  box-shadow:
+    inset 0 0 0 3px #fffdf755,
+    0 5px 0 #aa915e;
+}
+.drums-pad-name {
+  font-size: clamp(14px, 1.8vw, 22px);
+}
+.drums-pad-sound {
+  font-size: 12px;
+  font-weight: 400;
+}
+.drums-pad-key {
+  position: absolute;
+  bottom: 10px;
+  font-size: 11px;
+}
+.drums-hit-mark {
+  position: absolute;
+  right: 15%;
+  top: 23%;
+  visibility: hidden;
+}
+.drums-next {
+  position: absolute;
+  top: 8px;
+  font-size: 10px;
+  visibility: hidden;
+}
+.drums-pad.expected .drums-next,
+.drums-pad.struck .drums-hit-mark {
+  visibility: visible;
+}
+.drums-pad.expected {
+  outline: 3px dashed #235e59;
+  outline-offset: 3px;
+}
+.drums-pad.struck {
+  box-shadow:
+    inset 0 0 0 5px #283b3d,
+    0 2px 0 #94a298;
+  transform: translateY(3px);
+}
+.drums-still .drums-pad.struck {
+  transform: none;
+}
+@media (max-width: 950px) {
+  .drums-header {
+    padding: 12px 16px;
+  }
+  .drums-workspace {
+    grid-template-columns: 160px minmax(0, 1fr);
+  }
+  .drums-practice {
+    padding: 18px 10px;
+  }
+  .drums-practice button {
+    padding: 10px;
+    font-size: 14px;
+  }
+  .drums-score,
+  .drums-instrument {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+@media (max-width: 600px) {
+  .drums-header {
+    padding-top: 50px;
+  }
+  .drums-header nav {
+    width: 100%;
+  }
+  .drums-header nav button {
+    flex: 1;
+    padding: 8px;
+  }
+  .drums-workspace {
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+  }
+  .drums-practice {
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow: visible;
+    gap: 8px;
+    padding: 12px;
+    border-right: 0;
+  }
+  .drums-practice .drums-eyebrow {
+    width: 100%;
+  }
+  .drums-practice button {
+    flex: 1 1 130px;
+  }
+  .drums-practice p {
+    display: none;
+  }
+  .drums-main {
+    overflow: visible;
+  }
+  .drums-kit {
+    grid-template-areas: 'crash ride' 'high-tom low-tom' 'hi-hat snare' 'kick floor-tom';
+    grid-template-columns: repeat(2, minmax(64px, 1fr));
+    grid-template-rows: repeat(4, 140px);
+  }
+  .drums-instrument {
+    flex-basis: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .drums-pad.struck {
+    transform: none;
+  }
+}

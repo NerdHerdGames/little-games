@@ -54,6 +54,16 @@ saved mute and reduced-motion preferences apply. The song/piano area uses a 30/7
 split on tablet screens, with scrolling to preserve 64-pixel keys on narrow
 screens. Check note audio, touch, and row transitions on the target Android tablet.
 
+**Drum Simulator** provides an eight-piece kit with kick, snare, three toms,
+hi-hat, crash, and ride. Tap multiple pads together or use number keys 1–8;
+arrow keys and Enter or a controller also select and play pads. Free play is
+available immediately, with three optional original rhythms to follow one
+named drum at a time. Every strike sounds, and other drums leave practice
+progress unchanged. There are no timers or penalties. Percussion is synthesized
+locally with Web Audio and follows the saved mute preference; pad feedback honors
+reduced motion. All controls are at least 64 CSS pixels, and narrow screens scroll.
+Check simultaneous touch, audio balance, and offline play on the target Android tablet.
+
 ## Prerequisites and installation
 
 - Node.js 20.19 or newer (Node 24 recommended)

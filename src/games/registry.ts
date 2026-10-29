@@ -13,6 +13,15 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'drum-simulator',
+    title: 'Drum Simulator',
+    description: 'Tap an eight-piece drum kit and try a rhythm at your own pace.',
+    sceneKey: 'DrumSimulator',
+    touchControls: 'none',
+    accentColor: 0xedb39e,
+    symbol: '🥁',
+  },
+  {
     id: 'piano-player',
     title: 'Piano Player',
     description: 'Play colorful piano keys and follow a song, one note at a time.',
