@@ -8,6 +8,8 @@ const output = join(root, 'dist-android');
 
 function files(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    // Android's asset packager omits source-control directory markers.
+    if (entry.name === '.gitkeep') return [];
     const path = join(directory, entry.name);
     return entry.isDirectory() ? files(path) : [path];
   });
