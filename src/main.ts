@@ -38,6 +38,7 @@ import { SolarSystemPuzzleScene } from './games/solar-system-order/SolarSystemPu
 import { SolarSystemOrderScene } from './scenes/SolarSystemOrderScene';
 import { StarCollectorScene } from './scenes/StarCollectorScene';
 import { TractorTrailerScene } from './scenes/TractorTrailerScene';
+import { AlphabetTracingScene } from './games/alphabet-tracing/AlphabetTracingScene';
 import './styles.css';
 
 registerSW({
@@ -57,6 +58,7 @@ const game = new Phaser.Game({
     GameHubScene,
     PaintByNumbersScene,
     PianoPlayerScene,
+    AlphabetTracingScene,
     AstronautAcademyScene,
     RocketWorkshopScene,
     MoonExplorerScene,

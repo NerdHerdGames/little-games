@@ -2,6 +2,18 @@ import { describe, expect, it } from 'vitest';
 import { ActionState } from './ActionState';
 
 describe('ActionState', () => {
+  it('queues tracing phases in order, rejects invalid coordinates, and clears on navigation', () => {
+    const input = new ActionState();
+    input.requestTrace({ phase: 'start', x: 10, y: 20 });
+    input.requestTrace({ phase: 'move', x: NaN, y: 30 });
+    input.requestTrace({ phase: 'end', x: 0, y: 0 });
+    expect(input.consumeTrace()).toEqual({ phase: 'start', x: 10, y: 20 });
+    expect(input.consumeTrace()).toEqual({ phase: 'end', x: 0, y: 0 });
+    expect(input.consumeTrace()).toBeUndefined();
+    input.requestTrace({ phase: 'move', x: 1, y: 2 });
+    input.clearTraces();
+    expect(input.consumeTrace()).toBeUndefined();
+  });
   it('delivers logical map placements once and clears them when leaving', () => {
     const input = new ActionState();
     const placement = { pieceId: '48', x: 434, y: 469, tolerance: 10 };

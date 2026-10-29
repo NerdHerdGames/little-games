@@ -22,6 +22,15 @@ export const GAMES: readonly GameDefinition[] = [
     symbol: '✎',
   },
   {
+    id: 'alphabet-tracing',
+    title: 'Alphabet Trail',
+    description: 'Hear letter names and sounds, then trace every letter from A to Z.',
+    sceneKey: 'AlphabetTracing',
+    touchControls: 'none',
+    accentColor: 0x9fc7ae,
+    symbol: 'ABC',
+  },
+  {
     id: 'piano-player',
     title: 'Piano Player',
     description: 'Play colorful piano keys and follow a song, one note at a time.',

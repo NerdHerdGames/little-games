@@ -69,6 +69,20 @@ picture or leaving the game starts fresh. Saved mute applies; there are no
 automatic animations or gameplay network requests. Review the original artwork in
 `src/games/paint-by-numbers/art.ts` and test brush feel on the target Android tablet.
 
+**Alphabet Trail** shows all 26 uppercase letters. Selecting a letter speaks its
+name; numbered starting dots and arrows guide manuscript strokes. Tracing fills
+the hollow letter in stroke order, pauses gently off the path, and preserves
+progress when the player lifts their finger. Finishing repeats the name and
+offers **Next letter** (Z wraps to A) and **Back to letters**. Finger, stylus, and
+mouse tracing use the shared logical input service. Installed local English
+speech voices provide names and phonetic approximations (A “ah”, B “buh”); C/G use
+hard sounds, X uses “ks”, and other letters use one introductory sound each.
+Pronunciation depends on the device voice. A visible note explains when no local
+English voice is installed, and written sound cues remain available. The game
+honors saved mute preferences, uses no automatic animation, and makes no gameplay
+network requests. Review `src/games/alphabet-tracing/letters.ts` for stroke shapes
+and phonics, then check pronunciation and tracing feel on the target Android tablet.
+
 ## Prerequisites and installation
 
 - Node.js 20.19 or newer (Node 24 recommended)

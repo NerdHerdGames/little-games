@@ -21,6 +21,12 @@ export interface PaintAction {
   to: { x: number; y: number };
 }
 
+export interface TraceAction {
+  phase: 'start' | 'move' | 'end';
+  x: number;
+  y: number;
+}
+
 export class ActionState {
   private current = emptyActions();
   private previous = emptyActions();
@@ -45,6 +51,7 @@ export class ActionState {
   clearPaint(): void {
     this.paint.length = 0;
   }
+  private traces: TraceAction[] = [];
   private viewGesture: ViewGesture = { rotateX: 0, rotateY: 0, zoom: 0 };
 
   /** Accumulate device-independent view changes; device events stay in input adapters. */
@@ -93,6 +100,18 @@ export class ActionState {
 
   clearPlacements(): void {
     this.placements.length = 0;
+  }
+
+  requestTrace(trace: TraceAction): void {
+    if ([trace.x, trace.y].every(Number.isFinite)) this.traces.push(trace);
+  }
+
+  consumeTrace(): TraceAction | undefined {
+    return this.traces.shift();
+  }
+
+  clearTraces(): void {
+    this.traces.length = 0;
   }
 
   setSource(method: InputMethod, actions: Partial<Record<Action, boolean>>): void {

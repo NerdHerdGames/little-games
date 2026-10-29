@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "validate:games": "tsx scripts/validate-games.ts",
+    "validate:games": "node --import tsx scripts/validate-games.ts",
     "validate": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run validate:games && npm run build"
   },
   "dependencies": {
