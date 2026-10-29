@@ -1,0 +1,105 @@
+.platformer-ui {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  color: #17324d;
+}
+.platformer-ui header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  background: #fff8e7;
+  border-bottom: 3px solid #17324d;
+  pointer-events: auto;
+}
+.platformer-ui h1 {
+  margin: 0;
+  font-size: clamp(20px, 3vw, 32px);
+}
+.platformer-ui nav {
+  display: flex;
+  gap: 8px;
+}
+.platformer-ui button {
+  min-width: 64px;
+  min-height: 64px;
+  padding: 10px 16px;
+  border: 3px solid #17324d;
+  border-radius: 16px;
+  background: #ffd65a;
+  color: #17324d;
+  font:
+    700 18px Arial,
+    sans-serif;
+  cursor: pointer;
+  touch-action: manipulation;
+  pointer-events: auto;
+}
+.platformer-ui button:focus-visible {
+  outline: 4px solid #17324d;
+  outline-offset: 3px;
+}
+.platformer-ui button:active {
+  background: #ffe9a3;
+}
+.platformer-help {
+  margin: 8px auto;
+  padding: 8px 16px;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  border-radius: 12px;
+  background: #fff8e7;
+  text-align: center;
+  font-weight: bold;
+}
+.platformer-panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  background: rgb(23 50 77 / 65%);
+  pointer-events: auto;
+}
+.platformer-card {
+  width: min(560px, 100%);
+  max-height: 100%;
+  overflow: auto;
+  padding: 24px;
+  border: 4px solid #17324d;
+  border-radius: 24px;
+  background: #fff8e7;
+  text-align: center;
+}
+.platformer-card h2 {
+  margin: 0 0 12px;
+  font-size: clamp(25px, 4vw, 38px);
+}
+.platformer-card p {
+  font-size: 20px;
+  line-height: 1.45;
+}
+.platformer-card footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+@media (max-width: 650px) {
+  .platformer-ui header {
+    padding: 6px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .platformer-ui nav {
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .platformer-ui button {
+    padding: 8px;
+    font-size: 16px;
+  }
+}

@@ -1,4 +1,4 @@
-export type TouchControlProfile = 'full' | 'directions' | 'action' | 'none';
+export type TouchControlProfile = 'full' | 'directions' | 'action' | 'platformer' | 'jump' | 'none';
 
 export interface TouchControlVisibility {
   directions: boolean;
@@ -7,7 +7,8 @@ export interface TouchControlVisibility {
 
 export function getTouchControlVisibility(profile: TouchControlProfile): TouchControlVisibility {
   return {
-    directions: profile === 'full' || profile === 'directions',
-    action: profile === 'full' || profile === 'action',
+    directions: profile === 'full' || profile === 'directions' || profile === 'platformer',
+    action:
+      profile === 'full' || profile === 'action' || profile === 'platformer' || profile === 'jump',
   };
 }

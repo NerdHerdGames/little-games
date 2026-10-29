@@ -31,7 +31,7 @@ export class ActionMenu {
   refreshButtons(): void {
     const selected = document.activeElement;
     this.buttons = [...this.root.querySelectorAll<HTMLButtonElement>('button[data-action]')].filter(
-      (button) => !button.disabled && !button.closest('[hidden]'),
+      (button) => !button.disabled && !button.closest('[hidden], [inert]'),
     );
     this.focus = new MenuFocus(Math.max(1, this.buttons.length));
     const index = this.buttons.indexOf(selected as HTMLButtonElement);

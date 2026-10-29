@@ -1,5 +1,16 @@
 # Little Games
 
+**Meadow Jumper** and **Bunny Run** are two simple platform games. In Meadow Jumper,
+hold the large Left/Right buttons and tap Jump (keyboard: arrows or A/D and Space).
+In Bunny Run, the bunny runs automatically; tap Jump near a striped platform edge.
+Both have short courses leading to a picnic flag, optional stars, numbered checkpoints,
+pause/resume, replay, and gentle retries that keep collected stars. Tap Let’s play
+to start; auto-running also waits for Try again after a missed jump. Touch alone
+is sufficient. Sound and still-view buttons use saved preferences; still view
+removes decorative leaning and replaces continuous scrolling with overlapping
+fixed rooms. All artwork is generated locally and the games work offline with the
+existing PWA. Check simultaneous move/jump touch and timing on the target Android tablet.
+
 A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **United States Puzzle**, **Sun & Planet Explorer**, **Moon Explorer**, **Rocket Workshop**, **Star Collector**, **Dwarf Planet Explorer**, **Solar System Telescope**, **Fish Tank Quiz**, **Planet Fact Match**, **Dwarf Planet Fact Match**, **Solar System Order**, **Solar System Puzzle**, **Fish Shape Match**, **Shape Flip Match**, **Tractor Trailer Trip**, and **Asteroid Patrol**.
 
 Star Collector is a small movement-and-collection game. Dwarf Planet Explorer contains five dwarf-planet missions. Solar System Telescope lets children explore the Sun, eight planets, and five dwarf planets. Fish Tank Quiz asks simple sea-animal questions before releasing six animals into a swimming tank. Planet Fact Match asks children to drag each of the eight planets to a matching fact and earn stars. Dwarf Planet Fact Match provides the same calm matching activity for Ceres, Pluto, Haumea, Makemake, and Eris. Solar System Order places the Sun, eight planets, and five dwarf planets into a near-to-far sequence. Solar System Puzzle is a separate flat orbit-map puzzle with a fixed Sun, thirteen empty slots, draggable worlds, optional name hints, and gentle distance clues. Its schematic uses average distance, not current orbital positions or true scale. Fish Shape Match asks children to find circle, square, and triangle fish in red, green, and blue. Shape Flip Match uses those same nine combinations in a spoken 18-card memory game. Tractor Trailer Trip asks children to hold Right or Go, then drag three randomly selected farm animals onto the trailers. Asteroid Patrol is a calm auto-shooter where children guide a shielded spaceship, clear five waves of harmless space rocks, and choose friendly upgrades.

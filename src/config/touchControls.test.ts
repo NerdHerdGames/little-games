@@ -16,6 +16,8 @@ describe('touch control profiles', () => {
     expect(getTouchControlProfile('FishShapeMatch')).toBe('none');
     expect(getTouchControlProfile('ShapeFlipMatch')).toBe('none');
     expect(getTouchControlProfile('TractorTrailer')).toBe('action');
+    expect(getTouchControlProfile('MeadowJumper')).toBe('platformer');
+    expect(getTouchControlProfile('BunnyRun')).toBe('jump');
   });
 
   it('keeps the full layout throughout Dwarf Planet Explorer', () => {

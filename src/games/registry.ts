@@ -13,6 +13,24 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'meadow-jumper',
+    title: 'Meadow Jumper',
+    description: 'Move your bunny and jump across platforms to reach a picnic.',
+    sceneKey: 'MeadowJumper',
+    touchControls: 'platformer',
+    accentColor: 0x94c5ad,
+    symbol: '↟',
+  },
+  {
+    id: 'bunny-run',
+    title: 'Bunny Run',
+    description: 'Bunny runs by itself. Just tap Jump to hop across the gaps!',
+    sceneKey: 'BunnyRun',
+    touchControls: 'jump',
+    accentColor: 0xe4c9ed,
+    symbol: '➜',
+  },
+  {
     id: 'piano-player',
     title: 'Piano Player',
     description: 'Play colorful piano keys and follow a song, one note at a time.',

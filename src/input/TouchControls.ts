@@ -38,7 +38,12 @@ export class TouchControls {
     const visibility = getTouchControlVisibility(profile);
     this.releaseAll();
     this.pad.hidden = !visibility.directions;
+    for (const button of this.pad.querySelectorAll<HTMLButtonElement>('.up, .down'))
+      button.hidden = profile === 'platformer';
     this.actionButton.hidden = !visibility.action;
+    const actionLabel = profile === 'platformer' || profile === 'jump' ? 'Jump' : 'Go!';
+    this.actionButton.textContent = actionLabel;
+    this.actionButton.setAttribute('aria-label', actionLabel);
     this.setVisible(visibility.directions || visibility.action);
   }
 

@@ -6,6 +6,8 @@ describe('touch control visibility', () => {
     ['full', true, true],
     ['directions', true, false],
     ['action', false, true],
+    ['platformer', true, true],
+    ['jump', false, true],
     ['none', false, false],
   ] as const)('maps %s to its visible control groups', (profile, directions, action) => {
     expect(getTouchControlVisibility(profile)).toEqual({ directions, action });
