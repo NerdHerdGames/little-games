@@ -28,7 +28,11 @@ export const GAMES: readonly GameDefinition[] = [
     sceneKey: 'AlphabetTracing',
     touchControls: 'none',
     accentColor: 0x9fc7ae,
-    symbol: 'ABC',
+    symbol: 'A',
+    icon: {
+      key: 'alphabet-tracing-icon',
+      path: 'assets/games/alphabet-tracing/alphabet-icon.svg',
+    },
   },
   {
     id: 'piano-player',

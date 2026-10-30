@@ -1,10 +1,10 @@
-import { ART_HEIGHT, ART_WIDTH, COLORS, type Picture } from './art';
+import { COLORS, type Picture } from './art';
 import { Painting, SAMPLE_SIZE, type PaintSegment } from './rules';
 
-function surface(): HTMLCanvasElement {
+function surface(picture: Picture): HTMLCanvasElement {
   const canvas = document.createElement('canvas');
-  canvas.width = ART_WIDTH;
-  canvas.height = ART_HEIGHT;
+  canvas.width = picture.width;
+  canvas.height = picture.height;
   return canvas;
 }
 function context(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
@@ -16,10 +16,10 @@ function context(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
 /** Local vector geometry creates both precise visible ownership masks and the line art. */
 export class PaintSurface {
   readonly painting: Painting;
-  private readonly ink = surface();
-  private readonly outlines = surface();
-  private readonly scratch = surface();
-  private readonly mask = surface();
+  private readonly ink: HTMLCanvasElement;
+  private readonly outlines: HTMLCanvasElement;
+  private readonly scratch: HTMLCanvasElement;
+  private readonly mask: HTMLCanvasElement;
   private readonly ownerPixels: Uint8ClampedArray;
   private maskKey = '';
   private readonly labels: { x: number; y: number }[];
@@ -27,7 +27,11 @@ export class PaintSurface {
     private readonly canvas: HTMLCanvasElement,
     private readonly picture: Picture,
   ) {
-    const hit = surface();
+    this.ink = surface(picture);
+    this.outlines = surface(picture);
+    this.scratch = surface(picture);
+    this.mask = surface(picture);
+    const hit = surface(picture);
     const hitCtx = context(hit);
     const outline = context(this.outlines);
     picture.regions.forEach((region, id) => {
@@ -42,16 +46,16 @@ export class PaintSurface {
       outline.lineJoin = 'round';
       outline.stroke(path);
     });
-    this.ownerPixels = hitCtx.getImageData(0, 0, ART_WIDTH, ART_HEIGHT).data;
-    const columns = ART_WIDTH / SAMPLE_SIZE;
-    const rows = Math.ceil(ART_HEIGHT / SAMPLE_SIZE);
+    this.ownerPixels = hitCtx.getImageData(0, 0, picture.width, picture.height).data;
+    const columns = picture.width / SAMPLE_SIZE;
+    const rows = Math.ceil(picture.height / SAMPLE_SIZE);
     const owners = new Int16Array(columns * rows).fill(-1);
     const candidates: { x: number; y: number }[][] = picture.regions.map(() => []);
     for (let y = 0; y < rows; y++)
       for (let x = 0; x < columns; x++) {
         const px = (x + 0.5) * SAMPLE_SIZE;
         const py = (y + 0.5) * SAMPLE_SIZE;
-        const offset = (Math.floor(py) * ART_WIDTH + Math.floor(px)) * 4;
+        const offset = (Math.floor(py) * picture.width + Math.floor(px)) * 4;
         const owner = this.ownerPixels[offset + 3] === 255 ? this.ownerPixels[offset]! - 1 : -1;
         if (owner >= 0 && owner < picture.regions.length) {
           owners[y * columns + x] = owner;
@@ -94,7 +98,7 @@ export class PaintSurface {
   private makeMask(key: string, matches: (owner: number) => boolean): void {
     if (this.maskKey === key) return;
     const ctx = context(this.mask);
-    const pixels = ctx.createImageData(ART_WIDTH, ART_HEIGHT);
+    const pixels = ctx.createImageData(this.picture.width, this.picture.height);
     for (let i = 0; i < this.ownerPixels.length; i += 4) {
       if (this.ownerPixels[i + 3]! > 0 && matches(this.ownerPixels[i]! - 1))
         pixels.data[i + 3] = this.ownerPixels[i + 3]!;
@@ -107,7 +111,7 @@ export class PaintSurface {
     const finished = this.painting.stroke(segment, color, radius);
     this.makeMask(`color-${color}`, (owner) => this.picture.regions[owner]?.color === color);
     const scratch = context(this.scratch);
-    scratch.clearRect(0, 0, ART_WIDTH, ART_HEIGHT);
+    scratch.clearRect(0, 0, this.picture.width, this.picture.height);
     scratch.globalCompositeOperation = 'source-over';
     scratch.strokeStyle = COLORS[color - 1]!.hex;
     scratch.fillStyle = COLORS[color - 1]!.hex;
@@ -126,7 +130,7 @@ export class PaintSurface {
     for (const id of finished) {
       this.makeMask(`region-${id}`, (owner) => owner === id);
       scratch.globalCompositeOperation = 'source-over';
-      scratch.fillRect(0, 0, ART_WIDTH, ART_HEIGHT);
+      scratch.fillRect(0, 0, this.picture.width, this.picture.height);
       scratch.globalCompositeOperation = 'destination-in';
       scratch.drawImage(this.mask, 0, 0);
       context(this.ink).drawImage(this.scratch, 0, 0);
@@ -137,7 +141,7 @@ export class PaintSurface {
   draw(): void {
     const ctx = context(this.canvas);
     ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, ART_WIDTH, ART_HEIGHT);
+    ctx.fillRect(0, 0, this.picture.width, this.picture.height);
     ctx.drawImage(this.ink, 0, 0);
     ctx.drawImage(this.outlines, 0, 0);
     ctx.font = 'bold 22px Arial';

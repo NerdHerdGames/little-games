@@ -4,18 +4,9 @@ import { goToScene } from '../../core/SceneTransitions';
 import { actions, preferences } from '../../core/services';
 import { PaintAdapter } from '../../input/PaintAdapter';
 import { ActionMenu } from '../../ui/ActionMenu';
-import {
-  ART_HEIGHT,
-  ART_WIDTH,
-  CATEGORIES,
-  COLORS,
-  PICTURES,
-  thumbnail,
-  type CategoryId,
-  type Picture,
-} from './art';
+import { CATEGORIES, COLORS, PICTURES, thumbnail, type CategoryId, type Picture } from './art';
 import { PaintSurface } from './PaintSurface';
-import { BRUSH_SIZES } from './rules';
+import { DEFAULT_BRUSH_RADIUS } from './rules';
 import './style.css';
 
 const button = (action: string, label: string, extra = ''): string =>
@@ -30,7 +21,6 @@ export class PaintByNumbersScene extends Phaser.Scene {
   private category: CategoryId | undefined;
   private screen: 'categories' | 'pictures' | 'painting' = 'categories';
   private selected = 1;
-  private radius: number = BRUSH_SIZES[1];
   private leaving = false;
   private resetPending = false;
 
@@ -45,7 +35,6 @@ export class PaintByNumbersScene extends Phaser.Scene {
     this.canvas = undefined;
     this.leaving = false;
     this.resetPending = false;
-    this.radius = BRUSH_SIZES[1];
     this.menu = new ActionMenu(actions, 'paint-game', 'Paint by Numbers');
     this.showCategories();
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
@@ -69,7 +58,8 @@ export class PaintByNumbersScene extends Phaser.Scene {
     if (this.screen === 'painting' && this.surface && segments.length) {
       let completed = false;
       for (const segment of segments)
-        if (this.surface.stroke(segment, this.selected, this.radius).length) completed = true;
+        if (this.surface.stroke(segment, this.selected, DEFAULT_BRUSH_RADIUS).length)
+          completed = true;
       this.surface.draw();
       if (completed) {
         playPlacementTone(preferences.current.muted);
@@ -81,15 +71,16 @@ export class PaintByNumbersScene extends Phaser.Scene {
   }
 
   private header(title: string, description: string, back: string): string {
-    return `<header class="paint-header"><div><p class="paint-eyebrow">LITTLE GAMES · THE COLOR STUDIO</p><h1>${title}</h1><p class="paint-intro">${description}</p></div><nav aria-label="Game controls">${button('mute', preferences.current.muted ? 'Sound off' : 'Sound on', `aria-pressed="${preferences.current.muted}"`)}${button('back', back)}</nav></header>`;
+    return `<header class="paint-header"><div><p class="paint-eyebrow">LITTLE GAMES · THE COLOR STUDIO</p><h1>${title}</h1><p class="paint-intro">${description}</p></div><nav aria-label="Game controls">${this.screen === 'painting' ? button('reset', 'Start over') : ''}${button('mute', preferences.current.muted ? 'Sound off' : 'Sound on', `aria-pressed="${preferences.current.muted}"`)}${button('back', back)}</nav></header>`;
   }
 
   private showCategories(): void {
     this.adapter?.destroy();
     this.adapter = undefined;
     this.screen = 'categories';
+    this.menu.root.classList.add('paint-gallery-screen');
     this.menu.setContent(
-      `${this.header('A little color. A lot of possibility.', 'Pick a collection. Find a picture. Make it yours.', 'Game Library')}<div class="paint-gallery-heading"><h2>What will you color today?</h2><span>4 collections · ${PICTURES.length} pictures</span></div><div class="paint-category-grid">${CATEGORIES.map(
+      `${this.header('A little color. A lot of possibility.', 'Pick a collection. Find a picture. Make it yours.', 'Game Library')}<main class="paint-gallery" aria-label="Choose a collection"><div class="paint-gallery-heading"><h2>What will you color today?</h2><span>4 collections · ${PICTURES.length} pictures</span></div><div class="paint-category-grid">${CATEGORIES.map(
         (category) => {
           const pictures = PICTURES.filter((p) => p.category === category.id);
           const cover =
@@ -100,7 +91,7 @@ export class PaintByNumbersScene extends Phaser.Scene {
         },
       ).join(
         '',
-      )}</div><p class="paint-footer">One number, one color. Take your time and enjoy the little details.</p>`,
+      )}</div><p class="paint-footer">One number, one color. Take your time and enjoy the little details.</p></main>`,
     );
   }
 
@@ -108,23 +99,25 @@ export class PaintByNumbersScene extends Phaser.Scene {
     this.adapter?.destroy();
     this.adapter = undefined;
     this.screen = 'pictures';
+    this.menu.root.classList.add('paint-gallery-screen');
     this.category = category;
     const collection = CATEGORIES.find((c) => c.id === category)!;
     this.menu.setContent(
-      `${this.header(collection.title, 'Choose a picture to bring to life.', 'Collections')}<div class="paint-gallery-heading"><h2>Your next little masterpiece</h2><span>${PICTURES.filter((p) => p.category === category).length} pictures</span></div><div class="paint-picture-grid">${PICTURES.filter(
+      `${this.header(collection.title, 'Choose a picture to bring to life.', 'Collections')}<main class="paint-gallery" aria-label="Choose a picture"><div class="paint-gallery-heading"><h2>Your next little masterpiece</h2><span>${PICTURES.filter((p) => p.category === category).length} pictures</span></div><div class="paint-picture-grid">${PICTURES.filter(
         (p) => p.category === category,
       )
         .map(
           (p) =>
             `<button type="button" class="paint-picture" data-action="picture:${p.id}" style="--card-color:${collection.color}"><div class="paint-cover">${thumbnail(p)}</div><div class="paint-card-copy"><h2>${p.title}</h2><span>${this.current?.id === p.id ? 'Continue coloring' : 'Let’s color'} <span aria-hidden="true">↗</span></span></div></button>`,
         )
-        .join('')}</div>`,
+        .join('')}</div></main>`,
     );
   }
 
   private showPainting(picture: Picture, restart = false): void {
     this.adapter?.destroy();
     this.screen = 'painting';
+    this.menu.root.classList.remove('paint-gallery-screen');
     this.resetPending = false;
     const reuse = !restart && this.current?.id === picture.id && this.canvas && this.surface;
     this.current = picture;
@@ -133,8 +126,7 @@ export class PaintByNumbersScene extends Phaser.Scene {
     if (!reuse || !colors.includes(this.selected)) this.selected = colors[0]!;
     this.menu
       .setContent(`${this.header(picture.title, 'Pick a number on the right. Drag to color the same number.', 'Pictures')}
-      <div class="paint-tools"><div class="paint-brushes" role="group" aria-label="Brush size"><span>Brush size</span>${BRUSH_SIZES.map((size, i) => button(`brush:${size}`, `<span class="paint-brush-dot" style="width:${12 + i * 9}px;height:${12 + i * 9}px"></span><span class="paint-sr-only">${['Small', 'Medium', 'Large'][i]} brush</span>`, `aria-pressed="${size === this.radius}"`)).join('')}</div><span class="paint-brush-help">Stay curious. The outlines keep your colors inside.</span>${button('reset', 'Start over')}</div>
-      <div class="paint-workspace"><section class="paint-paper" aria-label="Numbered coloring picture"><div class="paint-art"><canvas width="${ART_WIDTH}" height="${ART_HEIGHT}" role="img" aria-label="${picture.title}. White sections with numbers. Drag a matching color inside each section." aria-describedby="paint-instruction"></canvas><svg viewBox="0 0 ${ART_WIDTH} ${ART_HEIGHT}" class="paint-details" aria-hidden="true"><g stroke="#344757" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="#344757" font-family="Arial" font-size="22" text-anchor="middle">${picture.details.join('')}</g></svg></div><div class="paint-celebration" hidden><span aria-hidden="true">✦</span><h2>Look what you made!</h2><p>Every number has found its color.</p>${button('back', 'Choose another picture')}</div></section>
+      <div class="paint-workspace"><section class="paint-paper" aria-label="Numbered coloring picture"><div class="paint-art" style="--paint-art-aspect:${picture.width} / ${picture.height}"><canvas width="${picture.width}" height="${picture.height}" role="img" aria-label="${picture.title}. White sections with numbers. Drag a matching color inside each section." aria-describedby="paint-instruction"></canvas><svg viewBox="0 0 ${picture.width} ${picture.height}" class="paint-details" aria-hidden="true"><g stroke="#344757" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="#344757" font-family="Arial" font-size="22" text-anchor="middle">${picture.details.join('')}</g></svg></div><div class="paint-celebration" hidden><span aria-hidden="true">✦</span><h2>Look what you made!</h2><p>Every number has found its color.</p>${button('back', 'Choose another picture')}</div></section>
       <aside class="paint-palette" aria-label="Numbered color palette"><h2>Your colors</h2><p id="paint-instruction">Choose, then color.</p><div class="paint-swatches">${colors
         .map((number) => {
           const color = COLORS[number - 1]!;
@@ -210,12 +202,6 @@ export class PaintByNumbersScene extends Phaser.Scene {
     } else if (id.startsWith('color:')) {
       this.selected = Number(id.slice(6));
       this.refreshProgress();
-    } else if (id.startsWith('brush:')) {
-      this.radius = Number(id.slice(6));
-      for (const size of BRUSH_SIZES)
-        this.menu.root
-          .querySelector(`[data-action="brush:${size}"]`)
-          ?.setAttribute('aria-pressed', String(this.radius === size));
     } else if (id === 'reset') this.toggleReset(true);
     else if (id === 'keep') this.toggleReset(false);
     else if (id === 'clear' && this.current) this.showPainting(this.current, true);
@@ -225,7 +211,7 @@ export class PaintByNumbersScene extends Phaser.Scene {
     this.resetPending = open;
     actions.clearPaint();
     this.menu.root.querySelector('.paint-reset')?.toggleAttribute('hidden', !open);
-    for (const selector of ['.paint-header', '.paint-tools', '.paint-workspace']) {
+    for (const selector of ['.paint-header', '.paint-workspace']) {
       const element = this.menu.root.querySelector<HTMLElement>(selector);
       if (element) element.inert = open;
     }

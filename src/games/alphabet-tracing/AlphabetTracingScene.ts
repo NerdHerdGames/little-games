@@ -118,18 +118,17 @@ export class AlphabetTracingScene extends Phaser.Scene {
   private render(): void {
     const letter = this.index === undefined ? undefined : LETTERS[this.index];
     this.menu.setContent(`
-      <header class="at-header"><div class="at-brand"><span class="at-logo">${pencil}</span><span>Alphabet<span class="at-brand-light"> Trail</span></span></div>
+      <header class="at-header"><div class="at-brand"><span class="at-logo">${pencil}</span><span class="at-brand-copy"><span>Alphabet<span class="at-brand-light"> Trail</span></span>${letter ? '' : '<span class="at-eyebrow">LITTLE HANDS. BIG DISCOVERIES.</span>'}</span></div>
       <nav aria-label="Game options">${button('mute', '', 'aria-pressed="false"')}${button('library', 'All games ↗')}</nav></header>
       ${
         letter
           ? `
-        <div class="at-trace-heading"><div>${button('letters', '← Back to letters', 'class="at-back"')}<h1>Let’s trace <span>${letter.letter}</span></h1></div><span class="at-page-number">${this.index! + 1} <span>/ 26 letters</span></span></div>
+        <div class="at-trace-heading"><div class="at-trace-title">${button('letters', '← Back to letters', 'class="at-back"')}<h1>Let’s trace <span>${letter.letter}</span></h1></div><div class="at-stroke-status"><span data-stroke-label></span><div class="at-stroke-dots" data-strokes></div></div><span class="at-page-number">${this.index! + 1} <span>/ 26 letters</span></span></div>
         <main class="at-workspace">
           <aside class="at-instructions"><span class="at-eyebrow">A LITTLE LETTER PRACTICE</span><h2>Follow the trail.</h2><p>Start at the numbered dot.<br>Trace in the arrow’s direction.</p>
           <div class="at-sound-card"><span class="at-sample-letter">${letter.letter}</span><div><span>Listen as you trace</span><strong>“${letter.sound}”</strong><small>${letter.letter === 'X' ? 'Like the x in' : 'As in'} ${letter.example}</small></div></div>
           <div class="at-listen">${button('hear', '◖)) Letter name')}${button('sound', '◖)) Letter sound')}</div>
           <p class="at-audio-note" data-audio-note></p>
-          <div class="at-stroke-status"><span data-stroke-label></span><div class="at-stroke-dots" data-strokes></div></div>
           ${button('retry', '↻ Start again', 'class="at-retry"')}</aside>
           <section class="at-paper" aria-label="Letter tracing practice"><div class="at-paper-caption"><span>YOUR TRACING PAPER</span><span>Finger, stylus, or mouse</span></div>
           <svg data-trace-surface viewBox="0 0 400 400" tabindex="0" role="img" aria-label="Trace uppercase ${letter.letter}. Follow the numbered dot and arrow. Resuming at the dot keeps your progress.">
@@ -151,9 +150,9 @@ export class AlphabetTracingScene extends Phaser.Scene {
           </section>
         </main>`
           : `
-        <main class="at-picker"><div class="at-intro"><span class="at-eyebrow">LITTLE HANDS. BIG DISCOVERIES.</span><h1>Every letter is<br>a little adventure.</h1><p>Pick a letter. Hear its sound.<br>Then follow the trail to make it yours.</p></div>
+        <main class="at-picker"><div class="at-intro"><h1>Every letter is<br>a little adventure.</h1><p>Pick a letter. Hear its sound.<br>Then follow the trail to make it yours.</p></div>
         <div class="at-picker-art" aria-hidden="true"><span>A</span><span>B</span><span>C</span><svg viewBox="0 0 100 100"><path d="M15 80Q35 20 80 15Q80 65 15 80" fill="#a7c6a5"/><path d="M15 80 65 35" stroke="#49765e" stroke-width="3"/></svg></div>
-        <section class="at-letters-section" aria-label="Choose a letter"><div class="at-grid-heading"><h2>Which letter shall we try?</h2><span>26 letters to explore</span></div><div class="at-letter-grid">${LETTERS.map((entry, i) => button(`letter:${i}`, `${entry.letter}${this.completed.has(i) ? '<small aria-hidden="true">✓</small>' : ''}`, `class="at-letter at-color-${i % 4}" aria-label="Trace ${entry.letter}${this.completed.has(i) ? ', practiced' : ''}"`)).join('')}</div></section>
+        <section class="at-letters-section" aria-label="Choose a letter"><div class="at-letter-grid">${LETTERS.map((entry, i) => button(`letter:${i}`, `${entry.letter}${this.completed.has(i) ? '<small aria-hidden="true">✓</small>' : ''}`, `class="at-letter at-color-${i % 4}" aria-label="Trace ${entry.letter}${this.completed.has(i) ? ', practiced' : ''}"`)).join('')}</div></section>
         <footer class="at-footer"><span>✦ A little practice, at your own pace.</span><span>Look · Listen · Trace</span></footer></main>`
       }`);
     this.refreshSound();

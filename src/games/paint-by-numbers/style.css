@@ -13,6 +13,22 @@
 .paint-game [hidden] {
   display: none;
 }
+.paint-game.paint-gallery-screen {
+  overflow: hidden;
+}
+.paint-gallery {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  margin: 0 -7px -7px;
+  padding: 0 7px 7px;
+}
+.paint-gallery > * {
+  flex-shrink: 0;
+}
 .paint-game h1,
 .paint-game h2,
 .paint-game p {
@@ -166,40 +182,9 @@
   font-weight: 400;
   color: #5b6d60;
 }
-.paint-tools {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 16px;
-  padding: 0 0 16px;
-}
-.paint-brushes {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-.paint-brushes > span {
-  margin-right: 8px;
-  font-size: 13px;
-}
-.paint-brushes button {
-  display: grid;
-  place-items: center;
-  padding: 8px;
-}
-.paint-brush-dot {
-  display: block;
-  border-radius: 50%;
-  background: #587361;
-}
 .paint-game [aria-pressed='true'] {
   border: 3px solid #335f4d;
   background: #eaf0e4;
-}
-.paint-brush-help {
-  flex: 1;
-  font-size: 13px;
-  color: #5b6d60;
 }
 .paint-workspace {
   display: grid;
@@ -224,9 +209,9 @@
 .paint-art {
   position: relative;
   width: 100%;
-  max-width: calc((100dvh - 285px) * 10 / 7);
+  max-width: calc((100dvh - 205px) * var(--paint-art-aspect));
   min-width: 300px;
-  aspect-ratio: 10 / 7;
+  aspect-ratio: var(--paint-art-aspect);
 }
 .paint-art canvas {
   display: block;
@@ -372,13 +357,6 @@
 .paint-reset button {
   margin: 4px;
 }
-.paint-sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-}
 @media (max-width: 1100px) {
   .paint-category-grid,
   .paint-picture-grid {
@@ -417,15 +395,10 @@
   }
   .paint-header nav {
     width: 100%;
+    flex-wrap: wrap;
   }
   .paint-header nav button {
     flex: 1;
-  }
-  .paint-brush-help {
-    display: none;
-  }
-  .paint-tools {
-    justify-content: space-between;
   }
   .paint-gallery-heading {
     flex-wrap: wrap;

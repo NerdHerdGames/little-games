@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Painting } from './rules';
-import { CATEGORIES, COLORS, PICTURES } from './art';
+import { Painting, SAMPLE_SIZE } from './rules';
+import { CATEGORIES, COLORS, PICTURES, thumbnail } from './art';
+import { PLANETS } from '../../data/planets';
 
 const segment = (x1: number, y1: number, x2 = x1, y2 = y1) => ({
   from: { x: x1, y: y1 },
@@ -45,10 +46,10 @@ describe('number-matched brush coverage', () => {
 
 describe('original picture catalogue', () => {
   it('includes all requested pictures and an animal collection', () => {
-    expect(PICTURES).toHaveLength(28);
-    expect(new Set(PICTURES.map((p) => p.id)).size).toBe(28);
+    expect(PICTURES).toHaveLength(33);
+    expect(new Set(PICTURES.map((p) => p.id)).size).toBe(33);
     expect(CATEGORIES.map((c) => PICTURES.filter((p) => p.category === c.id).length)).toEqual([
-      9, 8, 6, 5,
+      14, 8, 6, 5,
     ]);
     expect(PICTURES.filter((p) => p.category === 'space').map((p) => p.id)).toEqual([
       'solar-system',
@@ -60,10 +61,14 @@ describe('original picture catalogue', () => {
       'saturn',
       'uranus',
       'neptune',
+      ...PLANETS.map((planet) => planet.id),
     ]);
   });
   it('gives every picture local closed geometry and valid numbered colors', () => {
     for (const p of PICTURES) {
+      expect(p.width).toBeGreaterThan(0);
+      expect(p.width % SAMPLE_SIZE).toBe(0);
+      expect(p.height).toBeGreaterThan(0);
       expect(p.regions.length).toBeGreaterThan(3);
       for (const region of p.regions) {
         expect(region.path).toMatch(/^M .+ Z$/);
@@ -72,5 +77,42 @@ describe('original picture catalogue', () => {
         expect(Number.isFinite(region.x) && Number.isFinite(region.y)).toBe(true);
       }
     }
+  });
+  it('fits the wide Solar System bodies and labels without clipping or overlaps', () => {
+    const p = PICTURES.find((entry) => entry.id === 'solar-system')!;
+    const bodies = p.regions.slice(0, 9).map((region) => {
+      const [, left, y, radius] = region.path.match(/^M ([\d.]+) ([\d.]+) a ([\d.]+)/)!;
+      return { x: Number(left) + Number(radius), y: Number(y), radius: Number(radius) };
+    });
+    expect(bodies).toHaveLength(9);
+    for (const [index, body] of bodies.entries()) {
+      expect(body.x - body.radius).toBeGreaterThan(3);
+      expect(body.x + body.radius).toBeLessThan(p.width - 3);
+      expect(body.y - body.radius).toBeGreaterThan(3);
+      expect(body.y + body.radius).toBeLessThan(p.height - 3);
+      for (const other of bodies.slice(index + 1))
+        expect(Math.hypot(body.x - other.x, body.y - other.y)).toBeGreaterThan(
+          body.radius + other.radius + 8,
+        );
+    }
+    const labels = [...p.details.join('').matchAll(/<text x="(\d+)" y="(\d+)">([^<]+)<\/text>/g)];
+    expect(labels).toHaveLength(9);
+    for (const [, x, y, name] of labels) {
+      // Conservative text bounds include the label's outline and room for wide letters.
+      const halfWidth = name!.length * 8;
+      const left = Number(x) - halfWidth;
+      const right = Number(x) + halfWidth;
+      const top = Number(y) - 24;
+      const bottom = Number(y) + 6;
+      expect(left).toBeGreaterThan(0);
+      expect(right).toBeLessThan(p.width);
+      expect(bottom).toBeLessThan(p.height);
+      for (const body of bodies) {
+        const nearX = Math.max(left, Math.min(body.x, right));
+        const nearY = Math.max(top, Math.min(body.y, bottom));
+        expect(Math.hypot(body.x - nearX, body.y - nearY)).toBeGreaterThan(body.radius + 3);
+      }
+    }
+    expect(thumbnail(p)).toContain(`viewBox="0 0 ${p.width} ${p.height}"`);
   });
 });

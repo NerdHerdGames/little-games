@@ -7,7 +7,7 @@ export interface PaintSegment {
   to: PaintPoint;
 }
 export const SAMPLE_SIZE = 8;
-export const BRUSH_SIZES = [18, 30, 46] as const;
+export const DEFAULT_BRUSH_RADIUS = 30;
 
 /** Coverage is computed from visible section samples, independent of canvas or input devices. */
 export class Painting {
