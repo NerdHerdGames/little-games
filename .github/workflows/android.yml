@@ -2,7 +2,7 @@ name: Package Android application
 
 on:
   push:
-    branches: [main, feat/android]
+    branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
