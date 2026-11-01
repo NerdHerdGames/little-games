@@ -62,6 +62,9 @@ AAB, verifies every generated file inside the archive, including all code chunks
 Archive verification requires `unzip` on the path. The Android workflow runs these
 checks and publishes both packages as the `little-games-android` Actions artifact
 on pushes to `feat/android`/`main`, pull requests to `main`, and manual runs.
+The workflow renames the debug APK to `little-games-build.apk` before verification
+and upload. Download and extract the artifact, then open `little-games-build.apk`
+on your Android device to install it.
 
 Before a release, install the APK on a tablet, enable airplane mode **before first
 launch**, and open every game, especially both 3D explorers, alphabet tracing, and
