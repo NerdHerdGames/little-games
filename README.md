@@ -83,8 +83,9 @@ honors saved mute preferences, uses no automatic animation, and makes no gamepla
 network requests. Review `src/games/alphabet-tracing/letters.ts` for stroke shapes
 and phonics, then check pronunciation and tracing feel on the target Android tablet.
 
-**Drum Simulator** provides an eight-piece kit with kick, snare, three toms,
-hi-hat, crash, and ride. Tap multiple pads together or use number keys 1–8;
+**Drum Simulator** provides a seven-piece kit with kick, snare, three toms,
+hi-hat, and crash. Hi-hat sits at the upper left, crash at the upper right,
+and snare below the hi-hat. Tap multiple pads together or use number keys 1–7;
 arrow keys and Enter or a controller also select and play pads. Free play is
 available immediately, with three optional original rhythms to follow one
 named drum at a time. Every strike sounds, and other drums leave practice
