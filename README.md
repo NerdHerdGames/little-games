@@ -1,5 +1,12 @@
 # Little Games
 
+## Android application
+
+The application can also be packaged as an APK or Android App Bundle with all game
+code and assets included locally. Run `npm ci` and `npm run android:apk` with JDK
+17+ and Android SDK 36 installed. See [Android packaging](android/README.md) for
+setup, offline verification, CI artifacts, and release signing.
+
 A child-friendly, offline-capable Phaser game collection for Android tablets. The default game library currently contains **United States Puzzle**, **Sun & Planet Explorer**, **Moon Explorer**, **Rocket Workshop**, **Star Collector**, **Dwarf Planet Explorer**, **Solar System Telescope**, **Fish Tank Quiz**, **Planet Fact Match**, **Dwarf Planet Fact Match**, **Solar System Order**, **Solar System Puzzle**, **Fish Shape Match**, **Shape Flip Match**, **Tractor Trailer Trip**, and **Asteroid Patrol**.
 
 Star Collector is a small movement-and-collection game. Dwarf Planet Explorer contains five dwarf-planet missions. Solar System Telescope lets children explore the Sun, eight planets, and five dwarf planets. Fish Tank Quiz asks simple sea-animal questions before releasing six animals into a swimming tank. Planet Fact Match asks children to drag each of the eight planets to a matching fact and earn stars. Dwarf Planet Fact Match provides the same calm matching activity for Ceres, Pluto, Haumea, Makemake, and Eris. Solar System Order places the Sun, eight planets, and five dwarf planets into a near-to-far sequence. Solar System Puzzle is a separate flat orbit-map puzzle with a fixed Sun, thirteen empty slots, draggable worlds, optional name hints, and gentle distance clues. Its schematic uses average distance, not current orbital positions or true scale. Fish Shape Match asks children to find circle, square, and triangle fish in red, green, and blue. Shape Flip Match uses those same nine combinations in a spoken 18-card memory game. Tractor Trailer Trip asks children to hold Right or Go, then drag three randomly selected farm animals onto the trailers. Asteroid Patrol is a calm auto-shooter where children guide a shielded spaceship, clear five waves of harmless space rocks, and choose friendly upgrades.
