@@ -130,7 +130,7 @@
   color: #52635b;
   font-size: 16px;
   line-height: 1.6;
-  margin: 12px 0;
+  margin: 4px 0 0;
 }
 .drums-help {
   margin: 10px 0 0;
@@ -191,15 +191,40 @@
 }
 .drums-kit {
   display: grid;
-  grid-template-areas: 'crash high-tom low-tom ride' 'hi-hat snare kick floor-tom';
-  grid-template-columns: repeat(4, minmax(64px, 1fr));
-  grid-template-rows: repeat(2, minmax(120px, 1fr));
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(0, 1fr));
   align-items: center;
-  gap: clamp(8px, 1.5vw, 22px);
+  justify-items: center;
+  gap: 8px;
   flex: 1;
   width: 100%;
+  min-height: 300px;
   max-width: 1050px;
   align-self: center;
+}
+.drums-crash {
+  grid-area: 1 / 1 / 3 / 3;
+}
+.drums-high-tom {
+  grid-area: 2 / 3 / 4 / 5;
+}
+.drums-low-tom {
+  grid-area: 2 / 5 / 4 / 7;
+}
+.drums-ride {
+  grid-area: 1 / 7 / 3 / 9;
+}
+.drums-hi-hat {
+  grid-area: 3 / 1 / 5 / 3;
+}
+.drums-snare {
+  grid-area: 5 / 2 / 7 / 4;
+}
+.drums-kick {
+  grid-area: 5 / 4 / 7 / 6;
+}
+.drums-floor-tom {
+  grid-area: 4 / 7 / 6 / 9;
 }
 .drum-simulator .drums-pad {
   position: relative;
@@ -207,12 +232,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 2px;
   width: 100%;
   height: 100%;
-  min-height: 120px;
+  min-height: 88px;
   max-height: 240px;
-  padding: 22px 6px;
+  padding: 18px 6px;
   border: 6px solid #516360;
   border-radius: 50%;
   background: var(--drum-color);
@@ -222,8 +247,8 @@
   touch-action: none;
 }
 .drum-simulator .drums-cymbal {
-  height: 85%;
-  min-height: 108px;
+  height: 90%;
+  min-height: 88px;
   border: 3px solid #8a6d3c;
   background:
     repeating-radial-gradient(ellipse, transparent 0 7px, #8a6d3c20 8px 9px), var(--drum-color);
@@ -329,9 +354,16 @@
     overflow: visible;
   }
   .drums-kit {
-    grid-template-areas: 'crash ride' 'high-tom low-tom' 'hi-hat snare' 'kick floor-tom';
-    grid-template-columns: repeat(2, minmax(64px, 1fr));
-    grid-template-rows: repeat(4, 140px);
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-rows: repeat(6, 48px);
+    gap: 6px;
+  }
+  .drum-simulator .drums-pad {
+    border-width: 3px;
+    padding: 18px 3px;
+  }
+  .drums-pad-name {
+    font-size: 12px;
   }
   .drums-instrument {
     flex-basis: auto;

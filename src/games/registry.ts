@@ -53,6 +53,19 @@ export const GAMES: readonly GameDefinition[] = [
     symbol: '♫',
   },
   {
+    id: 'xylophone-player',
+    title: 'Xylophone Player',
+    description: 'Tap eight colorful bars and follow little tunes at your own pace.',
+    sceneKey: 'XylophonePlayer',
+    touchControls: 'none',
+    accentColor: 0xefb477,
+    symbol: '♫',
+    icon: {
+      key: 'xylophone-player-icon',
+      path: 'assets/games/xylophone-player/xylophone-icon.svg',
+    },
+  },
+  {
     id: 'moon-phases',
     title: 'Moon Phases Puzzle',
     description: 'Drag eight Moon phases into their places in the lunar cycle.',
