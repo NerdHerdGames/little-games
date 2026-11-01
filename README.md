@@ -93,6 +93,19 @@ locally with Web Audio and follows the saved mute preference; pad feedback honor
 reduced motion. All controls are at least 64 CSS pixels, and narrow screens scroll.
 Check simultaneous touch, audio balance, and offline play on the target Android tablet.
 
+**Xylophone Player** adds eight labeled, colorful bars from C5 to C6, arranged
+from long, low notes to short, high notes. Free play supports simultaneous touch
+and number keys 1–8, with arrows and Enter or a controller as alternatives.
+Three original tunes (Rainbow walk, Raindrops, and Little dance) and a supplied
+20-note Jurassic Park excerpt highlight the next named bar and track notes
+without timers or penalties. Tunes show one line at a time and scroll to the next
+when the line is complete, with an instant change in still view. Jurassic Park
+uses the four supplied five-note lines; every C uses the high C bar. Every bar still
+sounds while exploring. Mallet tones are synthesized locally, follow saved mute,
+and stop when leaving or hiding the app. Feedback honors reduced motion. Bars
+remain at least 64 CSS pixels wide; narrow screens use a vertical instrument.
+Check multi-touch, audio balance, and offline playback on the target tablet.
+
 ## Prerequisites and installation
 
 - Node.js 20.19 or newer (Node 24 recommended)

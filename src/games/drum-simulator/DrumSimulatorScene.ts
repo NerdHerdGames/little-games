@@ -114,7 +114,7 @@ export class DrumSimulatorScene extends Phaser.Scene {
           <section class="drums-instrument" aria-label="Eight-piece drum kit">
             <div class="drums-kit-heading"><span>Tap a drum to play</span><span>Keyboard: 1–8</span></div>
             <div class="drums-kit">
-              ${DRUMS.map((drum) => `<button class="drums-pad drums-${drum.id} ${drum.voice === 'cymbal' ? 'drums-cymbal' : 'drums-skin'}" data-action="pad:${drum.id}" data-strike="${drum.key}" style="--drum-color:${drum.color};grid-area:${drum.id}" aria-label="Play ${drum.name}, key ${drum.key}" aria-keyshortcuts="${drum.key}"><span class="drums-pad-name">${drum.name}</span><span class="drums-pad-sound" aria-hidden="true">${drum.sound}</span><span class="drums-pad-key" aria-hidden="true">${drum.key}</span><span class="drums-hit-mark" aria-hidden="true">✓</span><span class="drums-next" aria-hidden="true">NEXT ↓</span></button>`).join('')}
+              ${DRUMS.map((drum) => `<button class="drums-pad drums-${drum.id} ${drum.voice === 'cymbal' ? 'drums-cymbal' : 'drums-skin'}" data-action="pad:${drum.id}" data-strike="${drum.key}" style="--drum-color:${drum.color}" aria-label="Play ${drum.name}, key ${drum.key}" aria-keyshortcuts="${drum.key}"><span class="drums-pad-name">${drum.name}</span><span class="drums-pad-sound" aria-hidden="true">${drum.sound}</span><span class="drums-pad-key" aria-hidden="true">${drum.key}</span><span class="drums-hit-mark" aria-hidden="true">✓</span><span class="drums-next" aria-hidden="true">NEXT ↓</span></button>`).join('')}
             </div>
             <div class="drums-footer"><span data-last-hit>Let’s make some music.</span><span>Touch • Keyboard • Controller</span></div>
           </section>
@@ -131,10 +131,11 @@ export class DrumSimulatorScene extends Phaser.Scene {
     const score = this.menu.root.querySelector<HTMLElement>('[data-rhythm]')!;
     const help = this.menu.root.querySelector<HTMLElement>('[data-help]')!;
     const rhythm = this.rhythm;
+    help.hidden = !rhythm;
     if (!rhythm) {
       score.innerHTML =
         '<p class="drums-welcome">Deep booms, little taps, and a splash of cymbal.<br>Explore every sound, or pick a rhythm to try.</p>';
-      help.textContent = 'Tap the pads, press 1–8, or use arrows and Enter to choose a drum.';
+      help.textContent = '';
     } else {
       score.innerHTML = `<ol class="drums-steps" aria-label="Rhythm steps">${rhythm.steps
         .map((id, index) => {
