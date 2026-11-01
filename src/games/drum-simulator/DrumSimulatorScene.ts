@@ -111,8 +111,8 @@ export class DrumSimulatorScene extends Phaser.Scene {
             <div data-rhythm></div>
             <p class="drums-help" data-help role="status"></p>
           </section>
-          <section class="drums-instrument" aria-label="Eight-piece drum kit">
-            <div class="drums-kit-heading"><span>Tap a drum to play</span><span>Keyboard: 1–8</span></div>
+          <section class="drums-instrument" aria-label="Seven-piece drum kit">
+            <div class="drums-kit-heading"><span>Tap a drum to play</span><span>Keyboard: 1–7</span></div>
             <div class="drums-kit">
               ${DRUMS.map((drum) => `<button class="drums-pad drums-${drum.id} ${drum.voice === 'cymbal' ? 'drums-cymbal' : 'drums-skin'}" data-action="pad:${drum.id}" data-strike="${drum.key}" style="--drum-color:${drum.color}" aria-label="Play ${drum.name}, key ${drum.key}" aria-keyshortcuts="${drum.key}"><span class="drums-pad-name">${drum.name}</span><span class="drums-pad-sound" aria-hidden="true">${drum.sound}</span><span class="drums-pad-key" aria-hidden="true">${drum.key}</span><span class="drums-hit-mark" aria-hidden="true">✓</span><span class="drums-next" aria-hidden="true">NEXT ↓</span></button>`).join('')}
             </div>
@@ -137,21 +137,22 @@ export class DrumSimulatorScene extends Phaser.Scene {
         '<p class="drums-welcome">Deep booms, little taps, and a splash of cymbal.<br>Explore every sound, or pick a rhythm to try.</p>';
       help.textContent = '';
     } else {
-      score.innerHTML = `<ol class="drums-steps" aria-label="Rhythm steps">${rhythm.steps
-        .map((id, index) => {
-          const drum = DRUMS.find((drum) => drum.id === id)!;
-          const done = index < this.progress.played;
-          const next = index === this.progress.played;
-          return `<li class="${done ? 'done' : ''}" ${next ? 'aria-current="step"' : ''}><span>${done ? '✓' : index + 1}</span>${drum.name}</li>`;
-        })
-        .join('')}</ol>`;
+      score.innerHTML = `<div class="drums-progress"><span>${this.progress.complete ? 'Rhythm complete ✓' : `Step ${this.progress.played + 1} of ${rhythm.steps.length}`}</span><span>${this.progress.played} / ${rhythm.steps.length} beats</span></div>
+        <div class="drums-line"><ol class="drums-steps" aria-label="Rhythm steps">${rhythm.steps
+          .map((id, index) => {
+            const drum = DRUMS.find((drum) => drum.id === id)!;
+            const done = index < this.progress.played;
+            const next = index === this.progress.played;
+            return `<li class="${done ? 'done' : ''}" ${next ? 'aria-current="step"' : ''}><span>${done ? '✓' : index + 1}</span>${drum.name}</li>`;
+          })
+          .join('')}</ol></div>`;
       const next = DRUMS.find((drum) => drum.id === rhythm.steps[this.progress.played]);
       help.textContent = this.progress.complete
         ? 'You played the rhythm! Keep exploring, or start again.'
         : `Next: ${next!.name}. Follow the names at your own pace. Every drum is yours to try.`;
-      score
-        .querySelector<HTMLElement>('[aria-current]')
-        ?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' });
+      const current = score.querySelector<HTMLElement>('[aria-current]');
+      const scroll = score.querySelector<HTMLElement>('.drums-steps')!;
+      if (current) scroll.scrollLeft = Math.max(0, current.offsetLeft - scroll.clientWidth / 2);
     }
     const expected = rhythm?.steps[this.progress.played];
     for (const drum of DRUMS) {

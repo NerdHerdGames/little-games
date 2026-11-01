@@ -1,10 +1,19 @@
 import type { Drum } from '../games/drum-simulator/rules';
 
+const STRIKE_GAIN: Record<Drum['voice'], number> = {
+  kick: 1.2,
+  tom: 1.2,
+  snare: 0.7,
+  cymbal: 0.28,
+};
+
 /** Gentle local percussion, unlocked by a user gesture and bounded by a master compressor. */
 export class DrumAudio {
   private context: AudioContext | undefined;
   private output: GainNode | undefined;
   private noise: AudioBuffer | undefined;
+  private drumWave: PeriodicWave | undefined;
+  private kickWave: PeriodicWave | undefined;
   private readonly voices = new Set<AudioScheduledSourceNode>();
   private readonly listeners = new AbortController();
 
@@ -23,6 +32,16 @@ export class DrumAudio {
         this.output = context.createGain();
         this.output.gain.value = 0.35;
         this.output.connect(compressor).connect(context.destination);
+        // Give bass drums audible upper harmonics as well as their low fundamental.
+        this.drumWave = context.createPeriodicWave(
+          new Float32Array(5),
+          new Float32Array([0, 1, 0.8, 0.45, 0.25]),
+        );
+        // A bass-heavy kick with just enough upper tone to retain its attack.
+        this.kickWave = context.createPeriodicWave(
+          new Float32Array(5),
+          new Float32Array([0, 1, 0.35, 0.12, 0.05]),
+        );
         this.noise = context.createBuffer(1, context.sampleRate, context.sampleRate);
         const samples = this.noise.getChannelData(0);
         for (let i = 0; i < samples.length; i++) samples[i] = Math.random() * 2 - 1;
@@ -57,7 +76,11 @@ export class DrumAudio {
     const now = context.currentTime;
     const gain = context.createGain();
     gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(drum.voice === 'cymbal' ? 0.28 : 0.7, now + 0.004);
+    gain.gain.linearRampToValueAtTime(STRIKE_GAIN[drum.voice], now + 0.004);
+    if (drum.voice === 'kick' || drum.voice === 'tom') {
+      // Keep a fuller body after the attack instead of immediately fading into low bass.
+      gain.gain.exponentialRampToValueAtTime(STRIKE_GAIN[drum.voice] * 0.55, now + 0.08);
+    }
     gain.gain.exponentialRampToValueAtTime(0.001, now + drum.decay);
     gain.connect(this.output);
 
@@ -72,11 +95,14 @@ export class DrumAudio {
       filter.frequency.value = drum.voice === 'snare' ? 1800 : drum.frequency;
       filter.Q.value = 0.7;
     } else {
-      source.type = 'sine';
+      source.setPeriodicWave((drum.voice === 'kick' ? this.kickWave : this.drumWave)!);
       source.frequency.setValueAtTime(drum.frequency, now);
-      source.frequency.exponentialRampToValueAtTime(drum.frequency * 0.35, now + drum.decay);
+      source.frequency.exponentialRampToValueAtTime(
+        drum.frequency * (drum.voice === 'kick' ? 0.5 : 0.8),
+        now + 0.08,
+      );
       filter.type = 'lowpass';
-      filter.frequency.value = 1800;
+      filter.frequency.value = drum.voice === 'kick' ? 700 : 1800;
     }
     source.connect(filter).connect(gain);
     this.voices.add(source);
@@ -103,5 +129,7 @@ export class DrumAudio {
     this.context = undefined;
     this.output = undefined;
     this.noise = undefined;
+    this.drumWave = undefined;
+    this.kickWave = undefined;
   }
 }
