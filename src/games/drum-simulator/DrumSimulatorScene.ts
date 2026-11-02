@@ -60,6 +60,11 @@ export class DrumSimulatorScene extends Phaser.Scene {
 
   private activate(id: string, time: number): void {
     if (id === 'library') return this.leave();
+    if (id === 'sound-retry') {
+      this.audio.retry();
+      this.audio.play(DRUMS[0]);
+      return;
+    }
     const drum = DRUMS.find((drum) => id === `pad:${drum.id}`);
     if (drum) {
       this.audio.play(drum);
@@ -94,6 +99,7 @@ export class DrumSimulatorScene extends Phaser.Scene {
         <div><span class="drums-eyebrow">LITTLE GAMES · MUSIC ROOM</span><h1>Drum Simulator</h1></div>
         <nav aria-label="Drum options">
           <button data-action="mute" aria-pressed="${preferences.current.muted}">Sound ${preferences.current.muted ? 'off' : 'on'}</button>
+          <button data-action="sound-retry" ${preferences.current.muted ? 'disabled' : ''} aria-label="Fix sound and play a test note">Fix sound</button>
           <button data-action="motion" aria-pressed="${preferences.current.reducedMotion}">Still view ${preferences.current.reducedMotion ? 'on' : 'off'}</button>
           <button data-action="library">Games</button>
         </nav>

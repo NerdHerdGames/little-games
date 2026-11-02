@@ -1,3 +1,4 @@
+import { AudioSession } from '../core/AudioSession';
 import type { Drum } from '../games/drum-simulator/rules';
 
 const STRIKE_GAIN: Record<Drum['voice'], number> = {
@@ -9,23 +10,18 @@ const STRIKE_GAIN: Record<Drum['voice'], number> = {
 
 /** Gentle local percussion, unlocked by a user gesture and bounded by a master compressor. */
 export class DrumAudio {
-  private context: AudioContext | undefined;
+  private readonly session: AudioSession;
   private output: GainNode | undefined;
   private noise: AudioBuffer | undefined;
   private drumWave: PeriodicWave | undefined;
   private kickWave: PeriodicWave | undefined;
   private readonly voices = new Set<AudioScheduledSourceNode>();
-  private readonly listeners = new AbortController();
 
-  constructor(
-    root: HTMLElement,
-    private readonly muted: () => boolean,
-  ) {
-    const unlock = (): void => {
-      if (this.muted() || !window.AudioContext) return;
-      if (!this.context) {
-        const context = new AudioContext();
-        this.context = context;
+  constructor(root: HTMLElement, muted: () => boolean) {
+    this.session = new AudioSession(
+      root,
+      muted,
+      (context) => {
         const compressor = context.createDynamicsCompressor();
         compressor.threshold.value = -18;
         compressor.ratio.value = 8;
@@ -45,34 +41,23 @@ export class DrumAudio {
         this.noise = context.createBuffer(1, context.sampleRate, context.sampleRate);
         const samples = this.noise.getChannelData(0);
         for (let i = 0; i < samples.length; i++) samples[i] = Math.random() * 2 - 1;
-      }
-      if (this.context.state === 'suspended') void this.context.resume().catch(() => {});
-    };
-    root.addEventListener('pointerdown', unlock, { capture: true, signal: this.listeners.signal });
-    root.addEventListener('click', unlock, { capture: true, signal: this.listeners.signal });
-    window.addEventListener('keydown', unlock, { capture: true, signal: this.listeners.signal });
-    document.addEventListener(
-      'visibilitychange',
-      () => {
-        if (document.hidden) this.silence();
       },
-      { signal: this.listeners.signal },
-    );
-    window.addEventListener(
-      'preferenceschange',
-      () => {
-        if (this.muted()) this.silence();
-      },
-      { signal: this.listeners.signal },
+      () => this.stopVoices(),
     );
   }
 
   play(drum: Drum): void {
-    const context = this.context;
-    if (!context || !this.output || this.muted() || document.hidden) return;
-    if (context.state === 'suspended') void context.resume().catch(() => {});
+    this.session.play((context) => this.strike(context, drum));
+  }
+
+  private strike(context: AudioContext, drum: Drum): void {
+    if (!this.output) return;
     // Bound rapid multi-touch playing on slower tablets.
-    if (this.voices.size >= 24) this.voices.values().next().value?.stop();
+    if (this.voices.size >= 24) {
+      const oldest = this.voices.values().next().value!;
+      oldest.stop();
+      this.voices.delete(oldest);
+    }
     const now = context.currentTime;
     const gain = context.createGain();
     gain.gain.setValueAtTime(0, now);
@@ -116,17 +101,21 @@ export class DrumAudio {
     source.stop(now + drum.decay + 0.02);
   }
 
-  silence(): void {
+  private stopVoices(): void {
     for (const voice of this.voices) voice.stop();
     this.voices.clear();
-    if (this.context?.state === 'running') void this.context.suspend().catch(() => {});
+  }
+
+  retry(): void {
+    this.session.retry();
+  }
+
+  silence(): void {
+    this.session.silence();
   }
 
   destroy(): void {
-    this.listeners.abort();
-    this.silence();
-    if (this.context) void this.context.close().catch(() => {});
-    this.context = undefined;
+    this.session.destroy();
     this.output = undefined;
     this.noise = undefined;
     this.drumWave = undefined;

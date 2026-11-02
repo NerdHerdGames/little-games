@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { registerSW } from 'virtual:pwa-register';
+import { initializeFeedbackAudio } from './accessibility/FeedbackTone';
 import { GAME_HEIGHT, GAME_WIDTH } from './config/settings';
 import { getTouchControlProfile } from './config/touchControls';
 import { actions, preferences } from './core/services';
@@ -51,6 +52,7 @@ if (import.meta.env.MODE !== 'android') {
 }
 
 const coordinator = new InputCoordinator(actions);
+const stopFeedbackAudio = initializeFeedbackAudio(document, () => preferences.current.muted);
 const game = new Phaser.Game({
   type: Phaser.AUTO,
   parent: 'game',
@@ -103,6 +105,7 @@ const game = new Phaser.Game({
 });
 
 let activeTouchScene = '';
+game.events.once(Phaser.Core.Events.DESTROY, stopFeedbackAudio);
 game.events.on(Phaser.Core.Events.PRE_STEP, () => {
   const activeScenes = game.scene.getScenes(true);
   const sceneKey = activeScenes.at(-1)?.sys.settings.key ?? '';

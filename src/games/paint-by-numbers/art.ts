@@ -12,7 +12,7 @@ export const COLORS = [
   { name: 'Purple', hex: '#a78acb' },
   { name: 'Brown', hex: '#ba8864' },
   { name: 'Gray', hex: '#a4b0bc' },
-  { name: 'White', hex: '#ffffff' },
+  { name: 'Off-white', hex: '#ede7db' },
   { name: 'Black', hex: '#222222' },
   { name: 'Cream', hex: '#f2ddb6' },
   { name: 'Golden brown', hex: '#ca8a42' },
@@ -32,6 +32,8 @@ export interface Picture {
   category: CategoryId;
   width: number;
   height: number;
+  /** Top-left of the artwork frame; canvas input stays local to this frame. */
+  origin?: { x: number; y: number };
   regions: Region[];
   details: string[];
 }
@@ -404,7 +406,12 @@ function vehicle(id: string, title: string, color: number): Picture {
     regions[7]!.y = 208;
     regions[11]!.x = 550;
     regions[11]!.y = 319;
-    for (let i = 0; i < 6; i++) regions.push(rect(175 + i * 72, 190, 55, 35, 9));
+    for (let i = 0; i < 6; i++) {
+      const x = 175 + i * 72;
+      // Reverse winding cuts each fixed white opening out of the paintable ladder.
+      regions[7]!.path += ` M ${x} 190 v 35 h 55 v -35 Z`;
+      details.push(`<path d="${rect(x, 190, 55, 35, 9).path}" fill="#ffffff"/>`);
+    }
     details.push(
       '<path d="M 180 315 H 310 M 180 335 H 310 M 180 355 H 310 M 180 375 H 310 M 355 315 H 485 M 355 335 H 485 M 355 355 H 485 M 355 375 H 485 M 225 395 H 265 M 400 395 H 440 M 625 250 V 410 M 725 250 V 410 M 650 365 H 680 M 850 435 V 465 M 860 435 V 465" fill="none"/>',
       '<text x="665" y="448">FIRE</text>',
@@ -464,7 +471,13 @@ function vehicle(id: string, title: string, color: number): Picture {
       id === 'school-bus' ? rect(842, 388, 40, 38, 3) : rect(810, 430, 48, 38, 3),
     );
   }
-  return picture(id, title, 'vehicles', regions, details);
+  // Frame the vehicle closely so responsive sizing enlarges the whole drawing,
+  // including its labels, without stretching it or changing brush coordinates.
+  const top = id === 'airplane' ? 110 : id === 'fire-truck' ? 155 : 190;
+  return {
+    ...picture(id, title, 'vehicles', regions, details, { width: 840, height: 610 - top }),
+    origin: { x: 80, y: top },
+  };
 }
 
 function animal(id: string, title: string): Picture {
@@ -890,5 +903,5 @@ export const PICTURES: readonly Picture[] = [
 
 /** The same original vector geometry supplies the gallery and playable outlines. */
 export function thumbnail(p: Picture): string {
-  return `<svg viewBox="0 0 ${p.width} ${p.height}" aria-hidden="true" focusable="false"><g stroke="#344757" stroke-width="5" stroke-linejoin="round">${p.regions.map((r) => `<path d="${r.path}" fill="${COLORS[r.color - 1]!.hex}"/>`).join('')}</g><g stroke="#344757" stroke-width="5" fill="#344757" font-family="Arial" font-size="22" text-anchor="middle">${p.details.join('')}</g></svg>`;
+  return `<svg viewBox="${p.origin?.x ?? 0} ${p.origin?.y ?? 0} ${p.width} ${p.height}" aria-hidden="true" focusable="false"><g stroke="#344757" stroke-width="5" stroke-linejoin="round">${p.regions.map((r) => `<path d="${r.path}" fill="${COLORS[r.color - 1]!.hex}"/>`).join('')}</g><g stroke="#344757" stroke-width="5" fill="#344757" font-family="Arial" font-size="22" text-anchor="middle">${p.details.join('')}</g></svg>`;
 }

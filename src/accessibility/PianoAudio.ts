@@ -1,41 +1,30 @@
+import { AudioSession } from '../core/AudioSession';
 import { noteFrequency } from '../games/piano-player/rules';
 
 /** Local synthesized notes; unlock within a device event, then play through logical actions. */
 export class PianoAudio {
-  private context: AudioContext | undefined;
-  private readonly listeners = new AbortController();
+  private readonly session: AudioSession;
+  private readonly voices = new Set<OscillatorNode>();
 
-  constructor(
-    root: HTMLElement,
-    private readonly muted: () => boolean,
-  ) {
-    const unlock = (): void => {
-      if (this.muted() || !window.AudioContext) return;
-      this.context ??= new AudioContext();
-      if (this.context.state === 'suspended') void this.context.resume().catch(() => {});
-    };
-    root.addEventListener('click', unlock, { signal: this.listeners.signal });
-    root.addEventListener('keydown', unlock, { signal: this.listeners.signal });
-    document.addEventListener(
-      'visibilitychange',
-      () => {
-        if (document.hidden) this.silence();
-      },
-      { signal: this.listeners.signal },
-    );
-    window.addEventListener(
-      'preferenceschange',
-      () => {
-        if (this.muted()) this.silence();
-      },
-      { signal: this.listeners.signal },
+  constructor(root: HTMLElement, muted: () => boolean) {
+    this.session = new AudioSession(
+      root,
+      muted,
+      () => {},
+      () => this.stopVoices(),
     );
   }
 
   play(midi: number): void {
-    if (this.muted() || document.hidden || !this.context) return;
-    const context = this.context;
-    if (context.state === 'suspended') void context.resume().catch(() => {});
+    this.session.play((context) => this.strike(context, midi));
+  }
+
+  private strike(context: AudioContext, midi: number): void {
+    if (this.voices.size >= 16) {
+      const oldest = this.voices.values().next().value!;
+      oldest.stop();
+      this.voices.delete(oldest);
+    }
     const oscillator = context.createOscillator();
     const gain = context.createGain();
     const now = context.currentTime;
@@ -45,21 +34,30 @@ export class PianoAudio {
     gain.gain.linearRampToValueAtTime(0.14, now + 0.012);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
     oscillator.connect(gain).connect(context.destination);
+    this.voices.add(oscillator);
     oscillator.start();
     oscillator.stop(now + 0.7);
     oscillator.onended = () => {
+      this.voices.delete(oscillator);
       oscillator.disconnect();
       gain.disconnect();
     };
   }
 
+  private stopVoices(): void {
+    for (const voice of this.voices) voice.stop();
+    this.voices.clear();
+  }
+
+  retry(): void {
+    this.session.retry();
+  }
+
   silence(): void {
-    if (this.context?.state === 'running') void this.context.suspend().catch(() => {});
+    this.session.silence();
   }
 
   destroy(): void {
-    this.listeners.abort();
-    if (this.context) void this.context.close().catch(() => {});
-    this.context = undefined;
+    this.session.destroy();
   }
 }

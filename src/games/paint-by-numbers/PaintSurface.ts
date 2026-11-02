@@ -34,6 +34,9 @@ export class PaintSurface {
     const hit = surface(picture);
     const hitCtx = context(hit);
     const outline = context(this.outlines);
+    const origin = picture.origin ?? { x: 0, y: 0 };
+    hitCtx.translate(-origin.x, -origin.y);
+    outline.translate(-origin.x, -origin.y);
     picture.regions.forEach((region, id) => {
       const path = new Path2D(region.path);
       hitCtx.fillStyle = `rgb(${id + 1},0,0)`;
@@ -69,7 +72,8 @@ export class PaintSurface {
     );
     this.labels = picture.regions.map((region, id) => {
       // Keep labels inside the exposed part of overlapping sections, away from edges.
-      let best = { x: region.x, y: region.y };
+      const target = { x: region.x - origin.x, y: region.y - origin.y };
+      let best = target;
       let score = Infinity;
       for (const point of candidates[id]!) {
         const gx = Math.floor(point.x / SAMPLE_SIZE);
@@ -84,7 +88,7 @@ export class PaintSurface {
           const y = gy + dy!;
           return x >= 0 && x < columns && y >= 0 && y < rows && owners[y * columns + x] === id;
         });
-        const distance = Math.hypot(point.x - region.x, point.y - region.y) + (inset ? 0 : 2000);
+        const distance = Math.hypot(point.x - target.x, point.y - target.y) + (inset ? 0 : 2000);
         if (distance < score) {
           score = distance;
           best = point;

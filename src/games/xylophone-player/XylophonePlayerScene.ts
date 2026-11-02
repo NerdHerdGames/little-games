@@ -55,6 +55,11 @@ export class XylophonePlayerScene extends Phaser.Scene {
 
   private activate(id: string, time: number): void {
     if (id === 'library') return this.leave();
+    if (id === 'sound-retry') {
+      this.audio.retry();
+      this.audio.play(BARS[0].midi);
+      return;
+    }
     const bar = BARS.find((bar) => id === `bar:${bar.id}`);
     if (bar) {
       this.audio.play(bar.midi);
@@ -89,6 +94,7 @@ export class XylophonePlayerScene extends Phaser.Scene {
         <div><span class="xylo-eyebrow">LITTLE GAMES · MUSIC ROOM</span><h1>Xylophone Player</h1></div>
         <nav aria-label="Xylophone options">
           <button data-action="mute" aria-pressed="${preferences.current.muted}">Sound ${preferences.current.muted ? 'off' : 'on'}</button>
+          <button data-action="sound-retry" ${preferences.current.muted ? 'disabled' : ''} aria-label="Fix sound and play a test note">Fix sound</button>
           <button data-action="motion" aria-pressed="${preferences.current.reducedMotion}">Still view ${preferences.current.reducedMotion ? 'on' : 'off'}</button>
           <button data-action="library">Games</button>
         </nav>

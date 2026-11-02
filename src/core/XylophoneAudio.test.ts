@@ -21,7 +21,7 @@ class FakeNode {
   stop = vi.fn();
 }
 
-class FakeContext {
+class FakeContext extends EventTarget {
   state = 'running';
   currentTime = 2;
   destination = new FakeNode();

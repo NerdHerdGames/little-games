@@ -1,51 +1,33 @@
+import { AudioSession } from './AudioSession';
+
 /** Local mallet tones with a short upper partial and a softly decaying fundamental. */
 export class XylophoneAudio {
-  private context: AudioContext | undefined;
+  private readonly session: AudioSession;
   private output: GainNode | undefined;
   private readonly voices = new Set<() => void>();
-  private readonly listeners = new AbortController();
 
-  constructor(
-    root: HTMLElement,
-    private readonly muted: () => boolean,
-  ) {
-    const unlock = (): void => {
-      if (this.muted() || !window.AudioContext) return;
-      if (!this.context) {
-        const context = new AudioContext();
-        this.context = context;
+  constructor(root: HTMLElement, muted: () => boolean) {
+    this.session = new AudioSession(
+      root,
+      muted,
+      (context) => {
         const compressor = context.createDynamicsCompressor();
         compressor.threshold.value = -18;
         compressor.ratio.value = 8;
         this.output = context.createGain();
         this.output.gain.value = 0.3;
         this.output.connect(compressor).connect(context.destination);
-      }
-      if (this.context.state === 'suspended') void this.context.resume().catch(() => {});
-    };
-    root.addEventListener('pointerdown', unlock, { capture: true, signal: this.listeners.signal });
-    root.addEventListener('click', unlock, { capture: true, signal: this.listeners.signal });
-    window.addEventListener('keydown', unlock, { capture: true, signal: this.listeners.signal });
-    document.addEventListener(
-      'visibilitychange',
-      () => {
-        if (document.hidden) this.silence();
       },
-      { signal: this.listeners.signal },
-    );
-    window.addEventListener(
-      'preferenceschange',
-      () => {
-        if (this.muted()) this.silence();
-      },
-      { signal: this.listeners.signal },
+      () => this.stopVoices(),
     );
   }
 
   play(midi: number): void {
-    const context = this.context;
-    if (!context || !this.output || this.muted() || document.hidden) return;
-    if (context.state === 'suspended') void context.resume().catch(() => {});
+    this.session.play((context) => this.strike(context, midi));
+  }
+
+  private strike(context: AudioContext, midi: number): void {
+    if (!this.output) return;
     // Limit simultaneous notes on slower tablets, including rapid repeated strikes.
     if (this.voices.size >= 12) this.voices.values().next().value?.();
     const sources: OscillatorNode[] = [];
@@ -79,17 +61,21 @@ export class XylophoneAudio {
     this.voices.add(stop);
   }
 
-  silence(): void {
+  private stopVoices(): void {
     for (const stop of this.voices) stop();
     this.voices.clear();
-    if (this.context?.state === 'running') void this.context.suspend().catch(() => {});
+  }
+
+  retry(): void {
+    this.session.retry();
+  }
+
+  silence(): void {
+    this.session.silence();
   }
 
   destroy(): void {
-    this.listeners.abort();
-    this.silence();
-    if (this.context) void this.context.close().catch(() => {});
-    this.context = undefined;
+    this.session.destroy();
     this.output = undefined;
   }
 }

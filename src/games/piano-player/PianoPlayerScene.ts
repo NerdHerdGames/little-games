@@ -61,6 +61,11 @@ export class PianoPlayerScene extends Phaser.Scene {
 
   private activate(id: string, time: number): void {
     if (id === 'library') return this.leave();
+    if (id === 'sound-retry') {
+      this.audio.retry();
+      this.audio.play(60);
+      return;
+    }
     if (id === 'songs') this.songsOpen = !this.songsOpen;
     else if (id === 'labels') this.labels = !this.labels;
     else if (id === 'mute') preferences.toggleMute();
@@ -104,6 +109,7 @@ export class PianoPlayerScene extends Phaser.Scene {
         <nav aria-label="Piano options">
           <button data-action="labels" aria-pressed="${this.labels}">Labels ${this.labels ? 'on' : 'off'}</button>
           <button data-action="mute" aria-pressed="${preferences.current.muted}">Sound ${preferences.current.muted ? 'off' : 'on'}</button>
+          <button data-action="sound-retry" ${preferences.current.muted ? 'disabled' : ''} aria-label="Fix sound and play a test note">Fix sound</button>
           <button data-action="motion" aria-pressed="${preferences.current.reducedMotion}">Still view ${preferences.current.reducedMotion ? 'on' : 'off'}</button>
           <button data-action="library">Games</button>
         </nav>
