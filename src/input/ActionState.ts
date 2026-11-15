@@ -27,7 +27,28 @@ export interface TraceAction {
   y: number;
 }
 
+export interface BuildPointerAction {
+  phase: 'start' | 'move' | 'end' | 'cancel';
+  x: number;
+  y: number;
+}
+
 export class ActionState {
+  private buildPointers: BuildPointerAction[] = [];
+
+  requestBuildPointer(action: BuildPointerAction): void {
+    if (Number.isFinite(action.x) && Number.isFinite(action.y)) this.buildPointers.push(action);
+  }
+
+  consumeBuildPointers(): BuildPointerAction[] {
+    const actions = this.buildPointers;
+    this.buildPointers = [];
+    return actions;
+  }
+
+  clearBuildPointers(): void {
+    this.buildPointers.length = 0;
+  }
   private current = emptyActions();
   private previous = emptyActions();
   private sources = new Map<InputMethod, Partial<Record<Action, boolean>>>();

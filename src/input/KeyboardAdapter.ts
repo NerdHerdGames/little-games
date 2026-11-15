@@ -29,6 +29,13 @@ export class KeyboardAdapter {
   }
 
   private onKey(event: KeyboardEvent, down: boolean): void {
+    if (
+      event.target instanceof Element &&
+      event.target.closest('input, textarea, select, summary, [contenteditable="true"]')
+    ) {
+      this.held = {};
+      return;
+    }
     const action = KEY_ACTIONS[event.code];
     if (!action) return;
     event.preventDefault();

@@ -21,6 +21,7 @@
     "validate": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run validate:games && npm run build"
   },
   "dependencies": {
+    "@dimforge/rapier3d-compat": "0.19.3",
     "phaser": "4.2.1",
     "three": "0.186.1"
   },

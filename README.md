@@ -1,5 +1,14 @@
 # Little Games
 
+**3D Marble Run Builder (Marble Studio)** adds an offline Three.js/Rapier toy
+workshop to the first launcher page. Build with 59 procedural pieces in Snap or
+Free Build mode, release real physics marbles, and try six examples spanning
+racing, music, color sorting, and chain reactions. Large touch controls, local
+named saves, undo/redo, camera views/follow/POV, and saved accessibility preferences
+are included. Start with `npm run dev` and choose **3D Marble Run Builder**.
+See the [workshop guide](src/games/marble-run-3d/README.md) for controls,
+architecture, tests, and practical simulation limits.
+
 ## Android application
 
 The application can also be packaged as an APK or Android App Bundle with all game

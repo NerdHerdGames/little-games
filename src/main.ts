@@ -5,6 +5,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from './config/settings';
 import { getTouchControlProfile } from './config/touchControls';
 import { actions, preferences } from './core/services';
 import { InputCoordinator } from './input/InputCoordinator';
+import { MarbleRun3DScene } from './games/marble-run-3d/MarbleRun3DScene';
 import { RocketWorkshopScene } from './games/rocket-workshop/RocketWorkshopScene';
 import { AstronautAcademyScene } from './games/astronaut-academy/AstronautAcademyScene';
 import { SolarOrbitExplorerScene } from './games/solar-orbit-explorer/SolarOrbitExplorerScene';
@@ -62,6 +63,7 @@ const game = new Phaser.Game({
   scene: [
     BootScene,
     GameHubScene,
+    MarbleRun3DScene,
     PaintByNumbersScene,
     PianoPlayerScene,
     AlphabetTracingScene,
