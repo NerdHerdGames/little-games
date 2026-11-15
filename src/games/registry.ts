@@ -13,6 +13,16 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'marble-run',
+    title: 'Marble Run Builder',
+    description: 'Snap a track together, roll colorful marbles, and try your own ideas.',
+    sceneKey: 'MarbleRun',
+    touchControls: 'none',
+    accentColor: 0x94b59a,
+    symbol: '●',
+    icon: { key: 'marble-run-icon', path: 'assets/games/marble-run/icon.svg' },
+  },
+  {
     id: 'paint-by-numbers',
     title: 'Paint by Numbers',
     description: 'Choose a picture and brush matching colors into numbered sections.',
