@@ -1,5 +1,14 @@
 # Little Games
 
+## Marble Run Builder
+
+**Marble Run Builder** adds a responsive 2D physics workshop with Snap and Free
+construction, 36 track and interactive toy types, customizable marbles, local
+saves, undo/redo, camera controls, races, music, sorting, and chain reactions.
+Open it from the Little Games library. Touch is sufficient to build and play.
+See [the game guide and architecture](src/games/marble-run/README.md) for controls,
+validation, and remaining extensions.
+
 ## Android application
 
 The application can also be packaged as an APK or Android App Bundle with all game

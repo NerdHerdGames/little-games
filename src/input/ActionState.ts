@@ -27,7 +27,28 @@ export interface TraceAction {
   y: number;
 }
 
+export interface ConstructionAction {
+  phase: 'start' | 'move' | 'end' | 'cancel' | 'pan' | 'zoom';
+  x: number;
+  y: number;
+  dx: number;
+  dy: number;
+  source?: string;
+}
+
 export class ActionState {
+  private construction: ConstructionAction[] = [];
+  requestConstruction(action: ConstructionAction): void {
+    if ([action.x, action.y, action.dx, action.dy].every(Number.isFinite))
+      this.construction.push(action);
+  }
+  consumeConstruction(): ConstructionAction | undefined {
+    return this.construction.shift();
+  }
+  clearConstruction(): void {
+    this.construction.length = 0;
+  }
+
   private current = emptyActions();
   private previous = emptyActions();
   private sources = new Map<InputMethod, Partial<Record<Action, boolean>>>();

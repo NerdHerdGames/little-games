@@ -42,6 +42,7 @@ import { SolarSystemOrderScene } from './scenes/SolarSystemOrderScene';
 import { StarCollectorScene } from './scenes/StarCollectorScene';
 import { TractorTrailerScene } from './scenes/TractorTrailerScene';
 import { AlphabetTracingScene } from './games/alphabet-tracing/AlphabetTracingScene';
+import { MarbleRunScene } from './games/marble-run/MarbleRunScene';
 import './styles.css';
 
 if (import.meta.env.MODE !== 'android') {
@@ -62,6 +63,7 @@ const game = new Phaser.Game({
   scene: [
     BootScene,
     GameHubScene,
+    MarbleRunScene,
     PaintByNumbersScene,
     PianoPlayerScene,
     AlphabetTracingScene,
