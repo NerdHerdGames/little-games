@@ -1,0 +1,612 @@
+.burger-order {
+  --ink: #243442;
+  --red: #a92e25;
+  --paper: #fff8e8;
+  --line: #e7d7bc;
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  overflow: auto;
+  background: #fff5e2;
+  color: var(--ink);
+  touch-action: pan-y;
+}
+
+.burger-order [hidden] {
+  display: none;
+}
+
+.burger-order button {
+  min-width: 64px;
+  min-height: 64px;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fffdf6;
+  color: var(--ink);
+  font:
+    700 1rem Arial,
+    sans-serif;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.burger-order button:focus-visible {
+  outline: 3px solid #165b87;
+  outline-offset: 3px;
+}
+
+.burger-order button:disabled {
+  opacity: 0.56;
+  cursor: default;
+}
+
+@media (hover: hover) {
+  .burger-order button:not(:disabled):hover {
+    border-color: #a66a46;
+    background: #fff0d1;
+  }
+}
+
+.burger-header {
+  border-bottom: 8px solid transparent;
+  background:
+    linear-gradient(#fffaf0, #fffaf0) padding-box,
+    conic-gradient(from 90deg, #b74432 25%, #fff3d8 0 50%, #b74432 0 75%, #fff3d8 0) border-box 0
+      100% / 16px 8px;
+}
+
+.burger-header-inner,
+.burger-workspace {
+  width: min(100% - 48px, 1176px);
+  margin-inline: auto;
+}
+
+.burger-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 5px;
+}
+
+.burger-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--red);
+  font:
+    800 clamp(1.25rem, 3vw, 1.625rem) / 1 Georgia,
+    serif;
+}
+
+.burger-brand img {
+  width: 48px;
+  height: 48px;
+}
+
+.burger-header nav,
+.burger-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.burger-header button {
+  border-color: transparent;
+  background: transparent;
+  font-size: 0.875rem;
+}
+
+.burger-header button[data-action='library'] {
+  border-color: var(--line);
+  background: #fffaf0;
+}
+
+.burger-workspace {
+  padding-block: clamp(14px, 3.4vh, 34px) 24px;
+}
+
+.burger-intro {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: clamp(14px, 2.7vh, 26px);
+}
+
+.burger-intro h1 {
+  margin: 0;
+  font:
+    800 clamp(2.5rem, 6.4vh, 4rem) / 0.98 Georgia,
+    serif;
+  letter-spacing: -0.055em;
+}
+
+.burger-intro p {
+  margin: 10px 0 0;
+  color: #535249;
+  line-height: 1.35;
+}
+
+.burger-progress {
+  display: grid;
+  flex: 0 0 clamp(98px, 12vw, 150px);
+  gap: 7px;
+  padding-bottom: 3px;
+  color: var(--red);
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
+.burger-progress progress {
+  width: 100%;
+  height: 10px;
+  border: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ead9bf;
+  accent-color: var(--red);
+}
+
+.burger-progress progress::-webkit-progress-bar {
+  background: #ead9bf;
+}
+
+.burger-progress progress::-webkit-progress-value {
+  border-radius: 10px;
+  background: var(--red);
+}
+
+.burger-board {
+  display: grid;
+  grid-template-columns: clamp(260px, 29%, 344px) minmax(0, 1fr);
+  gap: clamp(12px, 2vw, 24px);
+}
+
+.burger-ticket,
+.burger-station,
+.burger-tray {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 4px 0 #eadcc6;
+}
+
+.burger-ticket {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 18px 20px 20px;
+  background: #fffdf5;
+}
+
+.burger-ticket::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 8px;
+  background: repeating-linear-gradient(120deg, #edb99a 0 8px, #fff5e2 8px 16px);
+  content: '';
+}
+
+.burger-ticket-header,
+.burger-station-header,
+.burger-tray-header,
+.burger-station-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.burger-ticket-header {
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #d5a88f;
+  color: var(--red);
+}
+
+.burger-ticket-header h2 {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.burger-ticket h3 {
+  margin: 14px 0 10px;
+  color: #422f2b;
+  font:
+    800 clamp(1.375rem, 2.55vw, 1.875rem) / 1.03 Georgia,
+    serif;
+  letter-spacing: -0.045em;
+}
+
+.burger-ticket-recipe {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.burger-ticket-art {
+  --stack-width: min(100%, 155px);
+  display: grid;
+  height: 100%;
+  min-height: 125px;
+  place-items: center;
+  background: radial-gradient(ellipse, #fff0cf 10%, transparent 70%);
+}
+
+.burger-ticket-art .burger-stack {
+  transform: translateY(10%);
+}
+
+.burger-ticket ol {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.burger-ticket li {
+  --ingredient-color: #d78334;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.burger-ticket li::before {
+  width: 9px;
+  height: 9px;
+  border: 1px solid #0003;
+  border-radius: 50%;
+  background: var(--ingredient-color);
+  content: '';
+}
+
+.burger-ticket [data-ingredient='patty'] {
+  --ingredient-color: #884927;
+}
+.burger-ticket [data-ingredient='cheese'] {
+  --ingredient-color: #ffbc35;
+}
+.burger-ticket [data-ingredient='tomato'] {
+  --ingredient-color: #e64f2f;
+}
+.burger-ticket [data-ingredient='lettuce'] {
+  --ingredient-color: #83b436;
+}
+.burger-ticket [data-ingredient='pickles'] {
+  --ingredient-color: #8e9637;
+}
+
+.burger-station {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-color: #abccd5;
+  background: #eaf6f8;
+  box-shadow: 0 4px 0 #c4dce2;
+}
+
+.burger-station-header {
+  padding: 13px 17px;
+  border-bottom: 1px solid #badce2;
+}
+
+.burger-station h2,
+.burger-tray h2 {
+  margin: 0;
+  font:
+    800 1.25rem / 1.1 Georgia,
+    serif;
+}
+
+.burger-station-header span {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border: 1px solid #bedde3;
+  border-radius: 20px;
+  background: #d6edf1;
+  color: #294c5c;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.burger-counter {
+  --counter-height: clamp(185px, 30vh, 300px);
+  --stack-width: clamp(125px, 22vh, 216px);
+  position: relative;
+  flex: 1;
+  min-height: var(--counter-height);
+  overflow: hidden;
+  background: #d6edf0 radial-gradient(#8bbbc66e 1px, transparent 1px) center / 16px 16px;
+}
+
+.burger-drop-target {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.burger-order:has(.map-drag-ghost) .burger-drop-target {
+  box-shadow: inset 0 0 0 3px #5b9cae;
+}
+
+.burger-plate,
+.burger-player-art,
+.burger-drop-label {
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+}
+
+.burger-plate {
+  bottom: 14px;
+  width: min(calc(var(--stack-width) * 1.64), 88%);
+  aspect-ratio: 3.45;
+  border: 2px solid #e0b89a;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, #fffaf0 48%, #f6dfc3 62%, #fff9e8 66%);
+  box-shadow:
+    0 5px 0 #d8b399,
+    0 12px 19px #26526733;
+}
+
+.burger-plate::after {
+  position: absolute;
+  inset: 8% 5%;
+  border: 1px solid #d9a98a;
+  border-radius: 50%;
+  content: '';
+}
+
+.burger-drop-label {
+  bottom: calc(var(--stack-width) * 0.33 + 26px);
+  padding: 11px 17px;
+  border: 2px dashed #719dab;
+  border-radius: 99px;
+  background: #eaf7f9;
+  color: #315663;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.burger-stack {
+  position: relative;
+  width: calc(var(--stack-width) * var(--fit));
+  aspect-ratio: 1;
+}
+
+.burger-stack.burger-player-art {
+  position: absolute;
+  bottom: calc(var(--stack-width) * 0.19 + 15px);
+  width: min(
+    var(--stack-width),
+    calc((var(--counter-height) - var(--stack-width) * 0.19 - 34px) / var(--height))
+  );
+}
+
+.burger-layer {
+  position: absolute;
+  left: 50%;
+  width: 100%;
+  translate: -50% 0;
+  filter: drop-shadow(0 2px 2px #3f281423);
+}
+
+.burger-layer[data-ingredient='lettuce'],
+.burger-layer[data-ingredient='cheese'] {
+  width: 105%;
+}
+
+.burger-layer[data-ingredient='pickles'] {
+  width: 96%;
+}
+
+.burger-layer-new {
+  animation: burger-place 180ms cubic-bezier(0.2, 0.75, 0.5, 1) both;
+}
+
+@keyframes burger-place {
+  from {
+    transform: translateY(-14px);
+    opacity: 0.5;
+  }
+}
+
+.burger-reduced-motion .burger-layer-new {
+  animation: none;
+}
+
+.burger-served {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 8px 12px;
+  border: 1px solid #8cb789;
+  border-radius: 8px;
+  background: #e6f5d7;
+  color: #2c532b;
+  font-weight: 800;
+}
+
+.burger-station-footer {
+  padding: 8px 12px;
+  border-top: 1px solid #badce2;
+}
+
+.burger-feedback {
+  margin: 0 0 0 4px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.burger-order .burger-undo {
+  border-color: #afccd5;
+  background: #f3fbfc;
+}
+
+.burger-order .burger-serve {
+  min-width: 124px;
+  border-color: #88251d;
+  background: var(--red);
+  color: white;
+  box-shadow: inset 0 -3px 0 #75251e;
+}
+
+@media (hover: hover) {
+  .burger-order .burger-serve:not(:disabled):hover {
+    border-color: #73231d;
+    background: #92251c;
+  }
+}
+
+.burger-tray {
+  margin-top: clamp(14px, 2.6vh, 24px);
+  padding: 12px 16px 16px;
+  background: #fffaf0;
+}
+
+.burger-tray-header {
+  margin-bottom: 9px;
+}
+
+.burger-tray-header p {
+  margin: 0;
+  color: #615347;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.burger-ingredients {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.burger-order .burger-piece {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+  padding: 7px 4px;
+  background: #fff4db;
+  box-shadow: inset 0 -3px 0 #eddcc0;
+  font-size: 0.875rem;
+  cursor: grab;
+  touch-action: none;
+}
+
+.burger-piece img {
+  width: 100%;
+  max-width: 102px;
+  height: clamp(39px, 6.1vh, 58px);
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.burger-order .map-drag-ghost {
+  position: fixed;
+  z-index: 10;
+  transform: translate(-50%, -50%) rotate(-5deg);
+  border-color: #ad7853;
+  opacity: 0.92;
+  pointer-events: none;
+  box-shadow: 0 5px 12px #583b2340;
+}
+
+#app:has(.burger-order)::before {
+  display: none;
+}
+
+@media (max-width: 730px) {
+  .burger-header-inner,
+  .burger-workspace {
+    width: calc(100% - 28px);
+  }
+
+  .burger-board {
+    grid-template-columns: 1fr;
+  }
+
+  .burger-ticket {
+    padding: 12px 14px 16px;
+  }
+
+  .burger-ticket h3 {
+    margin-block: 10px 4px;
+  }
+
+  .burger-ticket-recipe {
+    grid-template-columns: minmax(0, 150px) 1fr;
+  }
+
+  .burger-ticket-art {
+    --stack-width: 98px;
+    min-height: 104px;
+  }
+
+  .burger-ingredients {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 440px) {
+  .burger-brand img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .burger-header button {
+    padding-inline: 6px;
+  }
+
+  .burger-intro {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .burger-station-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .burger-actions > button {
+    flex: 1;
+  }
+}
+
+@media (max-height: 650px) and (min-width: 731px) {
+  .burger-header-inner {
+    padding-block: 0;
+  }
+
+  .burger-workspace {
+    padding-block: 11px 14px;
+  }
+
+  .burger-ticket,
+  .burger-tray {
+    padding-top: 10px;
+    padding-bottom: 12px;
+  }
+
+  .burger-counter {
+    --counter-height: 162px;
+  }
+
+  .burger-station-header {
+    padding-block: 8px;
+  }
+}

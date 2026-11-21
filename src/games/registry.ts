@@ -13,6 +13,16 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'burger-order',
+    title: 'Burger Order',
+    description: 'Read an order card and stack the burger from the bottom up.',
+    sceneKey: 'BurgerOrder',
+    touchControls: 'none',
+    accentColor: 0xffca74,
+    symbol: '🍔',
+    icon: { key: 'burger-order-icon', path: 'assets/games/burger-order/burger.webp' },
+  },
+  {
     id: 'marble-run',
     title: 'Marble Run Builder',
     description: 'Snap a track together, roll colorful marbles, and try your own ideas.',
