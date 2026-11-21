@@ -13,6 +13,15 @@ export interface GameDefinition {
 
 export const GAMES: readonly GameDefinition[] = [
   {
+    id: 'burger-stack',
+    title: 'Burger Stack',
+    description: 'Read the order card and stack burger pieces from the bottom up.',
+    sceneKey: 'BurgerStack',
+    touchControls: 'none',
+    accentColor: 0xf5b66d,
+    symbol: '🍔',
+  },
+  {
     id: 'marble-run',
     title: 'Marble Run Builder',
     description: 'Snap a track together, roll colorful marbles, and try your own ideas.',
